@@ -3,12 +3,15 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 import reportWebVitals from './reportWebVitals';
+import {RouterProvider} from "react-router-dom";
+import {mainRouter} from "./router";
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 root.render(
   <React.StrictMode>
+    <RouterProvider router={mainRouter}/>
   </React.StrictMode>
 );
 
