@@ -1,7 +1,10 @@
 import { configureStore, ThunkAction, Action } from "@reduxjs/toolkit";
+import boardSlice from "../features/board/boardSlice";
 
 export const store = configureStore({
-  reducer: {}
+  reducer: {
+    board: boardSlice
+  }
 });
 
 export type AppDispatch = typeof store.dispatch;
