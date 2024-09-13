@@ -1,19 +1,20 @@
-import { useAppDispatch, useAppSelector } from "../app/hooks";
-import { damageToFirst, damageToSecond, selectFirstPlayer, selectSecondPlayer } from "../features/board/boardSlice";
+import { useAppDispatch } from "../app/hooks";
+import { initialize } from "../features/board/boardSlice";
+import { useEffect } from "react";
+import { Outlet } from "react-router-dom";
 
 function Board() {
-  const firstPlayer = useAppSelector(selectFirstPlayer);
-  const secondPlayer = useAppSelector(selectSecondPlayer);
+  // const firstPlayer = useAppSelector(selectFirstPlayer);
+  // const secondPlayer = useAppSelector(selectSecondPlayer);
   const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(initialize());
+  }, []);
 
   return (
     <div>
-      <div>firstPlayer: {firstPlayer.healthPoint}</div>
-      <div>secondPlayer: {secondPlayer.healthPoint}</div>
-      <div>
-        <button onClick={() => dispatch(damageToFirst(100))}>100 to first</button>
-        <button onClick={() => dispatch(damageToSecond(100))}>100 to second</button>
-      </div>
+      <Outlet />
     </div>
   );
 }

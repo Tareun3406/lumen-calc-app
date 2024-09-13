@@ -29,6 +29,12 @@ export const boardSlice = createSlice({
   name: "board",
   initialState,
   reducers: {
+    initialize: state => {
+      state.firstPlayer.healthPoint = 5000;
+      state.secondPlayer.healthPoint = 5000;
+      state.firstPlayer.token = 0;
+      state.secondPlayer.token = 0;
+    },
     damageToFirst: (state, action: PayloadAction<number>) => {
       state.firstPlayer.healthPoint -= action.payload;
     },
@@ -50,7 +56,7 @@ export const boardSlice = createSlice({
   }
 });
 
-export const { damageToFirst, damageToSecond } = boardSlice.actions;
+export const { initialize, damageToFirst, damageToSecond } = boardSlice.actions;
 export const selectBoard = (state: RootState) => state.board;
 export const selectFirstPlayer = (state: RootState) => state.board.firstPlayer;
 export const selectSecondPlayer = (state: RootState) => state.board.secondPlayer;
