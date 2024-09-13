@@ -1,9 +1,10 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../../app/store";
+import { character } from "../characters";
 
 export interface PlayerState {
   healthPoint: number;
-  character: "viola" | "tao";
+  character: character;
   token: number;
 }
 
@@ -15,12 +16,18 @@ export interface BoardState {
 const initialState: BoardState = {
   firstPlayer: {
     healthPoint: 5000,
-    character: "viola",
+    character: {
+      name: "루트",
+      portrait: "/portrait/루트.png"
+    },
     token: 0
   },
   secondPlayer: {
     healthPoint: 5000,
-    character: "viola",
+    character: {
+      name: "루트",
+      portrait: "/portrait/루트.png"
+    },
     token: 0
   }
 };
@@ -52,11 +59,18 @@ export const boardSlice = createSlice({
     },
     setHealthToSecond: (state, action: PayloadAction<number>) => {
       state.secondPlayer.healthPoint = action.payload;
+    },
+    setCharacterToFirst: (state, action: PayloadAction<character>) => {
+      state.firstPlayer.character = action.payload;
+    },
+    setCharacterToSecond: (state, action: PayloadAction<character>) => {
+      state.secondPlayer.character = action.payload;
     }
   }
 });
 
-export const { initialize, damageToFirst, damageToSecond } = boardSlice.actions;
+export const { initialize, damageToFirst, damageToSecond, setCharacterToFirst, setCharacterToSecond } =
+  boardSlice.actions;
 export const selectBoard = (state: RootState) => state.board;
 export const selectFirstPlayer = (state: RootState) => state.board.firstPlayer;
 export const selectSecondPlayer = (state: RootState) => state.board.secondPlayer;
