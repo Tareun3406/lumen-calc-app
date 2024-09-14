@@ -153,13 +153,13 @@ function Play() {
                 <img src={token.img} height={80} alt={token.img} />
               </div>
               <div style={{ fontSize: 20 }}>
-                <IconButton onClick={() => removeToken(player, 0)}>
+                <IconButton onClick={() => removeToken(player, index)}>
                   <RemoveCircleOutline />
                 </IconButton>
                 <text>
                   {token.count} / {token.maxCount}
                 </text>
-                <IconButton onClick={() => addToken(player, 0)}>
+                <IconButton onClick={() => addToken(player, index)}>
                   <ControlPoint />
                 </IconButton>
               </div>
