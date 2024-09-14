@@ -33,7 +33,7 @@ function CharacterSelect() {
           src={character.portrait}
           height={128}
           onClick={() => onClickCharacter(character, player)}
-          alt={character.name}
+          alt={character.portrait}
         />
       </ImageListItem>
     );

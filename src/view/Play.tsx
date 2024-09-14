@@ -100,7 +100,7 @@ function Play() {
         return (
           <div>
             <span style={{ position: "relative", display: "inline-flex" }} onClick={() => changeToggle(player, 0)}>
-              <img src={`/token/${character.name}.png`} height={120} />
+              <img src={character.tokens[0].img} height={120} />
               <div
                 style={{
                   position: "absolute",
@@ -109,7 +109,7 @@ function Play() {
                   background: "black",
                   width: "100%",
                   height: "100%",
-                  opacity: player.character.tokens[0].toggle ? "0.45" : "0"
+                  opacity: player.character.tokens[0].toggle ? "0" : "0.4"
                 }}></div>
             </span>
           </div>
@@ -124,7 +124,7 @@ function Play() {
         return (
           <div>
             <div>
-              <img src={`/token/${character.name}.png`} height={80} />
+              <img src={character.tokens[0].img} height={80} />
             </div>
             <div style={{ fontSize: 20 }}>
               <IconButton onClick={() => removeToken(player, 0)}>

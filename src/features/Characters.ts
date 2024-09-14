@@ -1,10 +1,10 @@
 const characters: Character[] = [
   {
     name: "루트",
-    portrait: "/portrait/루트.png",
+    portrait: "/portrait/root.png",
     tokens: [
       {
-        img: "/token/루트.png",
+        img: "/token/root.png",
         type: "toggle",
         toggle: false
       }
@@ -12,10 +12,10 @@ const characters: Character[] = [
   },
   {
     name: "울프",
-    portrait: "/portrait/울프.png",
+    portrait: "/portrait/wolf.png",
     tokens: [
       {
-        img: "/token/울프.png",
+        img: "/token/wolf.png",
         type: "counter",
         count: 0,
         maxCount: 5
@@ -24,10 +24,10 @@ const characters: Character[] = [
   },
   {
     name: "비올라",
-    portrait: "/portrait/비올라.png",
+    portrait: "/portrait/viola.png",
     tokens: [
       {
-        img: "/token/비올라.png",
+        img: "/token/viola.png",
         type: "counter",
         count: 0,
         maxCount: 3
@@ -36,10 +36,10 @@ const characters: Character[] = [
   },
   {
     name: "델피",
-    portrait: "/portrait/델피.png",
+    portrait: "/portrait/delphi.png",
     tokens: [
       {
-        img: "/token/델피.png",
+        img: "/token/delphi.png",
         type: "toggle",
         toggle: false
       }
@@ -47,10 +47,10 @@ const characters: Character[] = [
   },
   {
     name: "키스",
-    portrait: "/portrait/키스.png",
+    portrait: "/portrait/kiss.png",
     tokens: [
       {
-        img: "/token/키스.png",
+        img: "/token/kiss.png",
         type: "toggle",
         toggle: false
       }
@@ -58,10 +58,10 @@ const characters: Character[] = [
   },
   {
     name: "니아",
-    portrait: "/portrait/니아.png",
+    portrait: "/portrait/nia.png",
     tokens: [
       {
-        img: "/token/니아.png",
+        img: "/token/nia.png",
         type: "toggle",
         toggle: false
       }
@@ -69,10 +69,10 @@ const characters: Character[] = [
   },
   {
     name: "레브",
-    portrait: "/portrait/레브.png",
+    portrait: "/portrait/rev.png",
     tokens: [
       {
-        img: "/token/레브.png",
+        img: "/token/rev.png",
         type: "toggle",
         toggle: false
       }
@@ -80,7 +80,7 @@ const characters: Character[] = [
   },
   {
     name: "타오",
-    portrait: "/portrait/타오.png",
+    portrait: "/portrait/tao.png",
     tokens: [
       {
         img: "",
@@ -98,7 +98,7 @@ const characters: Character[] = [
   },
   {
     name: "리타",
-    portrait: "/portrait/리타.png",
+    portrait: "/portrait/lita.png",
     tokens: []
   }
 ];

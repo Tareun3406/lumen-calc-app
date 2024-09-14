@@ -1,0 +1,63 @@
+*,
+*:before,
+*:after {
+  box-sizing: border-box;
+}
+
+@keyframes svgLineDashAnimation {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+.hit-points-bar {
+  width: 100%;
+  min-height: 20px;
+  margin-bottom: 40px;
+
+  transform: skew(-30deg);
+
+  &__gained-hp {
+    &.play {
+      animation: svgLineDashAnimation 1s linear forwards;
+    }
+  }
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  /*background-color: #333333;*/
+}
+
+.example {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  min-width: 500px;
+  width: 90%;
+  padding: 20px;
+  margin: auto;
+}
+
+.button {
+  border-radius: 3px;
+  background-color: red;
+  color: white;
+  border: 1px solid #111;
+  box-shadow: none;
+  appearance: none;
+  padding: 5px 10px;
+
+  &--down {
+    background-color: red;
+  }
+
+  &--reset {
+    background-color: #444;
+  }
+
+  &--up {
+    background-color: green;
+  }
+}
