@@ -83,13 +83,13 @@ const characters: Character[] = [
     portrait: "/portrait/tao.png",
     tokens: [
       {
-        img: "",
+        img: "/token/tao1.png",
         type: "counter",
         count: 0,
         maxCount: 4
       },
       {
-        img: "",
+        img: "/token/tao2.png",
         type: "counter",
         count: 0,
         maxCount: 4

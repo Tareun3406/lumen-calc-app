@@ -146,6 +146,26 @@ function Play() {
 
       // 카운터 형 다수
       case "타오":
+        return character.tokens.map((token, index) => {
+          return (
+            <div style={{ display: "inline-block" }} key={index}>
+              <div>
+                <img src={token.img} height={80} alt={token.img} />
+              </div>
+              <div style={{ fontSize: 20 }}>
+                <IconButton onClick={() => removeToken(player, 0)}>
+                  <RemoveCircleOutline />
+                </IconButton>
+                <text>
+                  {token.count} / {token.maxCount}
+                </text>
+                <IconButton onClick={() => addToken(player, 0)}>
+                  <ControlPoint />
+                </IconButton>
+              </div>
+            </div>
+          );
+        });
     }
   };
   // counter(3, 5, 2*4) , toggle,
