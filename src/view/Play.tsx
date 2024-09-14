@@ -10,6 +10,7 @@ import {
   damageToSecond,
   decreaseFpToFirst,
   decreaseFpToSecond,
+  deselectCharacter,
   healToFirst,
   healToSecond,
   increaseFpToFirst,
@@ -104,7 +105,7 @@ function Play() {
         return (
           <div>
             <span style={{ position: "relative", display: "inline-flex" }} onClick={() => changeToggle(player, 0)}>
-              <img src={character.tokens[0].img} height={120} />
+              <img src={character.tokens[0].img} height={120} alt={character.tokens[0].img} />
               <div
                 style={{
                   position: "absolute",
@@ -128,7 +129,7 @@ function Play() {
         return (
           <div>
             <div>
-              <img src={character.tokens[0].img} height={80} />
+              <img src={character.tokens[0].img} height={80} alt={character.tokens[0].img} />
             </div>
             <div style={{ fontSize: 20 }}>
               <IconButton onClick={() => removeToken(player, 0)}>
@@ -170,14 +171,15 @@ function Play() {
   };
   // counter(3, 5, 2*4) , toggle,
   return (
-    <Grid2 container padding={1}>
+    <Grid2 container padding={1} display={"flex"} justifyContent={"stretch"}>
       <Grid2 size={4.5}>{firstPlayer.character.name}</Grid2>
       <Grid2 size={3}>
-        <ButtonGroup variant={"outlined"}>
-          <Button onClick={() => navigate("/")}>
-            <Home />
-          </Button>
-          <Button onClick={() => navigate("/board/characterSelect")}>
+        <ButtonGroup variant={"outlined"} size={"small"}>
+          <Button
+            onClick={() => {
+              dispatch(deselectCharacter());
+              navigate("/board/characterSelect");
+            }}>
             <Person />
           </Button>
           <Button onClick={() => dispatch(initialize())}>
@@ -186,12 +188,12 @@ function Play() {
         </ButtonGroup>
       </Grid2>
       <Grid2 size={4.5}>{secondPlayer.character.name}</Grid2>
-      <Grid2 size={6} paddingLeft={4} paddingRight={6} marginTop={1} position={"relative"}>
+      <Grid2 size={6} paddingLeft={4} paddingRight={6} position={"relative"}>
         <HpBar targetPlayer="first" player={firstPlayer} />
         <text style={{ position: "absolute", top: 3, right: 70 }}>{firstPlayer.currentHp}</text>
         <text style={{ position: "absolute", top: 3, left: 70 }}>Hand: {handFirst}</text>
       </Grid2>
-      <Grid2 size={6} paddingLeft={6} paddingRight={4} marginTop={1} position={"relative"}>
+      <Grid2 size={6} paddingLeft={6} paddingRight={4} position={"relative"}>
         <HpBar targetPlayer="second" player={secondPlayer} />
         <text style={{ position: "absolute", top: 3, left: 70 }}>{secondPlayer.currentHp}</text>
         <text style={{ position: "absolute", top: 3, right: 70 }}>Hand: {handSecond}</text>
@@ -200,34 +202,34 @@ function Play() {
       <Grid2 size={4}>
         <Stack spacing={1} padding={1} paddingLeft={3}>
           <div style={{ display: "flex", justifyContent: "space-between" }}>
-            <Button variant={"outlined"} size={"large"} sx={buttonStyle} onClick={() => dispatch(damageToFirst(100))}>
+            <Button variant={"outlined"} size={"medium"} sx={buttonStyle} onClick={() => dispatch(damageToFirst(100))}>
               -100
             </Button>
-            <Button variant={"outlined"} size={"large"} sx={buttonStyle} onClick={() => dispatch(damageToFirst(200))}>
+            <Button variant={"outlined"} size={"medium"} sx={buttonStyle} onClick={() => dispatch(damageToFirst(200))}>
               -200
             </Button>
-            <Button variant={"outlined"} size={"large"} sx={buttonStyle} onClick={() => dispatch(damageToFirst(300))}>
+            <Button variant={"outlined"} size={"medium"} sx={buttonStyle} onClick={() => dispatch(damageToFirst(300))}>
               -300
             </Button>
           </div>
           <div style={{ display: "flex", justifyContent: "space-between" }}>
-            <Button variant={"outlined"} size={"large"} sx={buttonStyle} onClick={() => dispatch(damageToFirst(400))}>
+            <Button variant={"outlined"} size={"medium"} sx={buttonStyle} onClick={() => dispatch(damageToFirst(400))}>
               -400
             </Button>
-            <Button variant={"outlined"} size={"large"} sx={buttonStyle} onClick={() => dispatch(damageToFirst(500))}>
+            <Button variant={"outlined"} size={"medium"} sx={buttonStyle} onClick={() => dispatch(damageToFirst(500))}>
               -500
             </Button>
-            <Button variant={"outlined"} size={"large"} sx={buttonStyle} onClick={() => dispatch(damageToFirst(600))}>
+            <Button variant={"outlined"} size={"medium"} sx={buttonStyle} onClick={() => dispatch(damageToFirst(600))}>
               -600
             </Button>
           </div>
           <div style={{ display: "flex", justifyContent: "space-between" }}>
-            <Button variant={"outlined"} size={"large"} sx={buttonStyle} onClick={() => dispatch(damageToFirst(700))}>
+            <Button variant={"outlined"} size={"medium"} sx={buttonStyle} onClick={() => dispatch(damageToFirst(700))}>
               -700
             </Button>
             <Button
               variant={"contained"}
-              size={"large"}
+              size={"medium"}
               color={"error"}
               sx={buttonStyle}
               onClick={() => dispatch(damageToFirst(1000))}>
@@ -235,7 +237,7 @@ function Play() {
             </Button>
             <Button
               variant={"contained"}
-              size={"large"}
+              size={"medium"}
               color={"success"}
               sx={buttonStyle}
               onClick={() => dispatch(healToFirst(100))}>
@@ -244,57 +246,63 @@ function Play() {
           </div>
         </Stack>
       </Grid2>
-      <Grid2 size={4} paddingX={1}>
-        <div style={{ display: "inline-block", width: 62 }}>
+      <Grid2 size={4} display={"flex"} justifyContent={"space-between"}>
+        <div style={{ display: "inline-block" }}></div>
+        <div style={{ display: "inline-block", width: 72 }}>
           <IconButton onClick={() => dispatch(increaseFpToFirst(1))}>+</IconButton>
-          <Button variant={"outlined"}>{firstPlayer.fp}</Button>
+          <Button variant={"outlined"} fullWidth={true}>
+            {firstPlayer.fp} fp
+          </Button>
           <IconButton onClick={() => dispatch(decreaseFpToFirst(1))}>-</IconButton>
         </div>
         <Button
           variant={"contained"}
           size={"large"}
-          style={{ borderRadius: 50, fontSize: 45, width: 95, margin: 10 }}
+          style={{ borderRadius: 50, fontSize: 45, width: 90 }}
           color={timerColor}
           onClick={handleTimerButton}>
           {getTime}
         </Button>
-        <div style={{ display: "inline-block", width: 62 }}>
+        <div style={{ display: "inline-block", width: 72 }}>
           <IconButton onClick={() => dispatch(increaseFpToSecond(1))}>+</IconButton>
-          <Button variant={"outlined"}>{secondPlayer.fp}</Button>
+          <Button variant={"outlined"} fullWidth={true}>
+            {secondPlayer.fp} fp
+          </Button>
           <IconButton onClick={() => dispatch(decreaseFpToSecond(1))}>-</IconButton>
         </div>
+        <div style={{ display: "inline-block" }}></div>
       </Grid2>
       <Grid2 size={4}>
         <Stack padding={1} paddingRight={3} spacing={1}>
           <div style={{ display: "flex", justifyContent: "space-between" }}>
-            <Button variant={"outlined"} size={"large"} sx={buttonStyle} onClick={() => dispatch(damageToSecond(100))}>
+            <Button variant={"outlined"} size={"medium"} sx={buttonStyle} onClick={() => dispatch(damageToSecond(100))}>
               -100
             </Button>
-            <Button variant={"outlined"} size={"large"} sx={buttonStyle} onClick={() => dispatch(damageToSecond(200))}>
+            <Button variant={"outlined"} size={"medium"} sx={buttonStyle} onClick={() => dispatch(damageToSecond(200))}>
               -200
             </Button>
-            <Button variant={"outlined"} size={"large"} sx={buttonStyle} onClick={() => dispatch(damageToSecond(300))}>
+            <Button variant={"outlined"} size={"medium"} sx={buttonStyle} onClick={() => dispatch(damageToSecond(300))}>
               -300
             </Button>
           </div>
           <div style={{ display: "flex", justifyContent: "space-between" }}>
-            <Button variant={"outlined"} size={"large"} sx={buttonStyle} onClick={() => dispatch(damageToSecond(400))}>
+            <Button variant={"outlined"} size={"medium"} sx={buttonStyle} onClick={() => dispatch(damageToSecond(400))}>
               -400
             </Button>
-            <Button variant={"outlined"} size={"large"} sx={buttonStyle} onClick={() => dispatch(damageToSecond(500))}>
+            <Button variant={"outlined"} size={"medium"} sx={buttonStyle} onClick={() => dispatch(damageToSecond(500))}>
               -500
             </Button>
-            <Button variant={"outlined"} size={"large"} sx={buttonStyle} onClick={() => dispatch(damageToSecond(600))}>
+            <Button variant={"outlined"} size={"medium"} sx={buttonStyle} onClick={() => dispatch(damageToSecond(600))}>
               -600
             </Button>
           </div>
           <div style={{ display: "flex", justifyContent: "space-between" }}>
-            <Button variant={"outlined"} size={"large"} sx={buttonStyle} onClick={() => dispatch(damageToSecond(700))}>
+            <Button variant={"outlined"} size={"medium"} sx={buttonStyle} onClick={() => dispatch(damageToSecond(700))}>
               -700
             </Button>
             <Button
               variant={"contained"}
-              size={"large"}
+              size={"medium"}
               color={"error"}
               sx={buttonStyle}
               onClick={() => dispatch(damageToSecond(1000))}>
@@ -303,7 +311,7 @@ function Play() {
             <Button
               variant={"contained"}
               color={"success"}
-              size={"large"}
+              size={"medium"}
               sx={buttonStyle}
               onClick={() => dispatch(healToSecond(100))}>
               +100
@@ -311,12 +319,8 @@ function Play() {
           </div>
         </Stack>
       </Grid2>
-      <Grid2 size={6} paddingTop={2}>
-        {getToken(firstPlayer.character, firstPlayer)}
-      </Grid2>
-      <Grid2 size={6} paddingTop={2}>
-        {getToken(secondPlayer.character, secondPlayer)}
-      </Grid2>
+      <Grid2 size={6}>{getToken(firstPlayer.character, firstPlayer)}</Grid2>
+      <Grid2 size={6}>{getToken(secondPlayer.character, secondPlayer)}</Grid2>
     </Grid2>
   );
 }

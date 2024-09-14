@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../../app/store";
-import characters, { Character } from "../Characters";
+import { Character } from "../Characters";
 
 export interface PlayerState {
   isFirst: boolean;
@@ -15,19 +15,25 @@ export interface BoardState {
   secondPlayer: PlayerState;
 }
 
+const noneCharacter: Character = {
+  name: "선택없음",
+  portrait: "",
+  tokens: []
+};
+
 const initialState: BoardState = {
   firstPlayer: {
     isFirst: true,
     currentHp: 5000,
     damagedHp: 0,
-    character: characters[0],
+    character: noneCharacter,
     fp: 0
   },
   secondPlayer: {
     isFirst: false,
     currentHp: 5000,
     damagedHp: 0,
-    character: characters[0],
+    character: noneCharacter,
     fp: 0
   }
 };
@@ -41,6 +47,26 @@ export const boardSlice = createSlice({
       state.secondPlayer.currentHp = 5000;
       state.firstPlayer.fp = 0;
       state.secondPlayer.fp = 0;
+      state.firstPlayer.character.tokens = state.firstPlayer.character.tokens.map(token => {
+        switch (token.type) {
+          case "toggle":
+            token.toggle = false;
+            return token;
+          case "counter":
+            token.count = 0;
+            return token;
+        }
+      });
+      state.secondPlayer.character.tokens = state.secondPlayer.character.tokens.map(token => {
+        switch (token.type) {
+          case "toggle":
+            token.toggle = false;
+            return token;
+          case "counter":
+            token.count = 0;
+            return token;
+        }
+      });
     },
     damageToFirst: (state, action: PayloadAction<number>) => {
       state.firstPlayer.damagedHp = Math.min(state.firstPlayer.currentHp, action.payload);
@@ -128,6 +154,10 @@ export const boardSlice = createSlice({
     },
     decreaseFpToSecond: (state, action: PayloadAction<number>) => {
       state.secondPlayer.fp -= action.payload;
+    },
+    deselectCharacter: state => {
+      state.firstPlayer.character = noneCharacter;
+      state.secondPlayer.character = noneCharacter;
     }
   }
 });
@@ -149,7 +179,8 @@ export const {
   increaseFpToFirst,
   increaseFpToSecond,
   decreaseFpToFirst,
-  decreaseFpToSecond
+  decreaseFpToSecond,
+  deselectCharacter
 } = boardSlice.actions;
 export const selectBoard = (state: RootState) => state.board;
 export const selectFirstPlayer = (state: RootState) => state.board.firstPlayer;

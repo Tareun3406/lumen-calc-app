@@ -8,12 +8,18 @@ import {
   setCharacterToSecond
 } from "../features/board/boardSlice";
 import characters, { Character } from "../features/Characters";
+import { useEffect } from "react";
 
 function CharacterSelect() {
   const navigate = useNavigate();
   const firstPlayer = useAppSelector(selectFirstPlayer);
   const secondPlayer = useAppSelector(selectSecondPlayer);
   const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    if (firstPlayer.character.name === "선택없음" || secondPlayer.character.name === "선택없음") return;
+    navigate("/board/play");
+  }, [firstPlayer.character, secondPlayer.character]);
 
   const onClickCharacter = (character: Character, player: "first" | "second") => {
     if (player === "first") dispatch(setCharacterToFirst(character));
@@ -52,10 +58,6 @@ function CharacterSelect() {
         <ImageList cols={3} gap={10} sx={{ maxWidth: 330, margin: "auto" }}>
           {characters.map(character => characterButton(character, "second"))}
         </ImageList>
-      </Grid2>
-      <Grid2 size={12}>
-        <Button onClick={() => navigate("/")}>타이틀로 이동</Button>
-        <Button onClick={() => navigate("/board/play")}>게임판으로 이동</Button>
       </Grid2>
     </Grid2>
   );

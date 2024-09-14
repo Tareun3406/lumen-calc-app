@@ -112,7 +112,7 @@ export interface Token {
 }
 
 export interface Character {
-  name: "루트" | "울프" | "비올라" | "델피" | "키스" | "니아" | "레브" | "타오" | "리타";
+  name: "루트" | "울프" | "비올라" | "델피" | "키스" | "니아" | "레브" | "타오" | "리타" | "선택없음";
   portrait: string;
   tokens: Token[];
 }
