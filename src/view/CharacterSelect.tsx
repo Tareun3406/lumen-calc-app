@@ -7,7 +7,7 @@ import {
   setCharacterToFirst,
   setCharacterToSecond
 } from "../features/board/boardSlice";
-import characters, { character } from "../features/characters";
+import characters, { Character } from "../features/Characters";
 
 function CharacterSelect() {
   const navigate = useNavigate();
@@ -15,12 +15,12 @@ function CharacterSelect() {
   const secondPlayer = useAppSelector(selectSecondPlayer);
   const dispatch = useAppDispatch();
 
-  const onClickCharacter = (character: character, player: "first" | "second") => {
+  const onClickCharacter = (character: Character, player: "first" | "second") => {
     if (player === "first") dispatch(setCharacterToFirst(character));
     else dispatch(setCharacterToSecond(character));
   };
 
-  const characterButton = (character: character, player: "first" | "second") => {
+  const characterButton = (character: Character, player: "first" | "second") => {
     const playerCharacter = player === "first" ? firstPlayer.character : secondPlayer.character;
     const isSelected = playerCharacter.name === character.name;
     const sx = {
@@ -40,16 +40,16 @@ function CharacterSelect() {
   };
 
   return (
-    <Grid2 container spacing={4}>
+    <Grid2 container>
       <Grid2 size={6}>
         <div>player 1</div>
-        <ImageList cols={3} gap={10} sx={{ maxWidth: 404, margin: "auto" }}>
+        <ImageList cols={3} gap={10} sx={{ maxWidth: 330, margin: "auto" }}>
           {characters.map(character => characterButton(character, "first"))}
         </ImageList>
       </Grid2>
       <Grid2 size={6}>
         <div>player 2</div>
-        <ImageList cols={3} gap={10} sx={{ maxWidth: 404, margin: "auto" }}>
+        <ImageList cols={3} gap={10} sx={{ maxWidth: 330, margin: "auto" }}>
           {characters.map(character => characterButton(character, "second"))}
         </ImageList>
       </Grid2>

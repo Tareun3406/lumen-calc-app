@@ -4,8 +4,6 @@ import { useEffect } from "react";
 import { Outlet } from "react-router-dom";
 
 function Board() {
-  // const firstPlayer = useAppSelector(selectFirstPlayer);
-  // const secondPlayer = useAppSelector(selectSecondPlayer);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -13,7 +11,7 @@ function Board() {
   }, []);
 
   return (
-    <div>
+    <div style={{ width: "100%", height: "100%" }}>
       <Outlet />
     </div>
   );

@@ -10,3 +10,11 @@ body {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
 }
+
+.healthBarFirst {
+  transform: skew(30deg);
+}
+.healthBarSecond {
+  transform: skew(-30deg) scaleX(-1);
+}
+
