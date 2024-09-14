@@ -8,8 +8,12 @@ import {
   changeTokenToggleToSecond,
   damageToFirst,
   damageToSecond,
+  decreaseFpToFirst,
+  decreaseFpToSecond,
   healToFirst,
   healToSecond,
+  increaseFpToFirst,
+  increaseFpToSecond,
   initialize,
   PlayerState,
   removeTokenToFirst,
@@ -35,7 +39,7 @@ function Play() {
   const dispatch = useDispatch();
 
   const buttonStyle = {
-    width: 80
+    width: 70
   };
 
   const handFirst = useMemo(() => {
@@ -173,8 +177,8 @@ function Play() {
         <text style={{ position: "absolute", top: 3, right: 70 }}>Hand: {handSecond}</text>
       </Grid2>
 
-      <Grid2 size={4.5}>
-        <Stack paddingLeft={3} spacing={1} paddingTop={1}>
+      <Grid2 size={4}>
+        <Stack spacing={1} padding={1} paddingLeft={3}>
           <div style={{ display: "flex", justifyContent: "space-between" }}>
             <Button variant={"outlined"} size={"large"} sx={buttonStyle} onClick={() => dispatch(damageToFirst(100))}>
               -100
@@ -220,18 +224,28 @@ function Play() {
           </div>
         </Stack>
       </Grid2>
-      <Grid2 size={3} padding={3} display={"flex"} justifyContent={"center"}>
+      <Grid2 size={4} paddingX={1}>
+        <div style={{ display: "inline-block", width: 62 }}>
+          <IconButton onClick={() => dispatch(increaseFpToFirst(1))}>+</IconButton>
+          <Button variant={"outlined"}>{firstPlayer.fp}</Button>
+          <IconButton onClick={() => dispatch(decreaseFpToFirst(1))}>-</IconButton>
+        </div>
         <Button
           variant={"contained"}
           size={"large"}
-          style={{ borderRadius: 50, fontSize: 50, width: 100 }}
+          style={{ borderRadius: 50, fontSize: 45, width: 95, margin: 10 }}
           color={timerColor}
           onClick={handleTimerButton}>
           {getTime}
         </Button>
+        <div style={{ display: "inline-block", width: 62 }}>
+          <IconButton onClick={() => dispatch(increaseFpToSecond(1))}>+</IconButton>
+          <Button variant={"outlined"}>{secondPlayer.fp}</Button>
+          <IconButton onClick={() => dispatch(decreaseFpToSecond(1))}>-</IconButton>
+        </div>
       </Grid2>
-      <Grid2 size={4.5}>
-        <Stack paddingRight={3} spacing={1} paddingTop={1}>
+      <Grid2 size={4}>
+        <Stack padding={1} paddingRight={3} spacing={1}>
           <div style={{ display: "flex", justifyContent: "space-between" }}>
             <Button variant={"outlined"} size={"large"} sx={buttonStyle} onClick={() => dispatch(damageToSecond(100))}>
               -100

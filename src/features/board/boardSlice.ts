@@ -1,13 +1,13 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../../app/store";
 import characters, { Character } from "../Characters";
-import { Simulate } from "react-dom/test-utils";
 
 export interface PlayerState {
   isFirst: boolean;
   currentHp: number;
   damagedHp: number;
   character: Character;
+  fp: number;
 }
 
 export interface BoardState {
@@ -20,13 +20,15 @@ const initialState: BoardState = {
     isFirst: true,
     currentHp: 5000,
     damagedHp: 0,
-    character: characters[0]
+    character: characters[0],
+    fp: 0
   },
   secondPlayer: {
     isFirst: false,
     currentHp: 5000,
     damagedHp: 0,
-    character: characters[0]
+    character: characters[0],
+    fp: 0
   }
 };
 
@@ -37,6 +39,8 @@ export const boardSlice = createSlice({
     initialize: state => {
       state.firstPlayer.currentHp = 5000;
       state.secondPlayer.currentHp = 5000;
+      state.firstPlayer.fp = 0;
+      state.secondPlayer.fp = 0;
     },
     damageToFirst: (state, action: PayloadAction<number>) => {
       state.firstPlayer.damagedHp = Math.min(state.firstPlayer.currentHp, action.payload);
@@ -112,6 +116,18 @@ export const boardSlice = createSlice({
       if (token.type == "counter" && !!token.count && !!token.maxCount) {
         state.secondPlayer.character.tokens[index].count = Math.min(token.count - 1, 0);
       }
+    },
+    increaseFpToFirst: (state, action: PayloadAction<number>) => {
+      state.firstPlayer.fp += action.payload;
+    },
+    increaseFpToSecond: (state, action: PayloadAction<number>) => {
+      state.secondPlayer.fp += action.payload;
+    },
+    decreaseFpToFirst: (state, action: PayloadAction<number>) => {
+      state.firstPlayer.fp -= action.payload;
+    },
+    decreaseFpToSecond: (state, action: PayloadAction<number>) => {
+      state.secondPlayer.fp -= action.payload;
     }
   }
 });
@@ -129,7 +145,11 @@ export const {
   addTokenToFirst,
   addTokenToSecond,
   removeTokenToFirst,
-  removeTokenToSecond
+  removeTokenToSecond,
+  increaseFpToFirst,
+  increaseFpToSecond,
+  decreaseFpToFirst,
+  decreaseFpToSecond
 } = boardSlice.actions;
 export const selectBoard = (state: RootState) => state.board;
 export const selectFirstPlayer = (state: RootState) => state.board.firstPlayer;
