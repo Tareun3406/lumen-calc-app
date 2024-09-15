@@ -19,6 +19,8 @@ import {
   PlayerState,
   removeTokenToFirst,
   removeTokenToSecond,
+  resetFpToFirst,
+  resetFpToSecond,
   selectFirstPlayer,
   selectSecondPlayer
 } from "../features/board/boardSlice";
@@ -61,7 +63,7 @@ function Play() {
       if (getTime === 0) {
         return "error";
       }
-      return "success";
+      return "secondary";
     }
     return "info";
   }, [isTimerToggle, getTime]);
@@ -93,6 +95,21 @@ function Play() {
 
   const removeToken = (player: PlayerState, index: number) =>
     player.isFirst ? dispatch(removeTokenToFirst(index)) : dispatch(removeTokenToSecond(index));
+
+  const getFpColor = useMemo(() => {
+    const getColor = (fp: number): "success" | "info" | "error" => {
+      if (fp > 0) return "info";
+      if (fp < 0) return "error";
+      return "success";
+    };
+
+    const first = getColor(firstPlayer.fp);
+    const second = getColor(secondPlayer.fp);
+    return {
+      first,
+      second
+    };
+  }, [firstPlayer.fp, secondPlayer.fp]);
 
   const getToken = (character: Character, player: PlayerState) => {
     switch (character.name) {
@@ -258,7 +275,11 @@ function Play() {
         <div style={{ display: "inline-block" }}></div>
         <div style={{ display: "inline-block", width: 72 }}>
           <IconButton onClick={() => dispatch(increaseFpToFirst(1))}>+</IconButton>
-          <Button variant={"outlined"} fullWidth={true}>
+          <Button
+            variant={firstPlayer.fp == 0 ? "outlined" : "contained"}
+            fullWidth={true}
+            color={getFpColor.first}
+            onClick={() => dispatch(resetFpToFirst())}>
             {firstPlayer.fp} fp
           </Button>
           <IconButton onClick={() => dispatch(decreaseFpToFirst(1))}>-</IconButton>
@@ -273,7 +294,11 @@ function Play() {
         </Button>
         <div style={{ display: "inline-block", width: 72 }}>
           <IconButton onClick={() => dispatch(increaseFpToSecond(1))}>+</IconButton>
-          <Button variant={"outlined"} fullWidth={true}>
+          <Button
+            variant={secondPlayer.fp == 0 ? "outlined" : "contained"}
+            fullWidth={true}
+            color={getFpColor.second}
+            onClick={() => dispatch(resetFpToSecond())}>
             {secondPlayer.fp} fp
           </Button>
           <IconButton onClick={() => dispatch(decreaseFpToSecond(1))}>-</IconButton>
