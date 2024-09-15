@@ -10,9 +10,9 @@ function HpBar(props: HpBarProps) {
   const barClass = props.targetPlayer === "first" ? "healthBarFirst" : "healthBarSecond";
   const barStyle = {
     thickness: 15,
+    verticalLineThickness: 0.1,
     backgroundColor: "darkgray"
   };
-  const healthBar = useRef<SVGAnimationElement>(null);
   const pauseBarAnimate = useRef<SVGAnimationElement>(null);
 
   const percentHp = useMemo(() => {
@@ -22,17 +22,25 @@ function HpBar(props: HpBarProps) {
     };
   }, [props.player.currentHp, props.player.damagedHp]);
 
+  const hpColor = useMemo(() => {
+    if (percentHp.current > 80) return "#69f0ae";
+    else if (percentHp.current > 60) return "#81d4fa";
+    else if (percentHp.current > 40) return "#b39ddb";
+    else if (percentHp.current > 20) return "#ab47bc";
+    return "#e91e63";
+  }, [percentHp.current]);
+
   useEffect(() => {
     pauseBarAnimate.current?.beginElement();
   }, [props.player.currentHp, props.player.damagedHp]);
 
   return (
-    <svg viewBox="0 0 100 10" className={`${barClass}`}>
-      <line strokeWidth={barStyle.thickness} stroke={barStyle.backgroundColor} x1="0" y1="0" x2="100" y2="0" />
-      <line strokeWidth={barStyle.thickness} stroke={"lightgreen"} x1={0} y1={0} x2={percentHp.current} y2={0} />
+    <svg viewBox={`0 0 100 8.2`} className={`${barClass} healthBar`}>
+      <line strokeWidth={barStyle.thickness} stroke={barStyle.backgroundColor} x1={0} y1="0" x2={100} y2="0" />
+      <line strokeWidth={barStyle.thickness} stroke={hpColor} x1={0} y1={0} x2={percentHp.current} y2={0} />
       <line
         strokeWidth={barStyle.thickness}
-        stroke={"red"}
+        stroke={"#D32F2F"}
         x1={percentHp.current}
         y1={0}
         x2={percentHp.current + percentHp.damage}
@@ -47,7 +55,6 @@ function HpBar(props: HpBarProps) {
           begin="indefinite"
         />
         <animate
-          ref={healthBar}
           attributeName="x2"
           from={percentHp.current + percentHp.damage}
           to={percentHp.current}
@@ -56,6 +63,9 @@ function HpBar(props: HpBarProps) {
           begin="pauseBarAnimate.end"
         />
       </line>
+      <line strokeWidth={barStyle.verticalLineThickness} stroke={"black"} x1={80} x2={80} y1={6.5} y2={1} />
+      <line strokeWidth={barStyle.verticalLineThickness} stroke={"black"} x1={60} x2={60} y1={6.5} y2={1} />
+      <line strokeWidth={barStyle.verticalLineThickness} stroke={"black"} x1={40} x2={40} y1={6.5} y2={1} />
     </svg>
   );
 }

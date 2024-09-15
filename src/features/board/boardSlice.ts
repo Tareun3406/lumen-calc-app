@@ -44,7 +44,9 @@ export const boardSlice = createSlice({
   reducers: {
     initialize: state => {
       state.firstPlayer.currentHp = 5000;
+      state.firstPlayer.damagedHp = 0;
       state.secondPlayer.currentHp = 5000;
+      state.secondPlayer.damagedHp = 0;
       state.firstPlayer.fp = 0;
       state.secondPlayer.fp = 0;
       state.firstPlayer.character.tokens = state.firstPlayer.character.tokens.map(token => {
