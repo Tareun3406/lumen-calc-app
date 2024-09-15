@@ -101,6 +101,7 @@ export const boardSlice = createSlice({
       state.secondPlayer.character = action.payload;
     },
     setTokenToggleToFirst: (state, action: PayloadAction<{ index: number; value: boolean }>) => {
+      console.log(action.payload.index);
       state.firstPlayer.character.tokens[action.payload.index].toggle = action.payload.value;
     },
     setTokenToggleToSecond: (state, action: PayloadAction<{ index: number; value: boolean }>) => {
@@ -145,7 +146,7 @@ export const boardSlice = createSlice({
       const index = action.payload;
       const token = state.secondPlayer.character.tokens[index];
       if (token.type == "counter" && !!token.count && !!token.maxCount) {
-        state.secondPlayer.character.tokens[index].count = Math.min(token.count - 1, 0);
+        state.secondPlayer.character.tokens[index].count = Math.max(token.count - 1, 0);
       }
     },
     setTokenCountToFirst: (state, action: PayloadAction<{ index: number; value: number }>) => {

@@ -17,4 +17,7 @@ code {
 .healthBarSecond {
   transform: skew(-30deg) scaleX(-1);
 }
+.reverseFlexRow {
+  flex-direction: row-reverse;
+}
 

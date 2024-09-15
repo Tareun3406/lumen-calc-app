@@ -98,7 +98,7 @@ const characters: Character[] = [
         maxCount: 4
       },
       {
-        img: "/token/yin.png",
+        img: "/token/yang.png",
         type: "counter",
         count: 0,
         maxCount: 4
@@ -108,7 +108,13 @@ const characters: Character[] = [
   {
     name: "리타",
     portrait: "/portrait/lita.png",
-    tokens: []
+    tokens: [
+      {
+        img: "/token/lita.png",
+        type: "toggle",
+        toggle: false
+      }
+    ]
   }
 ];
 
