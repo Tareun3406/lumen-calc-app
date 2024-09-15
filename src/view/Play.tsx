@@ -114,7 +114,7 @@ function Play() {
                   background: "black",
                   width: "100%",
                   height: "100%",
-                  opacity: player.character.tokens[0].toggle ? "0" : "0.4"
+                  opacity: player.character.tokens[0].toggle ? "0" : "0.6"
                 }}></div>
             </span>
           </div>
