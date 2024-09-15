@@ -172,12 +172,12 @@ function Play() {
   // counter(3, 5, 2*4) , toggle,
   return (
     <Grid2 container padding={1}>
-      <Grid2 size={5.5} display={"flex"} justifyContent={"space-between"} paddingX={2.5}>
+      <Grid2 size={5.25} display={"flex"} justifyContent={"space-between"} paddingX={2.5}>
         <img style={{ height: 31 }} src={firstPlayer.character.portrait} alt={firstPlayer.character.portrait} />
         <div style={{ display: "flex", alignItems: "center" }}>{firstPlayer.character.name}</div>
         <div></div>
       </Grid2>
-      <Grid2 size={1}>
+      <Grid2 size={1.5}>
         <ButtonGroup variant={"outlined"} size={"small"}>
           <Button
             onClick={() => {
@@ -191,7 +191,7 @@ function Play() {
           </Button>
         </ButtonGroup>
       </Grid2>
-      <Grid2 size={5.5} display={"flex"} justifyContent={"space-between"} paddingX={2.5}>
+      <Grid2 size={5.25} display={"flex"} justifyContent={"space-between"} paddingX={2.5}>
         <div></div>
         <div style={{ display: "flex", alignItems: "center" }}>{secondPlayer.character.name}</div>
         <img style={{ height: 31 }} src={secondPlayer.character.portrait} alt={secondPlayer.character.portrait} />
