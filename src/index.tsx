@@ -13,7 +13,7 @@ const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement)
 root.render(
   <React.StrictMode>
     <Provider store={store}>
-      <Box sx={{ width: "100vw", height: "100vh", minWidth: 781 }}>
+      <Box sx={{ display: "grid", placeContent: "center", width: "100vw", height: "100vh", minWidth: 781 }}>
         <RouterProvider router={mainRouter}></RouterProvider>
       </Box>
     </Provider>
