@@ -46,16 +46,16 @@ function CharacterSelect() {
   };
 
   return (
-    <Grid2 container>
+    <Grid2 container spacing={1}>
       <Grid2 size={6}>
         <div>player 1</div>
-        <ImageList cols={3} gap={10} sx={{ maxWidth: 330, margin: "auto" }}>
+        <ImageList cols={3} gap={5} sx={{ maxWidth: 330, margin: "auto" }}>
           {characters.map(character => characterButton(character, "first"))}
         </ImageList>
       </Grid2>
       <Grid2 size={6}>
         <div>player 2</div>
-        <ImageList cols={3} gap={10} sx={{ maxWidth: 330, margin: "auto" }}>
+        <ImageList cols={3} gap={5} sx={{ maxWidth: 330, margin: "auto" }}>
           {characters.map(character => characterButton(character, "second"))}
         </ImageList>
       </Grid2>
