@@ -17,8 +17,10 @@ const characters: Character[] = [
       {
         img: "/token/wolf.png",
         type: "counter",
+        toggle: false,
         count: 0,
-        maxCount: 5
+        maxCount: 5,
+        toggleCount: 5
       }
     ]
   },
@@ -29,8 +31,10 @@ const characters: Character[] = [
       {
         img: "/token/viola.png",
         type: "counter",
+        toggle: false,
         count: 0,
-        maxCount: 3
+        maxCount: 3,
+        toggleCount: 1
       }
     ]
   },
@@ -83,13 +87,18 @@ const characters: Character[] = [
     portrait: "/portrait/tao.png",
     tokens: [
       {
-        img: "/token/tao1.png",
+        img: "/token/harmony.png",
+        type: "toggle",
+        toggle: false
+      },
+      {
+        img: "/token/yin.png",
         type: "counter",
         count: 0,
         maxCount: 4
       },
       {
-        img: "/token/tao2.png",
+        img: "/token/yin.png",
         type: "counter",
         count: 0,
         maxCount: 4
@@ -109,6 +118,7 @@ export interface Token {
   toggle?: boolean;
   count?: number;
   maxCount?: number;
+  toggleCount?: number;
 }
 
 export interface Character {

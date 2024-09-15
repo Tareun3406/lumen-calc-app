@@ -100,6 +100,12 @@ export const boardSlice = createSlice({
     setCharacterToSecond: (state, action: PayloadAction<Character>) => {
       state.secondPlayer.character = action.payload;
     },
+    setTokenToggleToFirst: (state, action: PayloadAction<{ index: number; value: boolean }>) => {
+      state.firstPlayer.character.tokens[action.payload.index].toggle = action.payload.value;
+    },
+    setTokenToggleToSecond: (state, action: PayloadAction<{ index: number; value: boolean }>) => {
+      state.secondPlayer.character.tokens[action.payload.index].toggle = action.payload.value;
+    },
     changeTokenToggleToFirst: (state, action: PayloadAction<number>) => {
       const index = action.payload;
       const token = state.firstPlayer.character.tokens[index];
@@ -118,7 +124,6 @@ export const boardSlice = createSlice({
       const index = action.payload;
       const token = state.firstPlayer.character.tokens[index];
       if (token.type == "counter") {
-        console.log("test");
         state.firstPlayer.character.tokens[index].count = Math.min(token.count! + 1, token.maxCount!);
       }
     },
@@ -142,6 +147,12 @@ export const boardSlice = createSlice({
       if (token.type == "counter" && !!token.count && !!token.maxCount) {
         state.secondPlayer.character.tokens[index].count = Math.min(token.count - 1, 0);
       }
+    },
+    setTokenCountToFirst: (state, action: PayloadAction<{ index: number; value: number }>) => {
+      state.firstPlayer.character.tokens[action.payload.index].count = action.payload.value;
+    },
+    setTokenCountToSecond: (state, action: PayloadAction<{ index: number; value: number }>) => {
+      state.secondPlayer.character.tokens[action.payload.index].count = action.payload.value;
     },
     increaseFpToFirst: (state, action: PayloadAction<number>) => {
       state.firstPlayer.fp += action.payload;
@@ -177,11 +188,15 @@ export const {
   setCharacterToFirst,
   setCharacterToSecond,
   changeTokenToggleToFirst,
+  setTokenToggleToFirst,
   changeTokenToggleToSecond,
+  setTokenToggleToSecond,
   addTokenToFirst,
   addTokenToSecond,
   removeTokenToFirst,
   removeTokenToSecond,
+  setTokenCountToFirst,
+  setTokenCountToSecond,
   increaseFpToFirst,
   increaseFpToSecond,
   decreaseFpToFirst,

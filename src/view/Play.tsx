@@ -22,11 +22,15 @@ import {
   resetFpToFirst,
   resetFpToSecond,
   selectFirstPlayer,
-  selectSecondPlayer
+  selectSecondPlayer,
+  setTokenCountToFirst,
+  setTokenCountToSecond,
+  setTokenToggleToFirst,
+  setTokenToggleToSecond
 } from "../features/board/boardSlice";
 import HpBar from "./component/HpBar";
 import { useDispatch } from "react-redux";
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { ControlPoint, Person, Refresh, RemoveCircleOutline } from "@mui/icons-material";
 import { Character } from "../features/Characters";
 
@@ -96,6 +100,11 @@ function Play() {
   const removeToken = (player: PlayerState, index: number) =>
     player.isFirst ? dispatch(removeTokenToFirst(index)) : dispatch(removeTokenToSecond(index));
 
+  const setTokenCount = (player: PlayerState, index: number, value: number) =>
+    player.isFirst
+      ? dispatch(setTokenCountToFirst({ index, value }))
+      : dispatch(setTokenCountToSecond({ index, value }));
+
   const getFpColor = useMemo(() => {
     const getColor = (fp: number): "success" | "info" | "error" => {
       if (fp > 0) return "info";
@@ -111,7 +120,40 @@ function Play() {
     };
   }, [firstPlayer.fp, secondPlayer.fp]);
 
+  // 비올라 울프 토큰 활성화 조건 (카운터 한개)
+  useEffect(() => {
+    const firstTokens = firstPlayer.character.tokens;
+    const secondTokens = secondPlayer.character.tokens;
+
+    firstTokens.forEach((token, index) => {
+      if (token.type === "counter" && token.toggleCount) {
+        if (token.count! >= token.toggleCount) dispatch(setTokenToggleToFirst({ index, value: true }));
+        else dispatch(setTokenToggleToFirst({ index, value: false }));
+      }
+    });
+
+    secondTokens.forEach((token, index) => {
+      if (token.type === "counter" && token.toggleCount) {
+        if (token.count! >= token.toggleCount) dispatch(setTokenToggleToSecond({ index, value: true }));
+        else dispatch(setTokenToggleToSecond({ index, value: false }));
+      }
+    });
+  }, [firstPlayer.character.tokens, secondPlayer.character.tokens]);
+
   const getToken = (character: Character, player: PlayerState) => {
+    const counterToken = (
+      <div style={{ display: "grid", placeContent: "center", paddingLeft: 5, paddingRight: 5 }}>
+        <IconButton onClick={() => removeToken(player, 0)}>
+          <RemoveCircleOutline />
+        </IconButton>
+        <Button variant={"contained"} style={{ borderRadius: 50 }} onClick={() => setTokenCount(player, 0, 0)}>
+          {character.tokens[0].count} / {character.tokens[0].maxCount}
+        </Button>
+        <IconButton onClick={() => addToken(player, 0)}>
+          <ControlPoint />
+        </IconButton>
+      </div>
+    );
     switch (character.name) {
       // 토글형 한개
       case "루트":
@@ -144,46 +186,32 @@ function Play() {
       case "울프":
       case "비올라":
         return (
-          <div>
-            <div>
-              <img src={character.tokens[0].img} height={80} alt={character.tokens[0].img} />
+          <div style={{ display: "flex", justifyContent: "center" }}>
+            {player.isFirst ? "" : counterToken}
+            <div
+              style={{
+                display: "grid",
+                placeContent: "center",
+                position: "relative"
+              }}>
+              <img src={character.tokens[0].img} height={116} alt={character.tokens[0].img} />
+              <div
+                style={{
+                  position: "absolute",
+                  top: 0,
+                  left: 0,
+                  background: "black",
+                  width: "100%",
+                  height: "100%",
+                  opacity: player.character.tokens[0].toggle ? "0" : "0.6"
+                }}></div>
             </div>
-            <div style={{ fontSize: 20 }}>
-              <IconButton onClick={() => removeToken(player, 0)}>
-                <RemoveCircleOutline />
-              </IconButton>
-              <span>
-                {character.tokens[0].count} / {character.tokens[0].maxCount}
-              </span>
-              <IconButton onClick={() => addToken(player, 0)}>
-                <ControlPoint />
-              </IconButton>
-            </div>
+            {player.isFirst ? counterToken : ""}
           </div>
         );
 
-      // 카운터 형 다수
       case "타오":
-        return character.tokens.map((token, index) => {
-          return (
-            <div style={{ display: "inline-block" }} key={index}>
-              <div>
-                <img src={token.img} height={80} alt={token.img} />
-              </div>
-              <div style={{ fontSize: 20 }}>
-                <IconButton onClick={() => removeToken(player, index)}>
-                  <RemoveCircleOutline />
-                </IconButton>
-                <span>
-                  {token.count} / {token.maxCount}
-                </span>
-                <IconButton onClick={() => addToken(player, index)}>
-                  <ControlPoint />
-                </IconButton>
-              </div>
-            </div>
-          );
-        });
+        return;
     }
   };
   // counter(3, 5, 2*4) , toggle,
@@ -352,8 +380,9 @@ function Play() {
           </div>
         </Stack>
       </Grid2>
-      <Grid2 size={6}>{getToken(firstPlayer.character, firstPlayer)}</Grid2>
-      <Grid2 size={6}>{getToken(secondPlayer.character, secondPlayer)}</Grid2>
+      <Grid2 size={5.25}>{getToken(firstPlayer.character, firstPlayer)}</Grid2>
+      <Grid2 size={1.5}></Grid2>
+      <Grid2 size={5.25}>{getToken(secondPlayer.character, secondPlayer)}</Grid2>
     </Grid2>
   );
 }
