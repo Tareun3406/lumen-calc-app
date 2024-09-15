@@ -103,7 +103,6 @@ export const boardSlice = createSlice({
       state.secondPlayer.character = action.payload;
     },
     setTokenToggleToFirst: (state, action: PayloadAction<{ index: number; value: boolean }>) => {
-      console.log(action.payload.index);
       state.firstPlayer.character.tokens[action.payload.index].toggle = action.payload.value;
     },
     setTokenToggleToSecond: (state, action: PayloadAction<{ index: number; value: boolean }>) => {

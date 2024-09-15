@@ -2,12 +2,11 @@ import { useEffect, useMemo, useRef } from "react";
 import { PlayerState } from "../../features/board/boardSlice";
 
 interface HpBarProps {
-  targetPlayer: "first" | "second";
   player: PlayerState;
 }
 
 function HpBar(props: HpBarProps) {
-  const barClass = props.targetPlayer === "first" ? "healthBarFirst" : "healthBarSecond";
+  const barClass = props.player.isFirst ? "healthBarFirst" : "healthBarSecond";
   const barStyle = {
     thickness: 15,
     verticalLineThickness: 0.1,
@@ -30,9 +29,11 @@ function HpBar(props: HpBarProps) {
     return "#e91e63";
   }, [percentHp.current]);
 
+  const animateElementId = props.player.isFirst ? "pauseBarAnimateFirst" : "pauseBarAnimateSecond";
+
   useEffect(() => {
     pauseBarAnimate.current?.beginElement();
-  }, [props.player.currentHp, props.player.damagedHp]);
+  }, [props.player.currentHp]);
 
   return (
     <svg viewBox={`0 0 100 8.2`} className={`${barClass} healthBar`}>
@@ -46,7 +47,7 @@ function HpBar(props: HpBarProps) {
         x2={percentHp.current + percentHp.damage}
         y2={0}>
         <animate
-          id="pauseBarAnimate"
+          id={animateElementId}
           ref={pauseBarAnimate}
           attributeName="x2"
           from={percentHp.current + percentHp.damage}
@@ -60,7 +61,7 @@ function HpBar(props: HpBarProps) {
           to={percentHp.current}
           dur="1s"
           fill="freeze"
-          begin="pauseBarAnimate.end"
+          begin={`${animateElementId}.end`}
         />
       </line>
       <line strokeWidth={barStyle.verticalLineThickness} stroke={"black"} x1={80} x2={80} y1={6.5} y2={1} />

@@ -397,12 +397,12 @@ function Play() {
         <img style={{ height: 31 }} src={secondPlayer.character.portrait} alt={secondPlayer.character.portrait} />
       </Grid2>
       <Grid2 size={6} paddingLeft={4} paddingRight={6} position={"relative"}>
-        <HpBar targetPlayer="first" player={firstPlayer} />
+        <HpBar player={firstPlayer} />
         <span style={{ position: "absolute", top: 3, right: 70 }}>{firstPlayer.currentHp}</span>
         <span style={{ position: "absolute", top: 3, left: 70 }}>Hand: {handFirst}</span>
       </Grid2>
       <Grid2 size={6} paddingLeft={6} paddingRight={4} position={"relative"}>
-        <HpBar targetPlayer="second" player={secondPlayer} />
+        <HpBar player={secondPlayer} />
         <span style={{ position: "absolute", top: 3, left: 70 }}>{secondPlayer.currentHp}</span>
         <span style={{ position: "absolute", top: 3, right: 70 }}>Hand: {handSecond}</span>
       </Grid2>
