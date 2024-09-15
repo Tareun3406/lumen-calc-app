@@ -17,6 +17,17 @@ code {
 .healthBarSecond {
   transform: skew(-30deg) scaleX(-1);
 }
+/*.healthBar {*/
+/*  &.damage {*/
+/*    animation: damageAnimation 1s linear 1 forwards;*/
+/*  }*/
+/*}*/
+/*@keyframes damageAnimation {*/
+/*  to {*/
+/*    stroke-dashoffset: 0;*/
+/*  }*/
+/*}*/
+
 .reverseFlexRow {
   flex-direction: row-reverse;
 }

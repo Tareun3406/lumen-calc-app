@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { Button, Grid2, ImageList, ImageListItem } from "@mui/material";
+import { Grid2, ImageList, ImageListItem } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import {
   selectFirstPlayer,
