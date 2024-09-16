@@ -206,8 +206,8 @@ function Play() {
       case "키스":
         return (
           <div>
-            <span style={{ position: "relative", display: "inline-flex" }} onClick={() => changeToggle(player, 0)}>
-              <img src={character.tokens[0].img} height={120} alt={character.tokens[0].img} />
+            <div style={{ position: "relative", display: "flex" }} onClick={() => changeToggle(player, 0)}>
+              <img src={character.tokens[0].img} height={116} alt={character.tokens[0].img} />
               <div
                 style={{
                   position: "absolute",
@@ -218,7 +218,7 @@ function Play() {
                   height: "100%",
                   opacity: player.character.tokens[0].toggle ? "0" : "0.6"
                 }}></div>
-            </span>
+            </div>
           </div>
         );
 
@@ -226,8 +226,8 @@ function Play() {
       case "리타":
         return (
           <div>
-            <span style={{ position: "relative", display: "inline-flex" }} onClick={() => changeToggle(player, 0)}>
-              <img src={character.tokens[0].img} height={120} alt={character.tokens[0].img} />
+            <div style={{ position: "relative", display: "flex" }} onClick={() => changeToggle(player, 0)}>
+              <img src={character.tokens[0].img} height={116} alt={character.tokens[0].img} />
               <div
                 style={{
                   position: "absolute",
@@ -238,7 +238,7 @@ function Play() {
                   height: "100%",
                   opacity: player.character.tokens[0].toggle ? "0" : "0.6"
                 }}></div>
-            </span>
+            </div>
           </div>
         );
 
@@ -286,7 +286,7 @@ function Play() {
                 display: "grid",
                 placeContent: "center"
               }}>
-              <div style={{ position: "relative" }}>
+              <div style={{ position: "relative", display: "flex" }}>
                 <img src={character.tokens[1].img} height={50} alt={character.tokens[1].img} />
                 <div
                   style={{
@@ -351,7 +351,7 @@ function Play() {
                 display: "grid",
                 placeContent: "center"
               }}>
-              <div style={{ position: "relative" }}>
+              <div style={{ position: "relative", height: 50 }}>
                 <img src={character.tokens[2].img} height={50} alt={character.tokens[2].img} />
                 <div
                   style={{
