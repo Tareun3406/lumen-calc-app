@@ -9,10 +9,17 @@ export interface PlayerState {
   character: Character;
   fp: number;
 }
+export interface damageLog {
+  isFirstPlayer: boolean;
+  type: "DAMAGE" | "HEAL";
+  payload: number;
+  result: number;
+}
 
 export interface BoardState {
   firstPlayer: PlayerState;
   secondPlayer: PlayerState;
+  damageLogs: damageLog[];
 }
 
 const noneCharacter: Character = {
@@ -35,7 +42,8 @@ const initialState: BoardState = {
     damagedHp: 0,
     character: noneCharacter,
     fp: 0
-  }
+  },
+  damageLogs: []
 };
 
 export const boardSlice = createSlice({
@@ -69,22 +77,33 @@ export const boardSlice = createSlice({
             return token;
         }
       });
+      state.damageLogs = [];
     },
     damageToFirst: (state, action: PayloadAction<number>) => {
-      state.firstPlayer.damagedHp = Math.min(state.firstPlayer.currentHp, action.payload);
+      const damaged = Math.min(state.firstPlayer.currentHp, action.payload);
+      state.firstPlayer.damagedHp = damaged;
       state.firstPlayer.currentHp = Math.max(state.firstPlayer.currentHp - action.payload, 0);
+      state.damageLogs.push({isFirstPlayer : true, type: "DAMAGE", payload: damaged, result: state.firstPlayer.currentHp});
     },
     damageToSecond: (state, action: PayloadAction<number>) => {
-      state.secondPlayer.damagedHp = Math.min(state.secondPlayer.currentHp, action.payload);
+      const damaged = Math.min(state.secondPlayer.currentHp, action.payload);
+      state.secondPlayer.damagedHp = damaged;
       state.secondPlayer.currentHp = Math.max(state.secondPlayer.currentHp - action.payload, 0);
+      state.damageLogs.push({isFirstPlayer : false, type: "DAMAGE", payload: damaged, result: state.secondPlayer.currentHp});
     },
     healToFirst: (state, action: PayloadAction<number>) => {
+      const sum = state.firstPlayer.currentHp + action.payload;
+      const healed = sum > 5000 ? (sum - 5000) : action.payload;
       state.firstPlayer.damagedHp = 0;
       state.firstPlayer.currentHp = Math.min(state.firstPlayer.currentHp + action.payload, 5000);
+      state.damageLogs.push({isFirstPlayer : true, type: "HEAL", payload: healed, result: state.firstPlayer.currentHp});
     },
     healToSecond: (state, action: PayloadAction<number>) => {
+      const sum = state.secondPlayer.currentHp + action.payload;
+      const healed = sum > 5000 ? (sum - 5000) : action.payload;
       state.secondPlayer.damagedHp = 0;
       state.secondPlayer.currentHp = Math.min(state.secondPlayer.currentHp + action.payload, 5000);
+      state.damageLogs.push({isFirstPlayer : false, type: "HEAL", payload: healed, result: state.secondPlayer.currentHp});
     },
     setHealthToFirst: (state, action: PayloadAction<number>) => {
       const damage = action.payload - state.firstPlayer.currentHp;
@@ -210,5 +229,6 @@ export const {
 export const selectBoard = (state: RootState) => state.board;
 export const selectFirstPlayer = (state: RootState) => state.board.firstPlayer;
 export const selectSecondPlayer = (state: RootState) => state.board.secondPlayer;
+export const selectDamageLogs = (state: RootState) => state.board.damageLogs;
 
 export default boardSlice.reducer;

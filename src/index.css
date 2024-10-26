@@ -26,3 +26,20 @@ code {
   flex-direction: row-reverse;
 }
 
+.damageLogFirstPlayer {
+  display: flex;
+  justify-content: flex-end;
+  text-align: left;
+}
+.damageLogSecondPlayer {
+  display: flex;
+  justify-content: start;
+  text-align: right;
+}
+
+.red {
+  color: red;
+}
+.green {
+  color: green;
+}

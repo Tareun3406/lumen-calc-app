@@ -1,4 +1,4 @@
-import { Button, ButtonGroup, Grid2, IconButton } from "@mui/material";
+import { Button, ButtonGroup, Drawer, Grid2, IconButton, List, ListItem, ListItemText } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useAppSelector } from "../app/hooks";
 import {
@@ -12,21 +12,25 @@ import {
   resetFpToSecond,
   selectFirstPlayer,
   selectSecondPlayer,
+  selectDamageLogs
 } from "../features/board/boardSlice";
 import HpBar from "../component/HpBar";
 import { useDispatch } from "react-redux";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Person, Refresh } from "@mui/icons-material";
+import { Person, Refresh, FormatListBulleted } from "@mui/icons-material";
 import TokenDisplay from "../component/TokenDisplay";
 import ButtonPanelProps from "../component/ButtonPanelProps";
+import DamageLogs from "../component/DamageLogs";
 
 function Play() {
   const firstPlayer = useAppSelector(selectFirstPlayer);
   const secondPlayer = useAppSelector(selectSecondPlayer);
+  const damageLogs = useAppSelector(selectDamageLogs);
   const navigate = useNavigate();
 
   const [getTime, setTime] = useState(10);
   const [isTimerToggle, setTimerToggle] = useState(false);
+  const [drawDamageLog, setDrawDamageLog] = useState(false);
   const timerIntervalId = useRef<NodeJS.Timer>();
 
   const dispatch = useDispatch();
@@ -88,18 +92,22 @@ function Play() {
     };
   }, [firstPlayer.fp, secondPlayer.fp]);
 
+  const toggleDamageLog = (toggle: boolean) => () => {
+    setDrawDamageLog(toggle);
+  }
+
   useEffect(() => {
     dispatch(initialize());
   }, []);
   // counter(3, 5, 2*4) , toggle,
   return (
     <Grid2 container padding={1}>
-      <Grid2 size={5.25} display={"flex"} justifyContent={"space-between"} paddingX={2.5}>
+      <Grid2 size={5} display={"flex"} justifyContent={"space-between"} paddingX={2.5}>
         <img style={{ height: 31 }} src={firstPlayer.character.portrait} alt={firstPlayer.character.portrait} />
         <div style={{ display: "flex", alignItems: "center" }}>{firstPlayer.character.name}</div>
         <div></div>
       </Grid2>
-      <Grid2 size={1.5}>
+      <Grid2 size={2} paddingBottom={0.5}>
         <ButtonGroup variant={"outlined"} size={"small"}>
           <Button
             onClick={() => {
@@ -111,9 +119,12 @@ function Play() {
           <Button onClick={() => dispatch(initialize())}>
             <Refresh />
           </Button>
+          <Button onClick={toggleDamageLog(true)}>
+            <FormatListBulleted />
+          </Button>
         </ButtonGroup>
       </Grid2>
-      <Grid2 size={5.25} display={"flex"} justifyContent={"space-between"} paddingX={2.5}>
+      <Grid2 size={5} display={"flex"} justifyContent={"space-between"} paddingX={2.5}>
         <div></div>
         <div style={{ display: "flex", alignItems: "center" }}>{secondPlayer.character.name}</div>
         <img style={{ height: 31 }} src={secondPlayer.character.portrait} alt={secondPlayer.character.portrait} />
@@ -174,6 +185,11 @@ function Play() {
       </Grid2>
       <Grid2 size={6} display={"flex"} justifyContent={"center"}>
         <TokenDisplay player={secondPlayer}></TokenDisplay>
+      </Grid2>
+      <Grid2 size={12}>
+        <Drawer open={drawDamageLog} onClose={toggleDamageLog(false)} anchor="bottom">
+          <DamageLogs damageLogs={damageLogs}></DamageLogs>
+        </Drawer>
       </Grid2>
     </Grid2>
   );
