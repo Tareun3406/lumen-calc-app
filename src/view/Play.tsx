@@ -15,7 +15,7 @@ import {
 } from "../features/board/boardSlice";
 import HpBar from "../component/HpBar";
 import { useDispatch } from "react-redux";
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Person, Refresh } from "@mui/icons-material";
 import TokenDisplay from "../component/TokenDisplay";
 import ButtonPanelProps from "../component/ButtonPanelProps";
@@ -88,6 +88,9 @@ function Play() {
     };
   }, [firstPlayer.fp, secondPlayer.fp]);
 
+  useEffect(() => {
+    dispatch(initialize());
+  }, []);
   // counter(3, 5, 2*4) , toggle,
   return (
     <Grid2 container padding={1}>
