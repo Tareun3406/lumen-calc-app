@@ -35,6 +35,7 @@ function Title() {
     return (
       <div style={{ display: "flex", flexDirection: "column" }}>
         <div>앱으로 설치하여 사용하기를 추천합니다.</div>
+        {/windows/i.test(userAgent) && windowElement}
         {/android/i.test(userAgent) && androidElement}
         {/iphone|ipad|ipod/i.test(userAgent) && iosMobileElement}
         {/macintosh|mac os x/i.test(userAgent) && windowElement}

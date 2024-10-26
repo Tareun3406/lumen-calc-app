@@ -17,7 +17,7 @@ import { StaleWhileRevalidate } from "workbox-strategies";
 declare const self: ServiceWorkerGlobalScope;
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const SERVICE_WORKER_VERSION = '1.0.1'
+const SERVICE_WORKER_VERSION = '1.0.2'
 console.log(SERVICE_WORKER_VERSION);
 
 clientsClaim();
