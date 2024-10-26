@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef } from "react";
-import { PlayerState } from "../../features/board/boardSlice";
+import { PlayerState } from "../features/board/boardSlice";
 
 interface HpBarProps {
   player: PlayerState;
