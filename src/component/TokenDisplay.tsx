@@ -74,6 +74,21 @@ function TokenDisplay(props: TokenDisplayProps) {
     }
   }, [character.tokens]);
 
+  // 비올라 울프 토큰 활성화 조건 (카운터 한개)
+  useEffect(() => {
+    const tokens = character.tokens;
+
+    tokens.forEach((token, index) => {
+      if (token.type === "counter" && token.toggleCount) {
+        if (token.count! >= token.toggleCount)  {
+          dispatchToken({index, value: true});
+        }
+        else dispatchToken({ index, value: false });
+      }
+    });
+
+  }, [character.tokens]);
+
 
   const counterToken = (
     <div style={{ display: "grid", placeContent: "center", paddingLeft: 5, paddingRight: 5 }}>
