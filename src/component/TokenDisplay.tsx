@@ -10,7 +10,7 @@ import {
   setTokenCountToSecond,
   setTokenToggleToFirst, setTokenToggleToSecond
 } from "../features/board/boardSlice";
-import { Button, IconButton } from "@mui/material";
+import { Button, IconButton, Tooltip } from "@mui/material";
 import { ControlPoint, RemoveCircleOutline } from "@mui/icons-material";
 import { useDispatch } from "react-redux";
 import { useEffect } from "react";
@@ -113,19 +113,21 @@ function TokenDisplay(props: TokenDisplayProps) {
     case "키스":
       return (
         <div>
-          <div style={{ position: "relative", display: "flex" }} onClick={() => changeToggle(0)}>
-            <img src={character.tokens[0].img} height={116} alt={character.tokens[0].img} />
-            <div
-              style={{
-                position: "absolute",
-                top: 0,
-                left: 0,
-                background: "black",
-                width: "100%",
-                height: "100%",
-                opacity: player.character.tokens[0].toggle ? "0" : "0.6"
-              }}></div>
-          </div>
+          <Tooltip title={character.tokens[0].description} placement={"top"}>
+            <div style={{ position: "relative", display: "flex" }} onClick={() => changeToggle(0)}>
+              <img src={character.tokens[0].img} height={116} alt={character.tokens[0].img} />
+              <div
+                style={{
+                  position: "absolute",
+                  top: 0,
+                  left: 0,
+                  background: "black",
+                  width: "100%",
+                  height: "100%",
+                  opacity: player.character.tokens[0].toggle ? "0" : "0.6"
+                }}></div>
+            </div>
+          </Tooltip>
         </div>
       );
 
@@ -155,24 +157,26 @@ function TokenDisplay(props: TokenDisplayProps) {
       return (
         <div style={{ display: "flex", justifyContent: "center" }}>
           {player.isFirst ? "" : counterToken}
-          <div
-            style={{
-              display: "grid",
-              placeContent: "center",
-              position: "relative"
-            }}>
-            <img src={character.tokens[0].img} height={116} alt={character.tokens[0].img} />
+          <Tooltip title={character.tokens[0].description} placement={"top"}>
             <div
               style={{
-                position: "absolute",
-                top: 0,
-                left: 0,
-                background: "black",
-                width: "100%",
-                height: "100%",
-                opacity: player.character.tokens[0].toggle ? "0" : "0.6"
-              }}></div>
-          </div>
+                display: "grid",
+                placeContent: "center",
+                position: "relative"
+              }}>
+              <img src={character.tokens[0].img} height={116} alt={character.tokens[0].img} />
+              <div
+                style={{
+                  position: "absolute",
+                  top: 0,
+                  left: 0,
+                  background: "black",
+                  width: "100%",
+                  height: "100%",
+                  opacity: player.character.tokens[0].toggle ? "0" : "0.6"
+                }}></div>
+            </div>
+          </Tooltip>
           {player.isFirst ? counterToken : ""}
         </div>
       );
@@ -193,19 +197,21 @@ function TokenDisplay(props: TokenDisplayProps) {
               display: "grid",
               placeContent: "center"
             }}>
-            <div style={{ position: "relative", display: "flex" }}>
-              <img src={character.tokens[1].img} height={50} alt={character.tokens[1].img} />
-              <div
-                style={{
-                  position: "absolute",
-                  top: 0,
-                  left: 0,
-                  background: "black",
-                  width: "100%",
-                  height: "100%",
-                  opacity: player.character.tokens[1].toggle ? "0" : "0.6"
-                }}></div>
-            </div>
+            <Tooltip title={character.tokens[1].description} placement={"top"}>
+              <div style={{ position: "relative", display: "flex" }}>
+                <img src={character.tokens[1].img} height={50} alt={character.tokens[1].img} />
+                <div
+                  style={{
+                    position: "absolute",
+                    top: 0,
+                    left: 0,
+                    background: "black",
+                    width: "100%",
+                    height: "100%",
+                    opacity: player.character.tokens[1].toggle ? "0" : "0.6"
+                  }}></div>
+              </div>
+            </Tooltip>
           </div>
           <div style={{ display: "grid", placeContent: "center", paddingLeft: 5, paddingRight: 5 }}>
             <IconButton onClick={() => addToken(1)}>
@@ -218,24 +224,26 @@ function TokenDisplay(props: TokenDisplayProps) {
               <RemoveCircleOutline />
             </IconButton>
           </div>
-          <div
-            style={{
-              display: "grid",
-              placeContent: "center",
-              position: "relative"
-            }}>
-            <img src={character.tokens[0].img} height={116} alt={character.tokens[0].img} />
+          <Tooltip title={character.tokens[0].description} placement={"top"}>
             <div
               style={{
-                position: "absolute",
-                top: 0,
-                left: 0,
-                background: "black",
-                width: "100%",
-                height: "100%",
-                opacity: player.character.tokens[0].toggle ? "0" : "0.6"
-              }}></div>
-          </div>
+                display: "grid",
+                placeContent: "center",
+                position: "relative"
+              }}>
+              <img src={character.tokens[0].img} height={116} alt={character.tokens[0].img} />
+              <div
+                style={{
+                  position: "absolute",
+                  top: 0,
+                  left: 0,
+                  background: "black",
+                  width: "100%",
+                  height: "100%",
+                  opacity: player.character.tokens[0].toggle ? "0" : "0.6"
+                }}></div>
+            </div>
+          </Tooltip>
           <div style={{ display: "grid", placeContent: "center", paddingLeft: 5, paddingRight: 5 }}>
             <IconButton onClick={() => addToken(2)}>
               <ControlPoint />
@@ -258,23 +266,26 @@ function TokenDisplay(props: TokenDisplayProps) {
               display: "grid",
               placeContent: "center"
             }}>
-            <div style={{ position: "relative", height: 50 }}>
-              <img src={character.tokens[2].img} height={50} alt={character.tokens[2].img} />
-              <div
-                style={{
-                  position: "absolute",
-                  top: 0,
-                  left: 0,
-                  background: "black",
-                  width: "100%",
-                  height: "100%",
-                  opacity: player.character.tokens[2].toggle ? "0" : "0.6"
-                }}></div>
-            </div>
+            <Tooltip title={character.tokens[2].description} placement={"top"}>
+              <div style={{ position: "relative", height: 50 }}>
+                <img src={character.tokens[2].img} height={50} alt={character.tokens[2].img} />
+                <div
+                  style={{
+                    position: "absolute",
+                    top: 0,
+                    left: 0,
+                    background: "black",
+                    width: "100%",
+                    height: "100%",
+                    opacity: player.character.tokens[2].toggle ? "0" : "0.6"
+                  }}></div>
+              </div>
+            </Tooltip>
           </div>
         </div>
       );
-    default: return (<div></div>)
+    default:
+      return (<div></div>)
   }
 }
 
