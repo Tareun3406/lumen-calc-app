@@ -25,8 +25,14 @@ function ButtonPanelProps(props:ButtonPanelProps) {
     width: 70
   };
 
+  const paddingAsPlayer = () => {
+    return isFirstPlayer
+      ? {left: 3, right: 0}
+      : {left: 0, right: 3}
+  }
+
   return(
-    <Stack padding={1} paddingRight={3} spacing={1}>
+    <Stack padding={1} paddingLeft={paddingAsPlayer().left} paddingRight={paddingAsPlayer().right} spacing={1}>
       <div style={{ display: "flex", justifyContent: "space-between" }} className={ getClassNameAsIsFirst() }>
         <Button variant={"outlined"} size={"medium"} sx={buttonStyle} onClick={() => dispatchDamage(100)}>
           -100

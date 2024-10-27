@@ -104,11 +104,13 @@ function Play() {
   // counter(3, 5, 2*4) , toggle,
   return (
     <Grid2 container padding={1}>
+
       <Grid2 size={5} display={"flex"} justifyContent={"space-between"} paddingX={2.5}>
         <img style={{ height: 31 }} src={firstPlayer.character.portrait} alt={firstPlayer.character.portrait} />
         <div style={{ display: "flex", alignItems: "center" }}>{firstPlayer.character.name}</div>
         <div></div>
       </Grid2>
+
       <Grid2 size={2} paddingBottom={0.5}>
         <ButtonGroup variant={"outlined"} size={"small"}>
           <Button
@@ -126,25 +128,33 @@ function Play() {
           </Button>
         </ButtonGroup>
       </Grid2>
+
       <Grid2 size={5} display={"flex"} justifyContent={"space-between"} paddingX={2.5}>
         <div></div>
         <div style={{ display: "flex", alignItems: "center" }}>{secondPlayer.character.name}</div>
         <img style={{ height: 31 }} src={secondPlayer.character.portrait} alt={secondPlayer.character.portrait} />
       </Grid2>
+
+
+
       <Grid2 size={6} paddingLeft={4} paddingRight={6} position={"relative"}>
         <HpBar player={firstPlayer} />
         <span style={{ position: "absolute", top: 3, right: 70 }}>{firstPlayer.currentHp}</span>
         <span style={{ position: "absolute", top: 3, left: 70 }}>Hand: {handFirst}</span>
       </Grid2>
+
       <Grid2 size={6} paddingLeft={6} paddingRight={4} position={"relative"}>
         <HpBar player={secondPlayer} />
         <span style={{ position: "absolute", top: 3, left: 70 }}>{secondPlayer.currentHp}</span>
         <span style={{ position: "absolute", top: 3, right: 70 }}>Hand: {handSecond}</span>
       </Grid2>
 
+
+
       <Grid2 size={4}>
         <ButtonPanelProps player={firstPlayer}></ButtonPanelProps>
       </Grid2>
+
       <Grid2 size={4} display={"flex"} justifyContent={"space-between"}>
         <div style={{ display: "inline-block" }}></div>
         <div style={{ display: "inline-block", width: 72 }}>
@@ -179,20 +189,27 @@ function Play() {
         </div>
         <div style={{ display: "inline-block" }}></div>
       </Grid2>
+
       <Grid2 size={4}>
         <ButtonPanelProps player={secondPlayer}></ButtonPanelProps>
       </Grid2>
+
+
+
       <Grid2 size={6} display={"flex"} justifyContent={"center"}>
         <TokenDisplay player={firstPlayer}></TokenDisplay>
       </Grid2>
+
       <Grid2 size={6} display={"flex"} justifyContent={"center"}>
         <TokenDisplay player={secondPlayer}></TokenDisplay>
       </Grid2>
+
       <Grid2 size={12}>
         <Drawer open={drawDamageLog} onClose={toggleDamageLog(false)} anchor="bottom">
           <DamageLogs damageLogs={damageLogs}></DamageLogs>
         </Drawer>
       </Grid2>
+
     </Grid2>
   );
 }
