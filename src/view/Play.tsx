@@ -17,7 +17,7 @@ import {
 import HpBar from "../component/HpBar";
 import { useDispatch } from "react-redux";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Person, Refresh, FormatListBulleted } from "@mui/icons-material";
+import { Person, Refresh, EditNote } from "@mui/icons-material";
 import TokenDisplay from "../component/TokenDisplay";
 import ButtonPanelProps from "../component/ButtonPanelProps";
 import DamageLogs from "../component/DamageLogs";
@@ -101,7 +101,7 @@ function Play() {
   useEffect(() => {
     dispatch(initialize());
   }, []);
-  // counter(3, 5, 2*4) , toggle,
+
   return (
     <Grid2 container padding={1}>
 
@@ -124,7 +124,7 @@ function Play() {
             <Refresh />
           </Button>
           <Button onClick={toggleDamageLog(true)}>
-            <FormatListBulleted />
+            <EditNote />
           </Button>
         </ButtonGroup>
       </Grid2>
@@ -203,6 +203,8 @@ function Play() {
       <Grid2 size={6} display={"flex"} justifyContent={"center"}>
         <TokenDisplay player={secondPlayer}></TokenDisplay>
       </Grid2>
+
+
 
       <Grid2 size={12}>
         <Drawer open={drawDamageLog} onClose={toggleDamageLog(false)} anchor="bottom">
