@@ -67,6 +67,8 @@ function HpBar(props: HpBarProps) {
       <line strokeWidth={barStyle.verticalLineThickness} stroke={"black"} x1={80} x2={80} y1={6.5} y2={1} />
       <line strokeWidth={barStyle.verticalLineThickness} stroke={"black"} x1={60} x2={60} y1={6.5} y2={1} />
       <line strokeWidth={barStyle.verticalLineThickness} stroke={"black"} x1={40} x2={40} y1={6.5} y2={1} />
+      {props.player.character.name === "리타" &&
+        <line strokeWidth={barStyle.verticalLineThickness} stroke={"black"} x1={20} x2={20} y1={6.5} y2={1} />}
     </svg>
   );
 }

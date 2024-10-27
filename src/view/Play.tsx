@@ -1,4 +1,4 @@
-import { Button, ButtonGroup, Drawer, Grid2, IconButton, List, ListItem, ListItemText } from "@mui/material";
+import { Button, ButtonGroup, Drawer, Grid2, IconButton } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useAppSelector } from "../app/hooks";
 import {
@@ -36,12 +36,14 @@ function Play() {
   const dispatch = useDispatch();
 
   const handFirst = useMemo(() => {
+    if (firstPlayer.currentHp <= 1000 && firstPlayer.character.name === "리타") return 10;
     if (firstPlayer.currentHp <= 2000) return 9;
     if (firstPlayer.currentHp <= 3000) return 8;
     if (firstPlayer.currentHp <= 4000) return 7;
     return 6;
   }, [firstPlayer.currentHp]);
   const handSecond = useMemo(() => {
+    if (secondPlayer.currentHp <= 1000 && secondPlayer.character.name === "리타") return 10;
     if (secondPlayer.currentHp <= 2000) return 9;
     if (secondPlayer.currentHp <= 3000) return 8;
     if (secondPlayer.currentHp <= 4000) return 7;
