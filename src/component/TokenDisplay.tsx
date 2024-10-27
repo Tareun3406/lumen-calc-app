@@ -10,10 +10,10 @@ import {
   setTokenCountToSecond,
   setTokenToggleToFirst, setTokenToggleToSecond
 } from "../features/board/boardSlice";
-import { Button, IconButton, Tooltip } from "@mui/material";
+import { Button, FormControlLabel, IconButton, Switch, ToggleButton, ToggleButtonGroup, Tooltip } from "@mui/material";
 import { ControlPoint, RemoveCircleOutline } from "@mui/icons-material";
 import { useDispatch } from "react-redux";
-import { useEffect } from "react";
+import React, { useEffect, useMemo } from "react";
 
 interface TokenDisplayProps {
   player: PlayerState;
@@ -90,6 +90,52 @@ function TokenDisplay(props: TokenDisplayProps) {
   }, [character.tokens]);
 
 
+  const litaTogglesList = useMemo(() => {
+    if (character.name !== "리타") return [];
+
+    const tokens = character.tokens;
+    const toggles = [];
+
+    if (tokens[1].toggle || tokens[4].toggle) toggles.push(tokens[1].name);
+    if (tokens[2].toggle || tokens[4].toggle) toggles.push(tokens[2].name);
+    if (tokens[3].toggle || tokens[4].toggle) toggles.push(tokens[3].name);
+
+    return toggles;
+  }, [character.tokens])
+
+  const litaToggleChange = (targetIndex: number) => {
+    if (character.tokens[targetIndex].toggle)
+      if (isFirst) dispatch(changeTokenToggleToFirst(targetIndex));
+      else dispatch(changeTokenToggleToSecond(targetIndex));
+    else {
+      if (isFirst) {
+        dispatch(changeTokenToggleToFirst(targetIndex));
+        character.tokens.forEach((token, index) => {
+            if (index !== targetIndex && index !== 0) dispatch(setTokenToggleToFirst({index:index, value: false}))
+        })
+      } else {
+        dispatch(changeTokenToggleToSecond(targetIndex));
+        character.tokens.forEach((token, index) => {
+          if (index !== targetIndex && index !== 0) dispatch(setTokenToggleToSecond({index:index, value: false}))
+        })
+      }
+    }
+  }
+
+  const litaSwitchHandle = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.checked) {
+      character.tokens.forEach((token, index) => {
+        if (index !== 0 && isFirst) dispatch(setTokenToggleToFirst({index:index, value: true}))
+        else if (index !== 0 && !isFirst) dispatch(setTokenToggleToSecond({index:index, value: true}))
+      })
+    } else {
+      character.tokens.forEach((token, index) => {
+        if (index !== 0 && isFirst) dispatch(setTokenToggleToFirst({index:index, value: false}))
+        else if (index !== 0 && !isFirst) dispatch(setTokenToggleToSecond({index:index, value: false}))
+      })
+    }
+  }
+
   const counterToken = (
     <div style={{ display: "grid", placeContent: "center", paddingLeft: 5, paddingRight: 5 }}>
       <IconButton onClick={() => addToken(0)}>
@@ -109,7 +155,6 @@ function TokenDisplay(props: TokenDisplayProps) {
     case "루트":
     case "니아":
     case "델피":
-    case "레브":
     case "키스":
       return (
         <div>
@@ -134,7 +179,8 @@ function TokenDisplay(props: TokenDisplayProps) {
     // 토글형 다수
     case "리타":
       return (
-        <div>
+        <div style={{ display: "flex", justifyContent: "space-between" }}
+             className={player.isFirst ? "" : "reverseFlexRow"}>
           <div style={{ position: "relative", display: "flex" }} onClick={() => changeToggle(0)}>
             <img src={character.tokens[0].img} height={116} alt={character.tokens[0].img} />
             <div
@@ -145,8 +191,23 @@ function TokenDisplay(props: TokenDisplayProps) {
                 background: "black",
                 width: "100%",
                 height: "100%",
-                opacity: player.character.tokens[0].toggle ? "0" : "0.6"
+                opacity: !player.character.tokens[0].toggle ? "0" : "0.6"
               }}></div>
+          </div>
+          <div>
+            <ToggleButtonGroup orientation={"vertical"} value={litaTogglesList} color={"primary"}>
+              <ToggleButton size={"small"} value={"축복-팔라딘"} onClick={() => litaToggleChange(1)}>팔라딘</ToggleButton>
+              <ToggleButton size={"small"} value={"축복-어쌔신"} onClick={() => litaToggleChange(2)}>어쌔신</ToggleButton>
+              <ToggleButton size={"small"} value={"축복-가디언"} onClick={() => litaToggleChange(3)}>가디언</ToggleButton>
+            </ToggleButtonGroup>
+          </div>
+          <div style={{display: "flex", justifyContent: "center", textAlign: "center"}}>
+            <FormControlLabel control={<Switch onChange={litaSwitchHandle} checked={character.tokens[4].toggle} />}
+                              label={"빛의 루멘"}
+                              disabled={player.currentHp > 1000}
+                              sx = {{marginLeft: 0, marginRight: 1}}
+                              className={player.isFirst ? "" : "reverseFlexRow"}
+            />
           </div>
         </div>
       );
@@ -284,6 +345,38 @@ function TokenDisplay(props: TokenDisplayProps) {
           </div>
         </div>
       );
+    case "레브" :
+      return (
+        <div style={{ display: "flex", justifyContent: "space-between" }}
+             className={player.isFirst ? "" : "reverseFlexRow"}>
+          <div style={{ display: "grid", placeContent: "center", paddingLeft: 5, paddingRight: 5 }}>
+            <IconButton onClick={() => addToken(1)}>
+              <ControlPoint />
+            </IconButton>
+            <Button variant={"contained"} style={{ borderRadius: 50 }} onClick={() => setTokenCount(1, 0)}>
+              {character.tokens[1].count} / {character.tokens[1].maxCount}
+            </Button>
+            <IconButton onClick={() => removeToken(1)}>
+              <RemoveCircleOutline />
+            </IconButton>
+          </div>
+          <Tooltip title={character.tokens[0].description} placement={"top"}>
+            <div style={{ position: "relative", display: "flex" }} onClick={() => changeToggle(0)}>
+              <img src={character.tokens[0].img} height={116} alt={character.tokens[0].img} />
+              <div
+                style={{
+                  position: "absolute",
+                  top: 0,
+                  left: 0,
+                  background: "black",
+                  width: "100%",
+                  height: "100%",
+                  opacity: player.character.tokens[0].toggle ? "0" : "0.6"
+                }}></div>
+            </div>
+          </Tooltip>
+        </div>
+      )
     default:
       return (<div></div>)
   }

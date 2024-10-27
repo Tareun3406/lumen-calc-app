@@ -93,6 +93,14 @@ const characters: Character[] = [
         type: "toggle",
         toggle: false,
         description: "상쇄시 자신이 데미지를 주었다면 추가로 100 데미지, [암야] 상대 특수판정 제거"
+      },
+      {
+        name: "단검",
+        img: "/token/rev.png",
+        type: "counter",
+        count: 0,
+        maxCount: 6,
+        description: "콤보시 [단검] 토큰을 모두 브레이크할 수 있다. 그 후 토큰 3장당 200 데미지"
       }
     ]
   },
@@ -135,6 +143,34 @@ const characters: Character[] = [
         type: "toggle",
         toggle: false,
         description: "",
+      },
+      {
+        name: "축복-팔라딘",
+        img: "/token/lita.png",
+        type: "toggle",
+        toggle: false,
+        description: ""
+      },
+      {
+        name: "축복-어쌔신",
+        img: "/token/lita.png",
+        type: "toggle",
+        toggle: false,
+        description: ""
+      },
+      {
+        name: "축복-가디언",
+        img: "/token/lita.png",
+        type: "toggle",
+        toggle: false,
+        description: ""
+      },
+      {
+        name: "빛의 루멘",
+        img: "/token/lita.png",
+        type: "toggle",
+        toggle: false,
+        description: ""
       }
     ]
   }
