@@ -1,6 +1,6 @@
 import { Button, ButtonGroup, Drawer, Grid2, IconButton } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import { useAppSelector } from "../app/hooks";
+import { useAppDispatch, useAppSelector } from "../app/hooks";
 import {
   decreaseFpToFirst,
   decreaseFpToSecond,
@@ -15,12 +15,12 @@ import {
   selectDamageLogs
 } from "../features/board/boardSlice";
 import HpBar from "../component/HpBar";
-import { useDispatch } from "react-redux";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Person, Refresh, EditNote } from "@mui/icons-material";
+import { Person, Refresh, EditNote, Cable } from "@mui/icons-material";
 import TokenDisplay from "../component/TokenDisplay";
 import ButtonPanelProps from "../component/ButtonPanelProps";
 import DamageLogs from "../component/DamageLogs";
+import RemoteConnectDialog from "../component/RemoteConnectDialog";
 
 function Play() {
   const firstPlayer = useAppSelector(selectFirstPlayer);
@@ -31,9 +31,11 @@ function Play() {
   const [getTime, setTime] = useState(10);
   const [isTimerToggle, setTimerToggle] = useState(false);
   const [drawDamageLog, setDrawDamageLog] = useState(false);
+  const [openRemoteDialog, setOpenRemoteDialog] = useState(false);
   const timerIntervalId = useRef<NodeJS.Timer>();
+  const remoteButtonRef = useRef<HTMLButtonElement | null>(null);
 
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const handFirst = useMemo(() => {
     if (firstPlayer.currentHp <= 1000 && firstPlayer.character.name === "리타") return 10;
@@ -41,14 +43,14 @@ function Play() {
     if (firstPlayer.currentHp <= 3000) return 8;
     if (firstPlayer.currentHp <= 4000) return 7;
     return 6;
-  }, [firstPlayer.currentHp]);
+  }, [firstPlayer.currentHp, firstPlayer.character.name]);
   const handSecond = useMemo(() => {
     if (secondPlayer.currentHp <= 1000 && secondPlayer.character.name === "리타") return 10;
     if (secondPlayer.currentHp <= 2000) return 9;
     if (secondPlayer.currentHp <= 3000) return 8;
     if (secondPlayer.currentHp <= 4000) return 7;
     return 6;
-  }, [secondPlayer.currentHp]);
+  }, [secondPlayer.currentHp, secondPlayer.character.name]);
 
   const timerColor = useMemo(() => {
     if (isTimerToggle) {
@@ -59,6 +61,14 @@ function Play() {
     }
     return "info";
   }, [isTimerToggle, getTime]);
+
+  const handleCloseRemoteDialog = () => {
+    setOpenRemoteDialog(false);
+  }
+  const handleOpenRemoteDialog = () => {
+    remoteButtonRef.current?.blur();
+    setOpenRemoteDialog(true);
+  }
 
   const handleTimerButton = () => {
     if (isTimerToggle) {
@@ -100,18 +110,17 @@ function Play() {
 
   useEffect(() => {
     dispatch(initialize());
-  }, []);
-
+  }, [dispatch]);
   return (
     <Grid2 container padding={1}>
 
-      <Grid2 size={5} display={"flex"} justifyContent={"space-between"} paddingX={2.5}>
+      <Grid2 size={4.5} display={"flex"} justifyContent={"space-between"} paddingX={2.5}>
         <img style={{ height: 31 }} src={firstPlayer.character.portrait} alt={firstPlayer.character.portrait} />
         <div style={{ display: "flex", alignItems: "center" }}>{firstPlayer.character.name}</div>
         <div></div>
       </Grid2>
 
-      <Grid2 size={2} paddingBottom={0.5}>
+      <Grid2 size={3} paddingBottom={0.5}>
         <ButtonGroup variant={"outlined"} size={"small"}>
           <Button
             onClick={() => {
@@ -123,13 +132,16 @@ function Play() {
           <Button onClick={() => dispatch(initialize())}>
             <Refresh />
           </Button>
+          <Button ref={remoteButtonRef}>
+            <Cable onClick={handleOpenRemoteDialog}/>
+          </Button>
           <Button onClick={toggleDamageLog(true)}>
             <EditNote />
           </Button>
         </ButtonGroup>
       </Grid2>
 
-      <Grid2 size={5} display={"flex"} justifyContent={"space-between"} paddingX={2.5}>
+      <Grid2 size={4.5} display={"flex"} justifyContent={"space-between"} paddingX={2.5}>
         <div></div>
         <div style={{ display: "flex", alignItems: "center" }}>{secondPlayer.character.name}</div>
         <img style={{ height: 31 }} src={secondPlayer.character.portrait} alt={secondPlayer.character.portrait} />
@@ -160,7 +172,7 @@ function Play() {
         <div style={{ display: "inline-block", width: 72 }}>
           <IconButton onClick={() => dispatch(increaseFpToFirst(1))}>+</IconButton>
           <Button
-            variant={firstPlayer.fp == 0 ? "outlined" : "contained"}
+            variant={firstPlayer.fp === 0 ? "outlined" : "contained"}
             fullWidth={true}
             color={getFpColor.first}
             onClick={() => dispatch(resetFpToFirst())}>
@@ -179,7 +191,7 @@ function Play() {
         <div style={{ display: "inline-block", width: 72 }}>
           <IconButton onClick={() => dispatch(increaseFpToSecond(1))}>+</IconButton>
           <Button
-            variant={secondPlayer.fp == 0 ? "outlined" : "contained"}
+            variant={secondPlayer.fp === 0 ? "outlined" : "contained"}
             fullWidth={true}
             color={getFpColor.second}
             onClick={() => dispatch(resetFpToSecond())}>
@@ -206,12 +218,10 @@ function Play() {
 
 
 
-      <Grid2 size={12}>
-        <Drawer open={drawDamageLog} onClose={toggleDamageLog(false)} anchor="bottom">
-          <DamageLogs damageLogs={damageLogs}></DamageLogs>
-        </Drawer>
-      </Grid2>
-
+      <Drawer open={drawDamageLog} onClose={toggleDamageLog(false)} anchor="bottom">
+        <DamageLogs damageLogs={damageLogs}></DamageLogs>
+      </Drawer>
+      <RemoteConnectDialog open={openRemoteDialog} handleClose={handleCloseRemoteDialog}></RemoteConnectDialog>
     </Grid2>
   );
 }

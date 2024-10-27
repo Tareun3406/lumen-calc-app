@@ -5,14 +5,14 @@ import {
   removeTokenToFirst,
   removeTokenToSecond, setTokenCountToFirst, setTokenCountToSecond, setTokenToggleToFirst, setTokenToggleToSecond
 } from "../../features/board/boardSlice";
-import { useDispatch } from "react-redux";
+import { useAppDispatch } from "../../app/hooks";
 
 export interface TokensInterface {
   player: PlayerState
 }
 
 export function useToken(props: TokensInterface) {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const { isFirst } = props.player;
 
   const changeToggle = (index: number) =>

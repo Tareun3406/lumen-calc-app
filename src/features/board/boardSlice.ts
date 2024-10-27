@@ -196,6 +196,9 @@ export const boardSlice = createSlice({
     deselectCharacter: state => {
       state.firstPlayer.character = noneCharacter;
       state.secondPlayer.character = noneCharacter;
+    },
+    setBoardState: (state, action: PayloadAction<BoardState>) => {
+      Object.assign(state, action.payload);
     }
   }
 });
@@ -224,7 +227,8 @@ export const {
   decreaseFpToSecond,
   resetFpToFirst,
   resetFpToSecond,
-  deselectCharacter
+  deselectCharacter,
+  setBoardState
 } = boardSlice.actions;
 export const selectBoard = (state: RootState) => state.board;
 export const selectFirstPlayer = (state: RootState) => state.board.firstPlayer;

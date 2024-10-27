@@ -1,13 +1,13 @@
 import { damageToFirst, damageToSecond, healToFirst, healToSecond, PlayerState } from "../features/board/boardSlice";
 import { Button, Stack } from "@mui/material";
-import { useDispatch } from "react-redux";
+import { useAppDispatch } from "../app/hooks";
 
 interface ButtonPanelProps {
   player: PlayerState
 }
 
 function ButtonPanelProps(props:ButtonPanelProps) {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const isFirstPlayer = props.player.isFirst
 
