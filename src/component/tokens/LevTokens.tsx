@@ -1,0 +1,44 @@
+import { TokensInterface, useToken } from "./Token";
+import { Button, IconButton, Tooltip } from "@mui/material";
+import { ControlPoint, RemoveCircleOutline } from "@mui/icons-material";
+import React from "react";
+
+function LevTokens(props: TokensInterface) {
+  const { player } = props;
+  const { character } = player;
+  const { addToken, setTokenCount, removeToken, changeToggle } = useToken(props);
+
+  return (
+    <div style={{ display: "flex", justifyContent: "space-between" }}
+         className={player.isFirst ? "" : "reverseFlexRow"}>
+      <div style={{ display: "grid", placeContent: "center", paddingLeft: 5, paddingRight: 5 }}>
+        <IconButton onClick={() => addToken(1)}>
+          <ControlPoint />
+        </IconButton>
+        <Button variant={"contained"} style={{ borderRadius: 50 }} onClick={() => setTokenCount(1, 0)}>
+          {character.tokens[1].count} / {character.tokens[1].maxCount}
+        </Button>
+        <IconButton onClick={() => removeToken(1)}>
+          <RemoveCircleOutline />
+        </IconButton>
+      </div>
+      <Tooltip title={character.tokens[0].description} placement={"top"}>
+        <div style={{ position: "relative", display: "flex" }} onClick={() => changeToggle(0)}>
+          <img src={character.tokens[0].img} height={116} alt={character.tokens[0].img} />
+          <div
+            style={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              background: "black",
+              width: "100%",
+              height: "100%",
+              opacity: player.character.tokens[0].toggle ? "0" : "0.6"
+            }}></div>
+        </div>
+      </Tooltip>
+    </div>
+  )
+}
+
+export default LevTokens;
