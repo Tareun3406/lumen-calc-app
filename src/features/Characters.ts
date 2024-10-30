@@ -92,11 +92,11 @@ const characters: Character[] = [
         img: "/token/rev.png",
         type: "toggle",
         toggle: false,
-        description: "상쇄시 자신이 데미지를 주었다면 추가로 100 데미지, [암야] 상대 특수판정 제거"
+        description: "상쇄시 자신이 데미지를 주었다면 추가로 100 데미지 주고 [암야] 상태가 된다. [암야] 상대 특수판정 제거"
       },
       {
         name: "단검",
-        img: "/token/rev.png",
+        img: "/token/dagger.png",
         type: "counter",
         count: 0,
         maxCount: 6,
@@ -138,39 +138,39 @@ const characters: Character[] = [
     portrait: "/portrait/lita.png",
     tokens: [
       {
-        name: "성녀",
+        name: "레기온",
         img: "/token/lita.png",
         type: "toggle",
         toggle: false,
-        description: "",
-      },
-      {
-        name: "축복-팔라딘",
-        img: "/token/lita.png",
-        type: "toggle",
-        toggle: false,
-        description: ""
-      },
-      {
-        name: "축복-어쌔신",
-        img: "/token/lita.png",
-        type: "toggle",
-        toggle: false,
-        description: ""
+        description: "자신에게 [성녀] 부여, 루멘 페이즈 시 하나의 레기온을 축복한다.",
       },
       {
         name: "축복-가디언",
-        img: "/token/lita.png",
+        img: "/token/guardian.png",
         type: "toggle",
         toggle: false,
-        description: ""
+        description: "[가디언] 방어 및 상쇄 시 +2FP"
+      },
+      {
+        name: "축복-어쌔신",
+        img: "/token/assassin.png",
+        type: "toggle",
+        toggle: false,
+        description: "[어쌔신] 카운터시 추가로 100 데미지"
+      },
+      {
+        name: "축복-팔라딘",
+        img: "/token/paladin.png",
+        type: "toggle",
+        toggle: false,
+        description: "[팔라딘] 콤보 시 리스트에서 기술 1장 획득"
       },
       {
         name: "빛의 루멘",
-        img: "/token/lita.png",
+        img: "/token/light-lumen.png",
         type: "toggle",
         toggle: false,
-        description: ""
+        description: "체력 1000 이하 발동 가능. 모든 레기온의 축복 효과 적용, 모든 받는 데미지 -100, [성녀] 효과 기술 데미지 +100"
       }
     ]
   }

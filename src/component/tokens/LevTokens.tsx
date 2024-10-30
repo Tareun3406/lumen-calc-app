@@ -2,15 +2,50 @@ import { TokensInterface, useToken } from "./Token";
 import { Button, IconButton, Tooltip } from "@mui/material";
 import { ControlPoint, RemoveCircleOutline } from "@mui/icons-material";
 import React from "react";
+import { useAppDispatch } from "../../app/hooks";
+import { damageToFirst, damageToSecond } from "../../features/board/boardSlice";
 
 function LevTokens(props: TokensInterface) {
   const { player } = props;
   const { character } = player;
   const { addToken, setTokenCount, removeToken, changeToggle } = useToken(props);
+  const dispatch = useAppDispatch();
+
+  const handleDaggerClick = () => {
+    const damage = getDaggerDamage();
+    if (player.isFirst) dispatch(damageToSecond(damage));
+    else dispatch(damageToFirst(damage));
+    setTokenCount(1, 0)
+  }
+
+  const getDaggerDamage = () => {
+    if (!player.character.tokens[1].count) return 0;
+    return Math.floor(player.character.tokens[1].count / 3) * 200;
+  }
 
   return (
     <div style={{ display: "flex", justifyContent: "space-between" }}
-         className={player.isFirst ? "" : "reverseFlexRow"}>
+         className={!player.isFirst ? "" : "reverseFlexRow"}>
+      <div style={{
+        display: "grid",
+        placeContent: "center"
+      }}>
+        <Tooltip title={character.tokens[1].description} placement={"top"}>
+          <div style={{ position: "relative", display: "flex" }} onClick={handleDaggerClick}>
+            <img src={character.tokens[1].img} height={80} alt={character.tokens[1].img} />
+            <div
+              style={{
+                position: "absolute",
+                top: 0,
+                left: 0,
+                background: "black",
+                width: "100%",
+                height: "100%",
+                opacity: (player.character.tokens[1].count && player.character.tokens[1].count >= 3) ? "0" : "0.6"
+              }}></div>
+          </div>
+        </Tooltip>
+      </div>
       <div style={{ display: "grid", placeContent: "center", paddingLeft: 5, paddingRight: 5 }}>
         <IconButton onClick={() => addToken(1)}>
           <ControlPoint />
