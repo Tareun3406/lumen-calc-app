@@ -1,34 +1,16 @@
 import { TokensInterface, useToken } from "./Token";
 import {
   Button,
-  FormControlLabel,
   Grid2,
-  IconButton,
-  Switch,
-  ToggleButton,
-  ToggleButtonGroup,
   Tooltip
 } from "@mui/material";
-import React, { useMemo, useState } from "react";
+import React, { useMemo } from "react";
 import { grey, yellow } from "@mui/material/colors";
 
 function LitaTokens(props: TokensInterface) {
   const { player } = props;
   const { character } = player;
   const { changeToggle, setTokenToggle } = useToken(props);
-
-  // const litaTogglesList = useMemo(() => {
-  //   if (character.name !== "리타") return [];
-  //
-  //   const tokens = character.tokens;
-  //   const toggles = [];
-  //
-  //   if (tokens[1].toggle || tokens[4].toggle) toggles.push(tokens[1].name);
-  //   if (tokens[2].toggle || tokens[4].toggle) toggles.push(tokens[2].name);
-  //   if (tokens[3].toggle || tokens[4].toggle) toggles.push(tokens[3].name);
-  //
-  //   return toggles;
-  // }, [character.tokens]);
 
   const litaToggleChange = (targetIndex: number) => {
     if (character.tokens[4].toggle) return;
