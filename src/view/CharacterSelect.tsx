@@ -9,6 +9,7 @@ import {
 } from "../features/board/boardSlice";
 import characters, { Character } from "../features/Characters";
 import { useEffect } from "react";
+import { grey } from "@mui/material/colors";
 
 function CharacterSelect() {
   const navigate = useNavigate();
@@ -30,7 +31,8 @@ function CharacterSelect() {
     const playerCharacter = player === "first" ? firstPlayer.character : secondPlayer.character;
     const isSelected = playerCharacter.name === character.name;
     const sx = {
-      border: "4px solid " + (isSelected ? "red" : "black")
+      backgroundColor: isSelected ? grey[400] : grey[300],
+      border: "2px solid " + (isSelected ? "red" : "black")
     };
 
     return (

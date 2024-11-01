@@ -167,7 +167,7 @@ const characters: Character[] = [
       },
       {
         name: "빛의 루멘",
-        img: "/token/light-lumen.png",
+        img: "/token/lita-effect.png",
         type: "toggle",
         toggle: false,
         description: "체력 1000 이하 발동 가능. 모든 레기온의 축복 효과 적용, 모든 받는 데미지 -100, [성녀] 효과 기술 데미지 +100"

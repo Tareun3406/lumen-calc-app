@@ -2,10 +2,10 @@ import { PlayerState } from "../features/board/boardSlice";
 
 import React from "react";
 import TaoTokens from "./tokens/TaoTokens";
-import OneCounterToken from "./tokens/OneCounterToken";
 import OneToggleToken from "./tokens/OneToggleToken";
 import LevTokens from "./tokens/LevTokens";
 import LitaTokens from "./tokens/LitaTokens";
+import OneCounterToken from "./tokens/OneCounterToken";
 
 interface TokenDisplayProps {
   player: PlayerState;
@@ -21,22 +21,21 @@ function TokenDisplay(props: TokenDisplayProps) {
       case "니아":
       case "델피":
       case "키스":
-        return <OneToggleToken player={player}></OneToggleToken>
+        return <OneToggleToken player={player} />
 
       // 토글형 다수
       case "리타":
-        return <LitaTokens player={player}></LitaTokens>
+        return <LitaTokens player={player} />
 
       // 카운터 형 한가지
       case "울프":
       case "비올라":
-        return (
-          <OneCounterToken player={player}></OneCounterToken>
-        );
+        return <OneCounterToken player={player} />;
+
       case "타오":
-        return <TaoTokens player={player}></TaoTokens>
+        return <TaoTokens player={player} />
       case "레브" :
-        return <LevTokens player={player}></LevTokens>
+        return <LevTokens player={player} />
       default:
         return (<div></div>)
     }
