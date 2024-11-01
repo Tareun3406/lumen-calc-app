@@ -12,6 +12,7 @@ function LevTokens(props: TokensInterface) {
   const dispatch = useAppDispatch();
 
   const handleDaggerClick = () => {
+    if (character.tokens[1].count && character.tokens[1].count < 3) return;
     const damage = getDaggerDamage();
     if (player.isFirst) dispatch(damageToSecond(damage));
     else dispatch(damageToFirst(damage));
