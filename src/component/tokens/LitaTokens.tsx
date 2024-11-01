@@ -1,24 +1,26 @@
 import { TokensInterface, useToken } from "./Token";
 import { FormControlLabel, Grid2, IconButton, Switch, ToggleButton, ToggleButtonGroup } from "@mui/material";
-import React, { useMemo } from "react";
+import React, { useMemo, useState } from "react";
 
 function LitaTokens(props: TokensInterface) {
   const { player } = props;
   const { character } = player;
   const { changeToggle, setTokenToggle } = useToken(props);
 
-  const litaTogglesList = useMemo(() => {
-    if (character.name !== "리타") return [];
+  const [lumenOn, setLumenOn] = useState(false);
 
-    const tokens = character.tokens;
-    const toggles = [];
-
-    if (tokens[1].toggle || tokens[4].toggle) toggles.push(tokens[1].name);
-    if (tokens[2].toggle || tokens[4].toggle) toggles.push(tokens[2].name);
-    if (tokens[3].toggle || tokens[4].toggle) toggles.push(tokens[3].name);
-
-    return toggles;
-  }, [character.tokens]);
+  // const litaTogglesList = useMemo(() => {
+  //   if (character.name !== "리타") return [];
+  //
+  //   const tokens = character.tokens;
+  //   const toggles = [];
+  //
+  //   if (tokens[1].toggle || tokens[4].toggle) toggles.push(tokens[1].name);
+  //   if (tokens[2].toggle || tokens[4].toggle) toggles.push(tokens[2].name);
+  //   if (tokens[3].toggle || tokens[4].toggle) toggles.push(tokens[3].name);
+  //
+  //   return toggles;
+  // }, [character.tokens]);
 
   const litaToggleChange = (targetIndex: number) => {
     if (character.tokens[targetIndex].toggle) changeToggle(targetIndex);
@@ -61,6 +63,24 @@ function LitaTokens(props: TokensInterface) {
     </div>
   );
 
+  const getLumenButtonStyle = useMemo(() => {
+    if (player.currentHp > 1000) {
+      return {
+        backgroundColor: "gray"
+      }
+    }
+    if (!lumenOn) {
+      return {
+        backgroundColor: "white",
+        border: "yellow",
+      }
+    }
+    return {
+      backgroundColor: "yellow",
+    }
+
+  }, [])
+
   return (
     <div
       style={{ display: "flex", justifyContent: "space-between", gap: 10 }}
@@ -79,7 +99,7 @@ function LitaTokens(props: TokensInterface) {
           }}></div>
       </div>
       <div style={{ display: "grid", placeContent: "center" }}>
-        <IconButton size={"small"} sx={{backgroundColor: ""}} onClick={handleAllToggle}>
+        <IconButton size={"small"} sx={getLumenButtonStyle} onClick={handleAllToggle} >
           <img src={character.tokens[4].img} alt={character.tokens[4].img} style={{ width: 60, height: 60 }} />
         </IconButton>
       </div>
