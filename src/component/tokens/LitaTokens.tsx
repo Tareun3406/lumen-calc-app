@@ -1,13 +1,21 @@
 import { TokensInterface, useToken } from "./Token";
-import { FormControlLabel, Grid2, IconButton, Switch, ToggleButton, ToggleButtonGroup } from "@mui/material";
+import {
+  Button,
+  FormControlLabel,
+  Grid2,
+  IconButton,
+  Switch,
+  ToggleButton,
+  ToggleButtonGroup,
+  Tooltip
+} from "@mui/material";
 import React, { useMemo, useState } from "react";
+import { grey, yellow } from "@mui/material/colors";
 
 function LitaTokens(props: TokensInterface) {
   const { player } = props;
   const { character } = player;
   const { changeToggle, setTokenToggle } = useToken(props);
-
-  const [lumenOn, setLumenOn] = useState(false);
 
   // const litaTogglesList = useMemo(() => {
   //   if (character.name !== "리타") return [];
@@ -23,6 +31,7 @@ function LitaTokens(props: TokensInterface) {
   // }, [character.tokens]);
 
   const litaToggleChange = (targetIndex: number) => {
+    if (character.tokens[4].toggle) return;
     if (character.tokens[targetIndex].toggle) changeToggle(targetIndex);
     else {
       changeToggle(targetIndex);
@@ -45,6 +54,7 @@ function LitaTokens(props: TokensInterface) {
   };
 
   const renderLegions = (tokenIndex: number) => (
+    <Tooltip title={character.tokens[tokenIndex].description} placement={"top"}>
     <div
       style={{ position: "relative", display: "flex", justifyContent: "center" }}
       onClick={() => litaToggleChange(tokenIndex)}>
@@ -61,30 +71,41 @@ function LitaTokens(props: TokensInterface) {
           opacity: player.character.tokens[tokenIndex].toggle ? "0" : "0.6"
         }}></div>
     </div>
+    </Tooltip>
   );
 
   const getLumenButtonStyle = useMemo(() => {
     if (player.currentHp > 1000) {
       return {
-        backgroundColor: "gray"
+        border: "solid 1px",
+        backgroundColor: grey[400],
+        borderColor: grey[600],
+        borderRadius: 50
       }
     }
-    if (!lumenOn) {
+    if (!character.tokens[4].toggle) {
       return {
+        border: "solid 1px",
+        borderRadius: 50,
+        borderColor: yellow["600"],
         backgroundColor: "white",
-        border: "yellow",
       }
     }
     return {
-      backgroundColor: "yellow",
+      border: "solid 1px",
+      borderRadius: 50,
+      borderColor: yellow["600"],
+      backgroundColor: yellow["600"],
     }
 
-  }, [])
+  }, [player.currentHp, !character.tokens[4].toggle])
 
   return (
     <div
       style={{ display: "flex", justifyContent: "space-between", gap: 10 }}
       className={player.isFirst ? "" : "reverseFlexRow"}>
+
+      <Tooltip title={character.tokens[0].description} placement={"top"}>
       <div style={{ position: "relative", display: "flex" }} onClick={() => changeToggle(0)}>
         <img src={character.tokens[0].img} height={116} alt={character.tokens[0].img} />
         <div
@@ -98,10 +119,13 @@ function LitaTokens(props: TokensInterface) {
             opacity: !player.character.tokens[0].toggle ? "0" : "0.6"
           }}></div>
       </div>
+      </Tooltip>
       <div style={{ display: "grid", placeContent: "center" }}>
-        <IconButton size={"small"} sx={getLumenButtonStyle} onClick={handleAllToggle} >
-          <img src={character.tokens[4].img} alt={character.tokens[4].img} style={{ width: 60, height: 60 }} />
-        </IconButton>
+        <Tooltip title={character.tokens[4].description} placement={"top"}>
+          <Button size={"small"} sx={getLumenButtonStyle} onClick={handleAllToggle} disabled={player.currentHp > 1000}>
+            <img src={character.tokens[4].img} alt={character.tokens[4].img} style={{ width: 60, height: 60 }} className={character.tokens[4].toggle ? "imageWhite" : ""} />
+          </Button>
+        </Tooltip>
       </div>
       <Grid2 container width={120}>
         <Grid2 size={12}>
