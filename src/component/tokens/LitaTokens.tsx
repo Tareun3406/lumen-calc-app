@@ -36,7 +36,7 @@ function LitaTokens(props: TokensInterface) {
   };
 
   const renderLegions = (tokenIndex: number) => (
-    <Tooltip title={character.tokens[tokenIndex].description} placement={"top"}>
+    <Tooltip title={character.tokens[tokenIndex].description} placement={tokenIndex === 1 ? "top" : "bottom"}>
     <div
       style={{ position: "relative", display: "flex", justifyContent: "center" }}
       onClick={() => litaToggleChange(tokenIndex)}>
