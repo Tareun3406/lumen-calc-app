@@ -2,7 +2,6 @@ import { Button, Grid2, TextField } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import {
   selectRemote,
-  setIsHost,
   setName,
   setInviteCode
 } from "../../features/board/remoteSlice";
@@ -27,9 +26,8 @@ function RemoteJoin(props: RemoteJoinProps) {
   }
 
   const handleJoin = async () => {
-    dispatch(setIsHost(false));
     await connectRemote();
-    joinRemote();
+    joinRemote(inviteCode);
   }
   return (
     <Grid2 container spacing={1} marginBottom={2} width={300}>

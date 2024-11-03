@@ -1,5 +1,5 @@
 import { Button, CircularProgress, Grid2, TextField } from "@mui/material";
-import { selectRemote, setHostRoom, setIsHost, setName, setSocketStatue } from "../../features/board/remoteSlice";
+import { selectRemote, setName } from "../../features/board/remoteSlice";
 import { ChangeEvent } from "react";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { useRemote } from "./Remote";
@@ -16,13 +16,9 @@ function RemoteHost(props: RemoteHostProps) {
 
   const handleCreate = async () => {
     if (socketStatus === "PENDING" || socketStatus === "IDLE") return;
-    dispatch(setIsHost(true));
 
     await connectRemote();
     hostRemote();
-
-    dispatch(setHostRoom({roomId: "test", playerCode: "playercode", observerCode: "observerco"}))
-    dispatch(setSocketStatue("CONNECTED"));
     return;
   }
   const handleChangeName = (e: ChangeEvent<HTMLInputElement>) => {
@@ -41,7 +37,7 @@ function RemoteHost(props: RemoteHostProps) {
         <Button variant={"contained"} size={"large"} onClick={handleCreate}
                 disabled={socketStatus === "PENDING" || socketStatus === "IDLE"}>코드 생성
         </Button>
-        {socketStatus === "PENDING" || socketStatus === "IDLE" && (
+        {(socketStatus === "PENDING" || socketStatus) === "IDLE" && (
           <CircularProgress size={24} sx={{color: green[500], position: 'absolute', top: '50%', left: '50%', marginTop: '-12px', marginLeft: '-12px'}}/>
         )}
       </Grid2>

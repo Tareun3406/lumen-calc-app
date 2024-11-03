@@ -1,6 +1,13 @@
-import { damageToFirst, damageToSecond, healToFirst, healToSecond, PlayerState } from "../features/board/boardSlice";
+import {
+  damageToFirst,
+  damageToSecond,
+  healToFirst,
+  healToSecond,
+  PlayerState, triggerPublish
+} from "../features/board/boardSlice";
 import { Button, Stack } from "@mui/material";
 import { useAppDispatch } from "../app/hooks";
+import { useRemote } from "./remote/Remote";
 
 interface ButtonPanelProps {
   player: PlayerState
@@ -8,6 +15,7 @@ interface ButtonPanelProps {
 
 function ButtonPanelProps(props:ButtonPanelProps) {
   const dispatch = useAppDispatch();
+  const { publishUpdate } = useRemote();
 
   const isFirstPlayer = props.player.isFirst
 
@@ -15,11 +23,18 @@ function ButtonPanelProps(props:ButtonPanelProps) {
     return isFirstPlayer ? "" : "reverseFlexRow";
   }
 
-  const dispatchDamage = (value: number) =>
-    isFirstPlayer ? dispatch(damageToFirst(value)) : dispatch(damageToSecond(value));
+  const dispatchDamage = (value: number) =>  {
+    if (isFirstPlayer) dispatch(damageToFirst(value))
+    else dispatch(damageToSecond(value))
+    publishUpdate();
+    dispatch(triggerPublish());
+  }
 
-  const dispatchHeal = (value: number) =>
-    isFirstPlayer ? dispatch(healToFirst(value)) : dispatch(healToSecond(value));
+  const dispatchHeal = (value: number) => {
+    if (isFirstPlayer) dispatch(healToFirst(value))
+    else dispatch(healToSecond(value));
+    dispatch(triggerPublish());
+  }
 
   const buttonStyle = {
     width: 70

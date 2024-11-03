@@ -4,7 +4,7 @@ import { selectRemote } from "../../features/board/remoteSlice";
 import { useMemo } from "react";
 
 function RemoteConnected() {
-  const {isHost, username, playerList, observerList, playerInviteCode, observerInviteCode} = useAppSelector(selectRemote);
+  const {username, playerList, observerList, playerInviteCode, observerInviteCode} = useAppSelector(selectRemote);
 
   const renderPlayerInviteCode = useMemo(() => {
     return playerInviteCode
@@ -30,8 +30,8 @@ function RemoteConnected() {
 
   return(
     <Grid2 container maxHeight={"80%"} width={364}>
-      {isHost && (renderPlayerInviteCode)}
-      {isHost && (renderObserverInviteCode)}
+      {playerInviteCode && (renderPlayerInviteCode)}
+      {observerInviteCode && (renderObserverInviteCode)}
       <Grid2
         container
         size={12}

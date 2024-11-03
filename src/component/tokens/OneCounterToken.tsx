@@ -1,27 +1,17 @@
 import { TokensInterface, useToken } from "./Token";
 import { Button, IconButton, Tooltip } from "@mui/material";
-import React, { useEffect } from "react";
+import React, { useMemo } from "react";
 import { ControlPoint, RemoveCircleOutline } from "@mui/icons-material";
 
 function OneCounterToken(props: TokensInterface) {
   const { player } = props;
   const { character } = player;
-  const { addToken, removeToken, setTokenCount, setTokenToggle} = useToken(props);
+  const { addToken, removeToken, setTokenCount} = useToken(props);
 
-  // 비올라 울프 토큰 활성화 조건 (카운터 한개)
-  useEffect(() => {
-    const tokens = character.tokens;
-
-    tokens.forEach((token, index) => {
-      if (token.type === "counter" && token.toggleCount) {
-        if (token.count! >= token.toggleCount)  {
-          setTokenToggle({index, value: true});
-        }
-        else setTokenToggle({ index, value: false });
-      }
-    });
-
-  }, [character.tokens]);
+  const getCounterToggle = useMemo(() => {
+    if (character.tokens[0].count && character.tokens[0].toggleCount)
+      return character.tokens[0].count >= character?.tokens[0]?.toggleCount;
+  }, [character.tokens[0]]);
 
   const counterToken = (
     <div style={{ display: "grid", placeContent: "center", paddingLeft: 5, paddingRight: 5 }}>
@@ -56,7 +46,7 @@ function OneCounterToken(props: TokensInterface) {
               background: "black",
               width: "100%",
               height: "100%",
-              opacity: player.character.tokens[0].toggle ? "0" : "0.6"
+              opacity: getCounterToggle ? "0" : "0.6"
             }}></div>
         </div>
       </Tooltip>

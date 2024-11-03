@@ -7,39 +7,43 @@ function TaoTokens(props: TokensInterface) {
   const player = props.player;
   const { character } = props.player;
 
-  const { addToken, removeToken, setTokenCount, setTokenToggle} = useToken(props);
+  const { addToken, removeToken, setTokenCount, setTokenToggle, setTokenToggleAsList} = useToken(props);
 
   // 타오 토큰 활성화 조건
   useEffect(() => {
-    const setTaoToken = () => {
-      const harmonyToggle = player.character.tokens[0].toggle;
-      const yinCount = player.character.tokens[1].count;
-      const yangCount = player.character.tokens[2].count;
+    const harmonyToggle = player.character.tokens[0].toggle;
+    const yinCount = player.character.tokens[1].count;
+    const yangCount = player.character.tokens[2].count;
+    const yinToggle = player.character.tokens[1].toggle;
+    const yangToggle = player.character.tokens[2].toggle;
 
-      if (yinCount === 4 && yangCount === 4 && !harmonyToggle) {
-        setTokenToggle({ index: 0, value: true });
-        setTokenToggle({ index: 1, value: true });
-        setTokenToggle({ index: 2, value: true });
-      } else if (yinCount! < 3 || yangCount! < 3) {
-        setTokenToggle({ index: 0, value: false });
+    const payload: {[type: number]: boolean} = {};
+
+    if (yinCount === 4 && yangCount === 4 && !harmonyToggle) {
+      payload[0] = true;
+      payload[1] = true;
+      payload[2] = true;
+    }
+
+    else if ((yinCount! < 3 || yangCount! < 3) && harmonyToggle) {
+      payload[0] = false;
+    }
+
+    if (!harmonyToggle && !(yinCount === 4 && yangCount === 4)) {
+      if (yinCount! > yangCount! && (!yinToggle || yangToggle)) {
+        payload[1] = true;
+        payload[2] = false;
+      } else if (yinCount! < yangCount! && (yinToggle || !yangToggle)) {
+        payload[1] = false;
+        payload[2] = true;
+      } else if (yinCount === yangCount && (yinToggle || yangToggle)){
+        payload[1] = false;
+        payload[2] = false;
       }
+    }
 
-      if (!harmonyToggle && (yinCount !== 4 || yangCount !== 4)) {
-        if (yinCount! > yangCount!) {
-          setTokenToggle({ index: 1, value: true });
-          setTokenToggle({ index: 2, value: false });
-        } else if (yinCount! < yangCount!) {
-          setTokenToggle({ index: 2, value: true });
-          setTokenToggle({ index: 1, value: false });
-        } else {
-          setTokenToggle({ index: 1, value: false });
-          setTokenToggle({ index: 2, value: false });
-        }
-      }
-    };
-
-    if (character.name === "타오") {
-      setTaoToken();
+    if (Object.keys(payload).length > 0) {
+      setTokenToggleAsList(payload);
     }
   }, [character.tokens]);
 

@@ -10,28 +10,38 @@ import { grey, yellow } from "@mui/material/colors";
 function LitaTokens(props: TokensInterface) {
   const { player } = props;
   const { character } = player;
-  const { changeToggle, setTokenToggle } = useToken(props);
+  const { changeToggle, setTokenToggleAsList } = useToken(props);
 
   const litaToggleChange = (targetIndex: number) => {
     if (character.tokens[4].toggle) return;
     if (character.tokens[targetIndex].toggle) changeToggle(targetIndex);
     else {
-      changeToggle(targetIndex);
-      character.tokens.forEach((_token, index) => {
-        if (index !== targetIndex && index !== 0) setTokenToggle({ index: index, value: false });
-      });
+      const payload = {
+        1: targetIndex === 1,
+        2: targetIndex === 2,
+        3: targetIndex === 3
+      };
+      setTokenToggleAsList(payload);
     }
   };
 
   const handleAllToggle = () => {
     if (character.tokens[4].toggle) {
-      character.tokens.forEach((_token, index) => {
-        if (index !== 0) setTokenToggle({ index: index, value: false });
-      });
+      const payload = {
+        1: false,
+        2: false,
+        3: false,
+        4: false
+      }
+      setTokenToggleAsList(payload);
     } else {
-      character.tokens.forEach((_token, index) => {
-        if (index !== 0) setTokenToggle({ index: index, value: true });
-      });
+      const payload = {
+        1: true,
+        2: true,
+        3: true,
+        4: true
+      }
+      setTokenToggleAsList(payload);
     }
   };
 

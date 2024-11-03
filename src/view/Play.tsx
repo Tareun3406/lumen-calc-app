@@ -12,7 +12,7 @@ import {
   resetFpToSecond,
   selectFirstPlayer,
   selectSecondPlayer,
-  selectDamageLogs
+  selectDamageLogs, triggerPublish
 } from "../features/board/boardSlice";
 import HpBar from "../component/HpBar";
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -108,6 +108,22 @@ function Play() {
     setDrawDamageLog(toggle);
   }
 
+  const handleIncreaseFp = (isFirst: boolean, value: number) => {
+    if (isFirst) dispatch(increaseFpToFirst(value));
+    else dispatch(increaseFpToSecond(value));
+    dispatch(triggerPublish());
+  }
+  const handleDecreaseFp = (isFirst: boolean, value: number) => {
+    if (isFirst) dispatch(decreaseFpToFirst(value));
+    else dispatch(decreaseFpToSecond(value));
+    dispatch(triggerPublish());
+  }
+  const handleResetFp = (isFirst: boolean) => {
+    if (isFirst) dispatch(resetFpToFirst());
+    else dispatch(resetFpToSecond());
+    dispatch(triggerPublish());
+  }
+
   useEffect(() => {
     dispatch(initialize());
   }, [dispatch]);
@@ -170,15 +186,15 @@ function Play() {
       <Grid2 size={4} display={"flex"} justifyContent={"space-between"}>
         <div style={{ display: "inline-block" }}></div>
         <div style={{ display: "inline-block", width: 72 }}>
-          <IconButton onClick={() => dispatch(increaseFpToFirst(1))}>+</IconButton>
+          <IconButton onClick={() => handleIncreaseFp(true, 1)}>+</IconButton>
           <Button
             variant={firstPlayer.fp === 0 ? "outlined" : "contained"}
             fullWidth={true}
             color={getFpColor.first}
-            onClick={() => dispatch(resetFpToFirst())}>
+            onClick={() => handleResetFp(true)}>
             {firstPlayer.fp} fp
           </Button>
-          <IconButton onClick={() => dispatch(decreaseFpToFirst(1))}>-</IconButton>
+          <IconButton onClick={() => handleDecreaseFp(true, 1)}>-</IconButton>
         </div>
         <Button
           variant={"contained"}
@@ -189,15 +205,15 @@ function Play() {
           {getTime}
         </Button>
         <div style={{ display: "inline-block", width: 72 }}>
-          <IconButton onClick={() => dispatch(increaseFpToSecond(1))}>+</IconButton>
+          <IconButton onClick={() => handleIncreaseFp(false, 1)}>+</IconButton>
           <Button
             variant={secondPlayer.fp === 0 ? "outlined" : "contained"}
             fullWidth={true}
             color={getFpColor.second}
-            onClick={() => dispatch(resetFpToSecond())}>
+            onClick={() => handleResetFp(false)}>
             {secondPlayer.fp} fp
           </Button>
-          <IconButton onClick={() => dispatch(decreaseFpToSecond(1))}>-</IconButton>
+          <IconButton onClick={() => handleDecreaseFp(false, 1)}>-</IconButton>
         </div>
         <div style={{ display: "inline-block" }}></div>
       </Grid2>

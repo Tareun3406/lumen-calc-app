@@ -1,11 +1,9 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Client } from "@stomp/stompjs";
 import { RootState } from "../../app/store";
-import { BoardState } from "./boardSlice";
 
 export interface RemoteState {
   socketStatus: "DISCONNECTED" | "CONNECTED" | "PENDING" | "IDLE" | "ERROR" | "NONE";
-  isHost: boolean;
   username: string;
   isPlayer: boolean;
   playerInviteCode: string;
@@ -36,7 +34,6 @@ export interface RemoteCreatedInfo {
 
 const initialState: RemoteState = {
   socketStatus: "NONE",
-  isHost: false,
   username: "",
   isPlayer: true,
   playerInviteCode: "",
@@ -49,8 +46,8 @@ const initialState: RemoteState = {
 
 let stompClient: Client | null = null;
 
-export const createRemote = createAsyncThunk(
-  "remote/createRemote",
+export const activateRemote = createAsyncThunk(
+  "remote/activateRemote",
   async (_, { dispatch }) => {
     stompClient = new Client({
       brokerURL: `${process.env.REACT_APP_WS_HOSTNAME}/remote-ws`,
@@ -58,19 +55,17 @@ export const createRemote = createAsyncThunk(
 
     return new Promise<void>((resolve, reject) => {
       stompClient!.onConnect = () => {
-        dispatch(setSocketStatue("IDLE"));
+        dispatch(setSocketStatus("IDLE"));
         resolve();
       }
       stompClient!.onStompError = (frame) => {
         console.error("WebSocket STOMP 오류:", frame);
-        dispatch(setSocketStatue("ERROR"))
-        dispatch(disconnect());
+        dispatch(setSocketStatus("ERROR"))
         reject(`Stomp Error: ${frame.body}`);
       }
       stompClient!.onWebSocketError = (error) => {
         console.error("WebSocket 오류:", error);
-        dispatch(setSocketStatue("ERROR"));
-        dispatch(disconnect());
+        dispatch(setSocketStatus("ERROR"));
         reject(`Stomp Error: ${error.message}`);
       }
       stompClient!.activate();
@@ -78,17 +73,49 @@ export const createRemote = createAsyncThunk(
   }
 );
 
+export const deactivateRemote = createAsyncThunk(
+  "remote/deleteRemote",
+  async (_, { getState, dispatch }) => {
+    try {
+      const { remote } = getState() as { remote: { username: string; roomId: string } };
+      if (stompClient) {
+        stompClient.publish({
+          destination: `/app/remote/disconnect`,
+          body: remote.username,
+          headers: { roomId: remote.roomId },
+        });
+
+        await stompClient.deactivate();
+        stompClient = null;
+        dispatch(setSocketStatus("DISCONNECTED"));
+      }
+    } catch (error) {
+      console.error("Error disconnecting:", error);
+      dispatch(setSocketStatus("ERROR"));
+      throw error;  // 에러를 던져서 호출한 곳에서 확인할 수 있도록 처리
+    }
+  }
+);
+
+
+
 export const remoteSlice = createSlice({
   name: "remote",
   initialState,
   reducers: {
-    setSocketStatue: (state, action: PayloadAction<"DISCONNECTED" | "CONNECTED" | "PENDING" | "IDLE" | "ERROR" | "NONE">) => {
+    initializeRemote: (state) => {
+      state.username= "";
+      state.isPlayer= true;
+      state.playerInviteCode= "";
+      state.observerInviteCode= "";
+      state.playerList= [];
+      state.observerList= [];
+      state.roomId= "";
+      state.inviteCode= "";
+    },
+    setSocketStatus: (state, action: PayloadAction<"DISCONNECTED" | "CONNECTED" | "PENDING" | "IDLE" | "ERROR" | "NONE">) => {
       console.log(`Socket Status: ${action.payload}`);
       state.socketStatus = action.payload;
-    },
-    disconnect: state => {
-      stompClient?.publish({destination: `/app/remote/disconnect`, body: state.username, headers: {roomId: state.roomId} });
-      stompClient?.deactivate().finally(() => stompClient = null);
     },
     setHostRoom: (state, action: PayloadAction<RemoteCreatedInfo>) => {
       state.roomId = action.payload.roomId;
@@ -111,22 +138,16 @@ export const remoteSlice = createSlice({
     setInviteCode: (state, action: PayloadAction<string>) => {
       state.inviteCode = action.payload;
     },
-    setIsHost: (state, action: PayloadAction<boolean>) => {
-      state.isHost = action.payload;
-    },
-    publishUpdate: (state, action: PayloadAction<BoardState>) => {
-      stompClient?.publish({destination: `/app/remote/updateBoard`, headers:{roomId: state.roomId}, body: JSON.stringify(action.payload)});
-    },
   },
   extraReducers: (builder) => {
-    builder.addCase(createRemote.pending, state => {
+    builder.addCase(activateRemote.pending, state => {
       state.socketStatus = "PENDING";
     })
   }
 });
 
 export const getStompClient = () => stompClient;
-export const { setSocketStatue, disconnect, setHostRoom, setJoinRoom, setMemberList, setName, setInviteCode, setIsHost, publishUpdate }
+export const { initializeRemote, setSocketStatus, setHostRoom, setJoinRoom, setMemberList, setName, setInviteCode }
   = remoteSlice.actions;
 export const selectRemote = (state: RootState) => state.remote;
 export default remoteSlice.reducer;

@@ -6,7 +6,7 @@ export const store = configureStore({
   reducer: {
     board: boardSlice,
     remote: remoteSlice
-  }
+  },
 });
 
 export type AppDispatch = typeof store.dispatch;

@@ -1,9 +1,15 @@
 import {
   addTokenToFirst,
-  addTokenToSecond, changeTokenToggleToFirst, changeTokenToggleToSecond,
+  addTokenToSecond,
+  changeTokenToggleToFirst,
+  changeTokenToggleToSecond,
   PlayerState,
   removeTokenToFirst,
-  removeTokenToSecond, setTokenCountToFirst, setTokenCountToSecond, setTokenToggleToFirst, setTokenToggleToSecond
+  removeTokenToSecond,
+  setTokenCountToFirst,
+  setTokenCountToSecond,
+  setTokenToggleToFirst, setTokenToggleToFirstAsList,
+  setTokenToggleToSecond, setTokenToggleToSecondAsList, triggerPublish
 } from "../../features/board/boardSlice";
 import { useAppDispatch } from "../../app/hooks";
 
@@ -15,22 +21,41 @@ export function useToken(props: TokensInterface) {
   const dispatch = useAppDispatch();
   const { isFirst } = props.player;
 
-  const changeToggle = (index: number) =>
-    isFirst ? dispatch(changeTokenToggleToFirst(index)) : dispatch(changeTokenToggleToSecond(index));
+  const changeToggle = (index: number) => {
+    if (isFirst) dispatch(changeTokenToggleToFirst(index));
+    else dispatch(changeTokenToggleToSecond(index));
+    dispatch(triggerPublish());
+  }
 
-  const addToken = (index: number) =>
-    isFirst ? dispatch(addTokenToFirst(index)) : dispatch(addTokenToSecond(index));
+  const addToken = (index: number) => {
+    if (isFirst) dispatch(addTokenToFirst(index));
+    else dispatch(addTokenToSecond(index));
+    dispatch(triggerPublish());
+  }
 
-  const removeToken = (index: number) =>
-    isFirst ? dispatch(removeTokenToFirst(index)) : dispatch(removeTokenToSecond(index));
+  const removeToken = (index: number) => {
+    if (isFirst) dispatch(removeTokenToFirst(index)); 
+    else dispatch(removeTokenToSecond(index));
+    dispatch(triggerPublish());
+  }
 
-  const setTokenCount = (index: number, value: number) =>
-    isFirst
-      ? dispatch(setTokenCountToFirst({ index, value }))
-      : dispatch(setTokenCountToSecond({ index, value }));
+  const setTokenCount = (index: number, value: number) => {
+    if (isFirst) dispatch(setTokenCountToFirst({ index, value }))
+    else dispatch(setTokenCountToSecond({ index, value }));
+    dispatch(triggerPublish());
+  }
 
-  const setTokenToggle = (payload: { index: number; value: boolean }) =>
-    isFirst ? dispatch(setTokenToggleToFirst(payload)) : dispatch(setTokenToggleToSecond(payload));
+  const setTokenToggle = (payload: { index: number; value: boolean }) => {
+    if (isFirst) dispatch(setTokenToggleToFirst(payload))
+    else dispatch(setTokenToggleToSecond(payload));
+    dispatch(triggerPublish());
+  }
 
-  return {changeToggle, addToken, removeToken, setTokenCount, setTokenToggle }
+  const setTokenToggleAsList = (payload: { [key: number]: boolean }) => {
+    if (isFirst) dispatch(setTokenToggleToFirstAsList(payload));
+    else dispatch(setTokenToggleToSecondAsList(payload));
+    dispatch(triggerPublish());
+  }
+
+  return {changeToggle, addToken, removeToken, setTokenCount, setTokenToggle, setTokenToggleAsList }
 }
