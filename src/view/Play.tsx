@@ -123,9 +123,13 @@ function Play() {
     else dispatch(resetFpToSecond());
     dispatch(triggerPublish());
   }
+  const handleInitialize = () => {
+    dispatch(initialize());
+    dispatch(triggerPublish());
+  }
 
   useEffect(() => {
-    dispatch(initialize());
+    handleInitialize();
   }, [dispatch]);
   return (
     <Grid2 container padding={1}>
@@ -145,7 +149,7 @@ function Play() {
             }}>
             <Person />
           </Button>
-          <Button onClick={() => dispatch(initialize())}>
+          <Button onClick={handleInitialize}>
             <Refresh />
           </Button>
           <Button ref={remoteButtonRef}>

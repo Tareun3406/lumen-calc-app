@@ -24,7 +24,7 @@ function Board() {
       console.log("publish triggered");
       publishUpdate();
     }
-  }, [boardState.triggerPublish]);
+  }, [boardState.triggerPublish, boardState.preventTrigger]);
 
   return (
     <div style={{ width: "100%", height: "100%" }}>
