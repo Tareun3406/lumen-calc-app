@@ -114,9 +114,11 @@ function LitaTokens(props: TokensInterface) {
       </Tooltip>
       <div style={{ display: "grid", placeContent: "center" }}>
         <Tooltip title={character.tokens[4].description} placement={"top"}>
-          <Button size={"small"} sx={getLumenButtonStyle} onClick={handleAllToggle} disabled={player.currentHp > 1000}>
+          <span>
+            <Button size={"small"} sx={getLumenButtonStyle} onClick={handleAllToggle} disabled={player.currentHp > 1000}>
             <img src={character.tokens[4].img} alt={character.tokens[4].img} style={{ width: 60, height: 60 }} className={character.tokens[4].toggle ? "imageWhite" : ""} />
           </Button>
+          </span>
         </Tooltip>
       </div>
       <Grid2 container width={120}>
