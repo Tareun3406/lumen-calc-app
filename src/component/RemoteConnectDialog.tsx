@@ -24,6 +24,7 @@ function RemoteConnectDialog(props: RemoteConnectDialogProps) {
   const { disconnectRemote } = useRemote();
   useEffect(() => {
     if (socketStatus === "CONNECTED") setSelectType("CONNECTED");
+    else if (socketStatus === "DISCONNECTED") setSelectType("NONE");
   }, [socketStatus]);
 
   return (

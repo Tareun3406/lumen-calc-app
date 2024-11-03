@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Client } from "@stomp/stompjs";
 import { RootState } from "../../app/store";
+import { BoardState } from "./boardSlice";
 
 export interface RemoteState {
   socketStatus: "DISCONNECTED" | "CONNECTED" | "PENDING" | "IDLE" | "ERROR" | "NONE";
@@ -24,6 +25,7 @@ export interface JoinedRoomInfo {
   roomId: string;
   playerList: Array<string>;
   observerList: Array<string>;
+  board: BoardState;
 }
 
 export interface RemoteCreatedInfo {
@@ -78,6 +80,7 @@ export const deactivateRemote = createAsyncThunk(
   async (_, { getState, dispatch }) => {
     try {
       const { remote } = getState() as { remote: { username: string; roomId: string } };
+      console.log("roomId: " + remote.roomId);
       if (stompClient) {
         stompClient.publish({
           destination: `/app/remote/disconnect`,

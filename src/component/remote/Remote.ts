@@ -32,7 +32,7 @@ export function useRemote() {
       dispatch(setHostRoom(createdRoom));
       joinRemote(createdRoom.playerCode);
     });
-    stompClient?.publish({ destination: "/app/remote/create", body: JSON.stringify(boardState)});
+    stompClient?.publish({ destination: "/app/remote/create", body: JSON.stringify({ hostName: username, board: boardState }) });
   }
 
   const joinRemote = (inviteCode: string) => {
@@ -40,6 +40,8 @@ export function useRemote() {
     stompClient?.subscribe("/user/queue/joined", (message) => {
       const joinedRoom = JSON.parse(message.body) as JoinedRoomInfo
       dispatch(setJoinRoom(joinedRoom));
+      dispatch(setBoardState(joinedRoom.board));
+      stompClient.subscribe(`/topic/remote/${joinedRoom.roomId}/disconnect`, () => disconnectRemote())
       stompClient.subscribe(`/topic/remote/${joinedRoom.roomId}/memberList`, (message) => dispatch(setMemberList(JSON.parse(message.body))));
       stompClient.subscribe(`/topic/remote/${joinedRoom.roomId}/updateBoard`, (message) => {
         dispatch(setBoardState(JSON.parse(message.body)));
