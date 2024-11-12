@@ -21,19 +21,28 @@ import TokenDisplay from "../component/TokenDisplay";
 import ButtonPanelProps from "../component/ButtonPanelProps";
 import DamageLogs from "../component/DamageLogs";
 import RemoteConnectDialog from "../component/RemoteConnectDialog";
+import { selectRemote } from "../features/board/remoteSlice";
+import { useRemote } from "../component/remote/Remote";
+import {
+  decreaseReadyTimerTime, preventReadyTimer,
+  selectTimer,
+  setReadyTimerTime,
+  toggleReadyTimer
+} from "../features/board/timerSlice";
 
 function Play() {
   const firstPlayer = useAppSelector(selectFirstPlayer);
   const secondPlayer = useAppSelector(selectSecondPlayer);
   const damageLogs = useAppSelector(selectDamageLogs);
   const navigate = useNavigate();
+  const { publishTimer } = useRemote();
+  const { socketStatus } = useAppSelector(selectRemote);
+  const { readyTimer } = useAppSelector(selectTimer);
 
-  const [getTime, setTime] = useState(10);
-  const [isTimerToggle, setTimerToggle] = useState(false);
   const [drawDamageLog, setDrawDamageLog] = useState(false);
   const [openRemoteDialog, setOpenRemoteDialog] = useState(false);
-  const timerIntervalId = useRef<NodeJS.Timer>();
   const remoteButtonRef = useRef<HTMLButtonElement | null>(null);
+  const readyTimerIntervalId = useRef<NodeJS.Timer>();
 
   const dispatch = useAppDispatch();
 
@@ -53,14 +62,14 @@ function Play() {
   }, [secondPlayer.currentHp, secondPlayer.character.name]);
 
   const timerColor = useMemo(() => {
-    if (isTimerToggle) {
-      if (getTime === 0) {
+    if (readyTimer.toggle) {
+      if (readyTimer.time === 0) {
         return "error";
       }
       return "secondary";
     }
     return "info";
-  }, [isTimerToggle, getTime]);
+  }, [readyTimer]);
 
   const handleCloseRemoteDialog = () => {
     setOpenRemoteDialog(false);
@@ -71,22 +80,11 @@ function Play() {
   }
 
   const handleTimerButton = () => {
-    if (isTimerToggle) {
-      setTime(10);
-      clearInterval(timerIntervalId.current);
-    } else {
-      timerIntervalId.current = setInterval(() => {
-        setTime(prevTime => {
-          if (prevTime <= 1) {
-            clearInterval(timerIntervalId.current);
-            setTimerToggle(true);
-            return 0;
-          }
-          return prevTime - 1;
-        });
-      }, 1000);
+    if (socketStatus === "CONNECTED") {
+      publishTimer(!readyTimer.toggle);
+      return;
     }
-    setTimerToggle(!isTimerToggle);
+    dispatch(toggleReadyTimer(!readyTimer.toggle));
   };
 
   const getFpColor = useMemo(() => {
@@ -129,7 +127,26 @@ function Play() {
   }
 
   useEffect(() => {
-    handleInitialize();
+    if (readyTimer.time < 1) {
+      clearInterval(readyTimerIntervalId.current);
+    }
+  }, [readyTimer.time]);
+  useEffect(() => {
+    if (readyTimer.preventTrigger) return;
+    if (readyTimer.toggle) {
+      readyTimerIntervalId.current = setInterval(() => {
+        dispatch(decreaseReadyTimerTime());
+      }, 1000);
+    } else {
+      clearInterval(readyTimerIntervalId.current);
+      dispatch(setReadyTimerTime(10));
+    }
+    dispatch(preventReadyTimer());
+  }, [readyTimer.toggle]);
+
+  useEffect(() => {
+    dispatch(initialize());
+    dispatch(triggerPublish());
   }, [dispatch]);
   return (
     <Grid2 container padding={1}>
@@ -206,7 +223,7 @@ function Play() {
           style={{ borderRadius: 50, fontSize: 45, width: 90 }}
           color={timerColor}
           onClick={handleTimerButton}>
-          {getTime}
+          {readyTimer.time}
         </Button>
         <div style={{ display: "inline-block", width: 72 }}>
           <IconButton onClick={() => handleIncreaseFp(false, 1)}>+</IconButton>

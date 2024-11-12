@@ -9,6 +9,8 @@ import {
   setJoinRoom, setMemberList, setSocketStatus
 } from "../../features/board/remoteSlice";
 import { selectBoard, setBoardState, setPreventTrigger } from "../../features/board/boardSlice";
+import { toggleReadyTimer } from "../../features/board/timerSlice";
+import { IMessage } from "@stomp/stompjs";
 
 export function useRemote() {
   const dispatch = useAppDispatch();
@@ -46,17 +48,29 @@ export function useRemote() {
       stompClient.subscribe(`/topic/remote/${joinedRoom.roomId}/updateBoard`, (message) => {
         dispatch(setBoardState(JSON.parse(message.body)));
       });
+      stompClient.subscribe(`/topic/remote/${joinedRoom.roomId}/timer`, toggleTimer)
       dispatch(setSocketStatus("CONNECTED"))
     })
     stompClient?.publish({ destination: "/app/remote/joinAsCode", body: JSON.stringify({name: username, inviteCode: inviteCode})})
   }
 
   const publishUpdate = () => {
-    dispatch(setPreventTrigger(true));
     if (socketStatus !== "CONNECTED") return;
+    dispatch(setPreventTrigger(true));
     const stompClient = getStompClient();
     stompClient?.publish({destination: `/app/remote/updateBoard`, headers:{roomId}, body: JSON.stringify(boardState)});
   }
 
-  return { connectRemote, disconnectRemote, hostRemote, joinRemote, publishUpdate }
+  const publishTimer = (isOn: boolean) => {
+    if (socketStatus !== "CONNECTED") return;
+    const stompClient = getStompClient();
+    stompClient?.publish({destination: `/app/remote/timer`, headers:{roomId}, body: JSON.stringify(isOn)});
+  }
+
+  const toggleTimer = (message: IMessage) => {
+    const isOn = JSON.parse(message.body) as boolean;
+    dispatch(toggleReadyTimer(isOn));
+  }
+
+  return { connectRemote, disconnectRemote, hostRemote, joinRemote, publishUpdate, publishTimer }
 }
