@@ -7,6 +7,8 @@ function RemoteConnected() {
   const {username, playerList, observerList, playerInviteCode, observerInviteCode, hostName} = useAppSelector(selectRemote);
 
   const renderPlayerInviteCode = useMemo(() => {
+    // todo 코드 숨기기
+    // todo 리모트 관련 안내 메세지 추가 ex) 연결 해제됨, 연결됨, 에러, 관전자 조작 금지 등
     return playerInviteCode
       ? (
         <Grid2 size={6} marginBottom={1}>
