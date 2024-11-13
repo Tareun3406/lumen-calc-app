@@ -36,7 +36,7 @@ function Play() {
   const damageLogs = useAppSelector(selectDamageLogs);
   const navigate = useNavigate();
   const { publishTimer } = useRemote();
-  const { socketStatus } = useAppSelector(selectRemote);
+  const { socketStatus, isPlayer } = useAppSelector(selectRemote);
   const { readyTimer } = useAppSelector(selectTimer);
 
   const [drawDamageLog, setDrawDamageLog] = useState(false);
@@ -46,6 +46,19 @@ function Play() {
 
   const dispatch = useAppDispatch();
 
+  const handleCloseRemoteDialog = () => {
+    setOpenRemoteDialog(false);
+  }
+  const handleOpenRemoteDialog = () => {
+    remoteButtonRef.current?.blur();
+    setOpenRemoteDialog(true);
+  }
+
+  const toggleDamageLog = (toggle: boolean) => () => {
+    setDrawDamageLog(toggle);
+  }
+
+  // todo HpBar 컴포넌트로 이동
   const handFirst = useMemo(() => {
     if (firstPlayer.currentHp <= 1000 && firstPlayer.character.name === "리타") return 10;
     if (firstPlayer.currentHp <= 2000) return 9;
@@ -61,6 +74,7 @@ function Play() {
     return 6;
   }, [secondPlayer.currentHp, secondPlayer.character.name]);
 
+  // todo timer 컴포넌트 만들기
   const timerColor = useMemo(() => {
     if (readyTimer.toggle) {
       if (readyTimer.time === 0) {
@@ -71,15 +85,9 @@ function Play() {
     return "info";
   }, [readyTimer]);
 
-  const handleCloseRemoteDialog = () => {
-    setOpenRemoteDialog(false);
-  }
-  const handleOpenRemoteDialog = () => {
-    remoteButtonRef.current?.blur();
-    setOpenRemoteDialog(true);
-  }
-
+  // todo timer 컴포넌트 만들기
   const handleTimerButton = () => {
+    if (!isPlayer && socketStatus === "CONNECTED") return;
     if (socketStatus === "CONNECTED") {
       publishTimer(!readyTimer.toggle);
       return;
@@ -87,6 +95,7 @@ function Play() {
     dispatch(toggleReadyTimer(!readyTimer.toggle));
   };
 
+  // todo action 컴포넌트 생성 및 이동
   const getFpColor = useMemo(() => {
     const getColor = (fp: number): "success" | "info" | "error" => {
       if (fp > 0) return "info";
@@ -101,31 +110,33 @@ function Play() {
       second
     };
   }, [firstPlayer.fp, secondPlayer.fp]);
-
-  const toggleDamageLog = (toggle: boolean) => () => {
-    setDrawDamageLog(toggle);
-  }
-
   const handleIncreaseFp = (isFirst: boolean, value: number) => {
+    if (!isPlayer && socketStatus === "CONNECTED") return;
     if (isFirst) dispatch(increaseFpToFirst(value));
     else dispatch(increaseFpToSecond(value));
     dispatch(triggerPublish());
   }
   const handleDecreaseFp = (isFirst: boolean, value: number) => {
+    if (!isPlayer && socketStatus === "CONNECTED") return;
     if (isFirst) dispatch(decreaseFpToFirst(value));
     else dispatch(decreaseFpToSecond(value));
     dispatch(triggerPublish());
   }
   const handleResetFp = (isFirst: boolean) => {
+    if (!isPlayer && socketStatus === "CONNECTED") return;
     if (isFirst) dispatch(resetFpToFirst());
     else dispatch(resetFpToSecond());
     dispatch(triggerPublish());
   }
+
+  // todo action 컴포넌트 생성 및 이동
   const handleInitialize = () => {
+    if (!isPlayer && socketStatus === "CONNECTED") return;
     dispatch(initialize());
     dispatch(triggerPublish());
   }
 
+  // todo timer 컴포넌트로 이동
   useEffect(() => {
     if (readyTimer.time < 1) {
       clearInterval(readyTimerIntervalId.current);
@@ -145,6 +156,7 @@ function Play() {
   }, [readyTimer.toggle]);
 
   useEffect(() => {
+    if (!isPlayer && socketStatus === "CONNECTED") return;
     dispatch(initialize());
     dispatch(triggerPublish());
   }, [dispatch]);
@@ -161,6 +173,7 @@ function Play() {
         <ButtonGroup variant={"outlined"} size={"small"}>
           <Button
             onClick={() => {
+              if (!isPlayer && socketStatus === "CONNECTED") return;
               dispatch(deselectCharacter());
               navigate("/board/characterSelect");
             }}>

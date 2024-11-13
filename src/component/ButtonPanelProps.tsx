@@ -6,8 +6,8 @@ import {
   PlayerState, triggerPublish
 } from "../features/board/boardSlice";
 import { Button, Stack } from "@mui/material";
-import { useAppDispatch } from "../app/hooks";
-import { useRemote } from "./remote/Remote";
+import { useAppDispatch, useAppSelector } from "../app/hooks";
+import { selectRemote } from "../features/board/remoteSlice";
 
 interface ButtonPanelProps {
   player: PlayerState
@@ -15,7 +15,7 @@ interface ButtonPanelProps {
 
 function ButtonPanelProps(props:ButtonPanelProps) {
   const dispatch = useAppDispatch();
-  const { publishUpdate } = useRemote();
+  const { isPlayer, socketStatus } = useAppSelector(selectRemote);
 
   const isFirstPlayer = props.player.isFirst
 
@@ -23,14 +23,17 @@ function ButtonPanelProps(props:ButtonPanelProps) {
     return isFirstPlayer ? "" : "reverseFlexRow";
   }
 
+  // todo action 컴포넌트 생성 및 이동
   const dispatchDamage = (value: number) =>  {
+    if (!isPlayer && socketStatus === "CONNECTED") return;
     if (isFirstPlayer) dispatch(damageToFirst(value))
     else dispatch(damageToSecond(value))
-    publishUpdate();
     dispatch(triggerPublish());
   }
 
+  // todo action 컴포넌트 생성 및 이동
   const dispatchHeal = (value: number) => {
+    if (!isPlayer && socketStatus === "CONNECTED") return;
     if (isFirstPlayer) dispatch(healToFirst(value))
     else dispatch(healToSecond(value));
     dispatch(triggerPublish());

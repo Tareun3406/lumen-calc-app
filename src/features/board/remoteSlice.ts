@@ -26,6 +26,7 @@ export interface JoinedRoomInfo {
   playerList: Array<string>;
   observerList: Array<string>;
   board: BoardState;
+  isPlayer: boolean;
 }
 
 export interface RemoteCreatedInfo {
@@ -130,6 +131,7 @@ export const remoteSlice = createSlice({
       state.roomId = action.payload.roomId;
       state.playerList = action.payload.playerList;
       state.observerList = action.payload.observerList;
+      state.isPlayer = action.payload.isPlayer;
     },
     setMemberList: (state, action: PayloadAction<MemberListMessage>) => {
       state.playerList = action.payload.playerList;

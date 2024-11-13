@@ -8,11 +8,11 @@ import { useRemote } from "../component/remote/Remote";
 function Board() {
   const dispatch = useAppDispatch();
   const boardState = useAppSelector(selectBoard);
-  const { isPlayer } = useAppSelector(selectRemote);
+  const { isPlayer, socketStatus } = useAppSelector(selectRemote);
   const { disconnectRemote, publishUpdate } = useRemote();
 
   useEffect(() => {
-    console.log('init');
+    if (!isPlayer && socketStatus === "CONNECTED") return;
     dispatch(initialize());
     return () => {
       disconnectRemote().then();
@@ -21,7 +21,6 @@ function Board() {
 
   useEffect(() => {
     if (isPlayer && !boardState.preventTrigger) {
-      console.log("publish triggered");
       publishUpdate();
     }
   }, [boardState.triggerPublish, boardState.preventTrigger]);
