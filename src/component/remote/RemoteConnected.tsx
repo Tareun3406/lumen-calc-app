@@ -4,7 +4,7 @@ import { selectRemote } from "../../features/board/remoteSlice";
 import { useMemo } from "react";
 
 function RemoteConnected() {
-  const {username, playerList, observerList, playerInviteCode, observerInviteCode} = useAppSelector(selectRemote);
+  const {username, playerList, observerList, playerInviteCode, observerInviteCode, hostName} = useAppSelector(selectRemote);
 
   const renderPlayerInviteCode = useMemo(() => {
     return playerInviteCode
@@ -28,6 +28,12 @@ function RemoteConnected() {
       : (<Grid2 size={6} marginBottom={1}></Grid2>);
   }, [observerInviteCode])
 
+  const getUsernameClass = (targetName: string) => {
+    if (targetName === hostName) return "red";
+    if (targetName === username) return "blue";
+    return "";
+  }
+
   return(
     <Grid2 container maxHeight={"80%"} width={364}>
       {playerInviteCode && (renderPlayerInviteCode)}
@@ -50,14 +56,14 @@ function RemoteConnected() {
         <Grid2 size={6}>
           <List>
             {playerList.map((playerName, index) => (
-              <ListItemText key={index} className={playerName === username ? "blue": ""}>{playerName}</ListItemText>
+              <ListItemText key={index} className={getUsernameClass(playerName)}>{playerName}</ListItemText>
             ))}
           </List>
         </Grid2>
         <Grid2 size={6}>
           <List>
-            {observerList.map((observer, index) => (
-              <ListItemText key={index}>{observer}</ListItemText>
+            {observerList.map((observerName, index) => (
+              <ListItemText key={index} className={getUsernameClass(observerName)}>{observerName}</ListItemText>
             ))}
           </List>
         </Grid2>
