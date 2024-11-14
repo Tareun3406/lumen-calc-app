@@ -1,10 +1,31 @@
 import { Chip, Grid2, List, ListItemText } from "@mui/material";
-import { useAppSelector } from "../../app/hooks";
-import { selectRemote } from "../../features/board/remoteSlice";
-import { useMemo } from "react";
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
+import { selectRemote, showNotificationMessage } from "../../features/board/remoteSlice";
+import { useCallback, useMemo, useState } from "react";
 
 function RemoteConnected() {
   const {username, playerList, observerList, playerInviteCode, observerInviteCode, hostName} = useAppSelector(selectRemote);
+  const dispatch = useAppDispatch();
+
+  const [ viewPlayerCode, setViewPlayerCode ] = useState<boolean>(false);
+  const [ viewObserverCode, setViewObserverCode ] = useState<boolean>(false);
+
+  const onClickPlayerCodeChip = useCallback(() => {
+    if (!viewPlayerCode) {
+      setViewPlayerCode(true);
+    }
+    navigator.clipboard.writeText(playerInviteCode);
+    dispatch(showNotificationMessage({message: "클립보드에 복사 하였습니다.", status: "info"}));
+  }, [viewPlayerCode, playerInviteCode, dispatch])
+
+  const onClickObserverCodeChip = useCallback(() => {
+    if (!viewObserverCode) {
+      setViewObserverCode(true);
+    }
+    navigator.clipboard.writeText(observerInviteCode);
+    dispatch(showNotificationMessage({message: "클립보드에 복사 하였습니다.", status: "info"}));
+  }, [viewObserverCode, observerInviteCode, dispatch])
+
 
   const renderPlayerInviteCode = useMemo(() => {
     // todo 코드 숨기기
@@ -13,22 +34,24 @@ function RemoteConnected() {
       ? (
         <Grid2 size={6} marginBottom={1}>
           <div>진행자 초대 코드</div>
-          <Chip color={"primary"} label={playerInviteCode} />
+          <Chip color={"primary"} label={viewPlayerCode ? playerInviteCode : "초대 코드 확인"}
+          onClick={onClickPlayerCodeChip}/>
         </Grid2>
       )
       : (<Grid2 size={6} marginBottom={1}></Grid2>);
-  }, [playerInviteCode]);
+  }, [playerInviteCode, viewPlayerCode, onClickPlayerCodeChip]);
 
   const renderObserverInviteCode = useMemo(() => {
     return observerInviteCode
       ? (
         <Grid2 size={6} marginBottom={1}>
           <div>관전자 초대 코드</div>
-          <Chip color={"primary"} label={observerInviteCode} />
+          <Chip color={"primary"} label={ viewObserverCode ? observerInviteCode : "초대 코드 확인"}
+          onClick={onClickObserverCodeChip}/>
         </Grid2>
       )
       : (<Grid2 size={6} marginBottom={1}></Grid2>);
-  }, [observerInviteCode])
+  }, [observerInviteCode, viewObserverCode, onClickObserverCodeChip])
 
   const getUsernameClass = (targetName: string) => {
     if (targetName === hostName) return "red";

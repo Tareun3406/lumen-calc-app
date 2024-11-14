@@ -14,6 +14,13 @@ export interface RemoteState {
   roomId: string;
   hostName: string;
   inviteCode: string;
+  notification: Notification;
+}
+
+export interface Notification {
+  show: boolean,
+  status: "success" | "info" | "warning" | "error",
+  message: string,
 }
 
 export interface MemberListMessage {
@@ -47,7 +54,12 @@ const initialState: RemoteState = {
   observerList: [],
   hostName: "",
   roomId: "",
-  inviteCode: ""
+  inviteCode: "",
+  notification: {
+    message: "",
+    status: "info",
+    show: false
+  }
 };
 
 let stompClient: Client | null = null;
@@ -57,6 +69,7 @@ export const activateRemote = createAsyncThunk(
   async (_, { dispatch }) => {
     stompClient = new Client({
       brokerURL: `${process.env.REACT_APP_WS_HOSTNAME}/remote-ws`,
+      reconnectDelay: 0
     });
 
     return new Promise<void>((resolve, reject) => {
@@ -67,12 +80,22 @@ export const activateRemote = createAsyncThunk(
       stompClient!.onStompError = (frame) => {
         console.error("WebSocket STOMP 오류:", frame);
         dispatch(setSocketStatus("ERROR"))
+        dispatch(showNotificationMessage({message:"서버와의 통신중 오류가 발생했습니다.", status: "error"}))
         reject(`Stomp Error: ${frame.body}`);
       }
       stompClient!.onWebSocketError = (error) => {
         console.error("WebSocket 오류:", error);
-        dispatch(setSocketStatus("ERROR"));
+        dispatch(showNotificationMessage({message: "서버와의 연결에 실패하였습니다.", status: "error"}))
         reject(`Stomp Error: ${error.message}`);
+      }
+      stompClient!.onWebSocketClose = (event: CloseEvent) => {
+        if (event.wasClean) {
+          stompClient = null;
+          dispatch(setSocketStatus("DISCONNECTED"));
+          return;
+        }
+        dispatch(setSocketStatus("ERROR"));
+        dispatch(showNotificationMessage({message: "서버와의 통신이 끊어졌습니다.", status: "error"}))
       }
       stompClient!.activate();
     })
@@ -84,7 +107,6 @@ export const deactivateRemote = createAsyncThunk(
   async (_, { getState, dispatch }) => {
     try {
       const { remote } = getState() as { remote: { username: string; roomId: string } };
-      console.log("roomId: " + remote.roomId);
       if (stompClient) {
         stompClient.publish({
           destination: `/app/remote/disconnect`,
@@ -93,8 +115,6 @@ export const deactivateRemote = createAsyncThunk(
         });
 
         await stompClient.deactivate();
-        stompClient = null;
-        dispatch(setSocketStatus("DISCONNECTED"));
       }
     } catch (error) {
       console.error("Error disconnecting:", error);
@@ -121,7 +141,6 @@ export const remoteSlice = createSlice({
       state.inviteCode= "";
     },
     setSocketStatus: (state, action: PayloadAction<"DISCONNECTED" | "CONNECTED" | "PENDING" | "IDLE" | "ERROR" | "NONE">) => {
-      console.log(`Socket Status: ${action.payload}`);
       state.socketStatus = action.payload;
     },
     setHostRoom: (state, action: PayloadAction<RemoteCreatedInfo>) => {
@@ -147,6 +166,14 @@ export const remoteSlice = createSlice({
     setInviteCode: (state, action: PayloadAction<string>) => {
       state.inviteCode = action.payload;
     },
+    showNotificationMessage: (state, action: PayloadAction<{message: string, status: "success" | "info" | "warning" | "error"}>) => {
+      state.notification.message = action.payload.message;
+      state.notification.status = action.payload.status;
+      state.notification.show = true;
+    },
+    closeNotification: (state) => {
+      state.notification.show = false;
+    }
   },
   extraReducers: (builder) => {
     builder.addCase(activateRemote.pending, state => {
@@ -156,7 +183,17 @@ export const remoteSlice = createSlice({
 });
 
 export const getStompClient = () => stompClient;
-export const { initializeRemote, setSocketStatus, setHostRoom, setJoinRoom, setMemberList, setName, setInviteCode }
-  = remoteSlice.actions;
+export const {
+  initializeRemote,
+  setSocketStatus,
+  setHostRoom,
+  setJoinRoom,
+  setMemberList,
+  setName,
+  setInviteCode,
+  showNotificationMessage,
+  closeNotification
+} = remoteSlice.actions;
+
 export const selectRemote = (state: RootState) => state.remote;
 export default remoteSlice.reducer;
