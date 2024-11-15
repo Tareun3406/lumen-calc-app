@@ -2,7 +2,7 @@ import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import {
   activateRemote, deactivateRemote,
   getStompClient, initializeRemote,
-  JoinedRoomInfo,
+  JoinedRoomInfo, MemberListMessage,
   RemoteCreatedInfo, selectRemote,
   setHostRoom,
   setInviteCode,
@@ -15,7 +15,7 @@ import { IMessage } from "@stomp/stompjs";
 export function useRemote() {
   const dispatch = useAppDispatch();
   const boardState = useAppSelector(selectBoard);
-  const { isPlayer, username, roomId, socketStatus } = useAppSelector(selectRemote);
+  const { isPlayer, username, roomId, socketStatus, hostName } = useAppSelector(selectRemote);
 
   const connectRemote = async () => {
     dispatch(initializeRemote());
@@ -27,8 +27,8 @@ export function useRemote() {
     return dispatch(deactivateRemote()).unwrap();
   }
 
-  const disconnectedWithHost = async () => {
-    dispatch(showNotificationMessage({message: "호스트와의 연결이 끊어졌습니다.", status: "warning"}))
+  const disconnectedFromServer = async (message: string) => {
+    dispatch(showNotificationMessage({message: message, status: "warning"}))
     return dispatch(deactivateRemote()).unwrap();
   }
 
@@ -43,14 +43,21 @@ export function useRemote() {
     stompClient?.publish({ destination: "/app/remote/create", body: JSON.stringify({ hostName: username, board: boardState }) });
   }
 
+  const handleMemberListMessage = (memberList: MemberListMessage) => {
+    if (!memberList.playerList.includes(hostName)) {
+      dispatch(showNotificationMessage({message: "호스트의 연결이 끊어졌습니다. 방은 임시로 유지됩니다.", status: "warning"}))
+    }
+    dispatch(setMemberList(memberList));
+  }
+
   const joinRemote = (inviteCode: string) => {
     const stompClient = getStompClient();
     stompClient?.subscribe("/user/queue/joined", (message) => {
       const joinedRoom = JSON.parse(message.body) as JoinedRoomInfo
       dispatch(setJoinRoom(joinedRoom));
       dispatch(setBoardState(joinedRoom.board));
-      stompClient.subscribe(`/topic/remote/${joinedRoom.roomId}/disconnect`, () => disconnectedWithHost())
-      stompClient.subscribe(`/topic/remote/${joinedRoom.roomId}/memberList`, (message) => dispatch(setMemberList(JSON.parse(message.body))));
+      stompClient.subscribe(`/topic/remote/${joinedRoom.roomId}/disconnect`, (message) => disconnectedFromServer(message.body))
+      stompClient.subscribe(`/topic/remote/${joinedRoom.roomId}/memberList`, (message) => handleMemberListMessage(JSON.parse(message.body)));
       stompClient.subscribe(`/topic/remote/${joinedRoom.roomId}/updateBoard`, (message) => {
         dispatch(setBoardState(JSON.parse(message.body)));
       });
