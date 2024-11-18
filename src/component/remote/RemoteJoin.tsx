@@ -3,9 +3,8 @@ import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import {
   selectRemote,
   setName,
-  setInviteCode
 } from "../../features/board/remoteSlice";
-import { ChangeEvent } from "react";
+import { ChangeEvent, useState } from "react";
 import { useRemote } from "./Remote";
 
 export interface RemoteJoinProps {
@@ -13,19 +12,22 @@ export interface RemoteJoinProps {
 }
 
 function RemoteJoin(props: RemoteJoinProps) {
-  const {username, inviteCode} = useAppSelector(selectRemote);
+  const {username, socketStatus} = useAppSelector(selectRemote);
   const dispatch = useAppDispatch();
   const {connectRemote, joinRemote} = useRemote();
+
+  const [inviteCode, setInviteCode] = useState<string>("");
 
   const handleChangeName = (e: ChangeEvent<HTMLInputElement>) => {
     dispatch(setName(e.target.value));
   }
 
   const handleChangeCode = (e: ChangeEvent<HTMLInputElement>) => {
-    dispatch(setInviteCode(e.target.value));
+    setInviteCode(e.target.value);
   }
 
   const handleJoin = async () => {
+    if (!inviteCode || !username) return
     await connectRemote();
     joinRemote(inviteCode);
   }
@@ -41,7 +43,8 @@ function RemoteJoin(props: RemoteJoinProps) {
         <Button variant={"outlined"} size={"large"} onClick={props.onClickBack}>뒤로</Button>
       </Grid2>
       <Grid2 size={6}>
-        <Button variant={"contained"} size={"large"} onClick={handleJoin}>가입</Button>
+        <Button variant={"contained"} size={"large"} onClick={handleJoin}
+                disabled={socketStatus === "PENDING" || socketStatus === "IDLE"}>가입</Button>
       </Grid2>
     </Grid2>
   )

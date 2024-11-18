@@ -5,7 +5,7 @@ import {
   JoinedRoomInfo, MemberListMessage,
   RemoteCreatedInfo, selectRemote,
   setHostRoom,
-  setInviteCode,
+  setJoiningCode,
   setJoinRoom, setMemberList, setSocketStatus, showNotificationMessage
 } from "../../features/board/remoteSlice";
 import { selectBoard, setBoardState, setPreventTrigger } from "../../features/board/boardSlice";
@@ -15,7 +15,7 @@ import { IMessage } from "@stomp/stompjs";
 export function useRemote() {
   const dispatch = useAppDispatch();
   const boardState = useAppSelector(selectBoard);
-  const { isPlayer, username, roomId, socketStatus, hostName } = useAppSelector(selectRemote);
+  const { isPlayer, username, roomId, socketStatus, joiningCode } = useAppSelector(selectRemote);
 
   const connectRemote = async () => {
     dispatch(initializeRemote());
@@ -27,7 +27,13 @@ export function useRemote() {
     return dispatch(deactivateRemote()).unwrap();
   }
 
-  const disconnectedFromServer = async (message: string) => {
+  const reconnectRemote = async () => {
+    await dispatch(deactivateRemote()).unwrap();
+    await dispatch(activateRemote()).unwrap();
+    joinRemote(joiningCode);
+  }
+
+  const handleDisconnectedFromServer = async (message: string) => {
     dispatch(showNotificationMessage({message: message, status: "warning"}))
     return dispatch(deactivateRemote()).unwrap();
   }
@@ -36,7 +42,7 @@ export function useRemote() {
     const stompClient = getStompClient();
     stompClient?.subscribe("/user/queue/created",(message) => {
       const createdRoom = JSON.parse(message.body) as RemoteCreatedInfo
-      dispatch(setInviteCode(createdRoom.playerCode));
+      dispatch(setJoiningCode(createdRoom.playerCode));
       dispatch(setHostRoom(createdRoom));
       joinRemote(createdRoom.playerCode);
     });
@@ -44,19 +50,21 @@ export function useRemote() {
   }
 
   const handleMemberListMessage = (memberList: MemberListMessage) => {
-    if (!memberList.playerList.includes(hostName)) {
-      dispatch(showNotificationMessage({message: "호스트의 연결이 끊어졌습니다. 방은 임시로 유지됩니다.", status: "warning"}))
-    }
     dispatch(setMemberList(memberList));
   }
 
   const joinRemote = (inviteCode: string) => {
     const stompClient = getStompClient();
     stompClient?.subscribe("/user/queue/joined", (message) => {
+      if (!message.body) {
+        dispatch(showNotificationMessage({message: "방을 찾지 못했습니다.", status: "error"}));
+        dispatch(setSocketStatus("ERROR"));
+        return
+      }
       const joinedRoom = JSON.parse(message.body) as JoinedRoomInfo
       dispatch(setJoinRoom(joinedRoom));
       dispatch(setBoardState(joinedRoom.board));
-      stompClient.subscribe(`/topic/remote/${joinedRoom.roomId}/disconnect`, (message) => disconnectedFromServer(message.body))
+      stompClient.subscribe(`/topic/remote/${joinedRoom.roomId}/disconnect`, (message) => handleDisconnectedFromServer(message.body))
       stompClient.subscribe(`/topic/remote/${joinedRoom.roomId}/memberList`, (message) => handleMemberListMessage(JSON.parse(message.body)));
       stompClient.subscribe(`/topic/remote/${joinedRoom.roomId}/updateBoard`, (message) => {
         dispatch(setBoardState(JSON.parse(message.body)));
@@ -64,6 +72,7 @@ export function useRemote() {
       stompClient.subscribe(`/topic/remote/${joinedRoom.roomId}/timer`, toggleTimer);
       dispatch(setSocketStatus("CONNECTED"));
       dispatch(showNotificationMessage({message: "연결 성공", status: "success"}));
+      dispatch(setJoiningCode(inviteCode));
     })
     stompClient?.publish({ destination: "/app/remote/joinAsCode", body: JSON.stringify({name: username, inviteCode: inviteCode})})
   }
@@ -87,5 +96,5 @@ export function useRemote() {
     dispatch(toggleReadyTimer(isOn));
   }
 
-  return { connectRemote, disconnectRemote, hostRemote, joinRemote, publishUpdate, publishTimer }
+  return { connectRemote, reconnectRemote, disconnectRemote, hostRemote, joinRemote, publishUpdate, publishTimer }
 }

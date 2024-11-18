@@ -13,8 +13,9 @@ export interface RemoteState {
   observerList: Array<string>;
   roomId: string;
   hostName: string;
-  inviteCode: string;
+  joiningCode: string;
   notification: Notification;
+  confirmReconnectModal: boolean;
 }
 
 export interface Notification {
@@ -54,12 +55,13 @@ const initialState: RemoteState = {
   observerList: [],
   hostName: "",
   roomId: "",
-  inviteCode: "",
+  joiningCode: "",
   notification: {
     message: "",
     status: "info",
     show: false
-  }
+  },
+  confirmReconnectModal: false,
 };
 
 let stompClient: Client | null = null;
@@ -79,22 +81,23 @@ export const activateRemote = createAsyncThunk(
       }
       stompClient!.onStompError = (frame) => {
         console.error("WebSocket STOMP 오류:", frame);
-        dispatch(setSocketStatus("ERROR"))
+        dispatch(setSocketStatus("DISCONNECTED"))
         dispatch(showNotificationMessage({message:"서버와의 통신중 오류가 발생했습니다.", status: "error"}))
         reject(`Stomp Error: ${frame.body}`);
       }
       stompClient!.onWebSocketError = (error) => {
         console.error("WebSocket 오류:", error);
+        dispatch(setSocketStatus("DISCONNECTED"))
         dispatch(showNotificationMessage({message: "서버와의 연결에 실패하였습니다.", status: "error"}))
         reject(`Stomp Error: ${error.message}`);
       }
       stompClient!.onWebSocketClose = (event: CloseEvent) => {
         if (event.wasClean) {
           stompClient = null;
-          dispatch(setSocketStatus("DISCONNECTED"));
+          dispatch(setSocketStatus("NONE"));
           return;
         }
-        dispatch(setSocketStatus("ERROR"));
+        dispatch(setSocketStatus("DISCONNECTED"));
         dispatch(showNotificationMessage({message: "서버와의 통신이 끊어졌습니다.", status: "error"}))
       }
       stompClient!.activate();
@@ -104,16 +107,9 @@ export const activateRemote = createAsyncThunk(
 
 export const deactivateRemote = createAsyncThunk(
   "remote/deleteRemote",
-  async (_, { getState, dispatch }) => {
+  async (_, { dispatch }) => {
     try {
-      const { remote } = getState() as { remote: { username: string; roomId: string } };
       if (stompClient) {
-        stompClient.publish({
-          destination: `/app/remote/disconnect`,
-          body: remote.username,
-          headers: { roomId: remote.roomId },
-        });
-
         await stompClient.deactivate();
       }
     } catch (error) {
@@ -138,7 +134,7 @@ export const remoteSlice = createSlice({
       state.playerList= [];
       state.observerList= [];
       state.roomId= "";
-      state.inviteCode= "";
+      state.joiningCode= "";
     },
     setSocketStatus: (state, action: PayloadAction<"DISCONNECTED" | "CONNECTED" | "PENDING" | "IDLE" | "ERROR" | "NONE">) => {
       state.socketStatus = action.payload;
@@ -163,8 +159,8 @@ export const remoteSlice = createSlice({
     setName: (state, action: PayloadAction<string>) => {
       state.username = action.payload;
     },
-    setInviteCode: (state, action: PayloadAction<string>) => {
-      state.inviteCode = action.payload;
+    setJoiningCode: (state, action: PayloadAction<string>) => {
+      state.joiningCode = action.payload;
     },
     showNotificationMessage: (state, action: PayloadAction<{message: string, status: "success" | "info" | "warning" | "error"}>) => {
       state.notification.message = action.payload.message;
@@ -190,7 +186,7 @@ export const {
   setJoinRoom,
   setMemberList,
   setName,
-  setInviteCode,
+  setJoiningCode,
   showNotificationMessage,
   closeNotification
 } = remoteSlice.actions;
