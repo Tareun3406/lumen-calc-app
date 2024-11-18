@@ -24,6 +24,11 @@ export interface Notification {
   message: string,
 }
 
+export interface INotificationMessage {
+  status: "success" | "info" | "warning" | "error",
+  message: string,
+}
+
 export interface MemberListMessage {
   playerList: Array<string>;
   observerList: Array<string>;

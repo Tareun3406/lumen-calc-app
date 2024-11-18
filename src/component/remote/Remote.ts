@@ -1,7 +1,7 @@
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import {
   activateRemote, deactivateRemote,
-  getStompClient, initializeRemote,
+  getStompClient, initializeRemote, INotificationMessage,
   JoinedRoomInfo, MemberListMessage,
   RemoteCreatedInfo, selectRemote,
   setHostRoom,
@@ -20,6 +20,11 @@ export function useRemote() {
   const connectRemote = async () => {
     dispatch(initializeRemote());
     return dispatch(activateRemote()).unwrap();
+  }
+
+  const handleNotificationMessage = (message: string) => {
+    const notification = JSON.parse(message) as INotificationMessage
+    dispatch(showNotificationMessage(notification))
   }
 
   const disconnectRemote = async () => {
@@ -64,8 +69,9 @@ export function useRemote() {
       const joinedRoom = JSON.parse(message.body) as JoinedRoomInfo
       dispatch(setJoinRoom(joinedRoom));
       dispatch(setBoardState(joinedRoom.board));
+      stompClient.subscribe(`/topic/remote/${joinedRoom.roomId}/notification`, (message => handleNotificationMessage(message.body)))
       stompClient.subscribe(`/topic/remote/${joinedRoom.roomId}/disconnect`, (message) => handleDisconnectedFromServer(message.body))
-      stompClient.subscribe(`/topic/remote/${joinedRoom.roomId}/memberList`, (message) => handleMemberListMessage(JSON.parse(message.body)));
+      stompClient.subscribe(`/topic/remote/${joinedRoom.roomId}/memberList`, (message) => handleMemberListMessage(JSON.parse(message.body)))
       stompClient.subscribe(`/topic/remote/${joinedRoom.roomId}/updateBoard`, (message) => {
         dispatch(setBoardState(JSON.parse(message.body)));
       });
