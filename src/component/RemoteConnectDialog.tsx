@@ -7,8 +7,8 @@ import { useEffect, useState } from "react";
 import RemoteConnected from "./remote/RemoteConnected";
 import RemoteDefault from "./remote/RemoteDefault";
 import RemoteJoin from "./remote/RemoteJoin";
-import { useAppDispatch, useAppSelector } from "../app/hooks";
-import { selectRemote, setSocketStatus } from "../features/board/remoteSlice";
+import { useAppSelector } from "../app/hooks";
+import { selectRemote } from "../features/board/remoteSlice";
 import RemoteHost from "./remote/RemoteHost";
 import { useRemote } from "./remote/Remote";
 
@@ -20,7 +20,7 @@ export interface RemoteConnectDialogProps {
 function RemoteConnectDialog(props: RemoteConnectDialogProps) {
   const [selectType, setSelectType] = useState<"NONE" | "HOST" | "JOIN" | "PENDING" | "CONNECTED" | "DISCONNECTED">("NONE");
   const { socketStatus } = useAppSelector(selectRemote);
-  const dispatch = useAppDispatch();
+
   const { disconnectRemote, reconnectRemote } = useRemote();
   useEffect(() => {
     if (socketStatus === "CONNECTED") setSelectType("CONNECTED");
@@ -61,7 +61,6 @@ function RemoteConnectDialog(props: RemoteConnectDialogProps) {
     <Dialog open={props.open} onClose={handleClose} disableEnforceFocus>
       <DialogTitle>
         <span>리모트 연결</span> {selectType === "DISCONNECTED" && (<span> 오류</span>)}
-        <Button onClick={() => dispatch(setSocketStatus("DISCONNECTED"))}>디버그</Button>
         {
           socketStatus === "CONNECTED" &&
           (<Button size={"small"} variant={"outlined"} sx={{position: "absolute", right: 20}} onClick={() => disconnectRemote()}>
