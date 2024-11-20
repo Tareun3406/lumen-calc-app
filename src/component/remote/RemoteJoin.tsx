@@ -29,7 +29,7 @@ function RemoteJoin(props: RemoteJoinProps) {
   const handleJoin = async () => {
     if (!inviteCode || !username) return
     await connectRemote();
-    joinRemote(inviteCode);
+    joinRemote({ inviteCode, isReconnect: false });
   }
   return (
     <Grid2 container spacing={1} marginBottom={2} width={300}>

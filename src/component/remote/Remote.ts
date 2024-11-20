@@ -35,7 +35,7 @@ export function useRemote() {
   const reconnectRemote = async () => {
     await dispatch(deactivateRemote()).unwrap();
     await dispatch(activateRemote()).unwrap();
-    joinRemote(joiningCode);
+    joinRemote({inviteCode: joiningCode, isReconnect: true });
   }
 
   const handleDisconnectedFromServer = async (message: string) => {
@@ -49,7 +49,7 @@ export function useRemote() {
       const createdRoom = JSON.parse(message.body) as RemoteCreatedInfo
       dispatch(setJoiningCode(createdRoom.playerCode));
       dispatch(setHostRoom(createdRoom));
-      joinRemote(createdRoom.playerCode);
+      joinRemote({ inviteCode: createdRoom.playerCode, isReconnect: false });
     });
     stompClient?.publish({ destination: "/app/remote/create", body: JSON.stringify({ hostName: username, board: boardState }) });
   }
@@ -58,7 +58,7 @@ export function useRemote() {
     dispatch(setMemberList(memberList));
   }
 
-  const joinRemote = (inviteCode: string) => {
+  const joinRemote = (joinRequest: {inviteCode: string, isReconnect: boolean}) => {
     const stompClient = getStompClient();
     stompClient?.subscribe("/user/queue/joined", (message) => {
       if (!message.body) {
@@ -78,9 +78,9 @@ export function useRemote() {
       stompClient.subscribe(`/topic/remote/${joinedRoom.roomId}/timer`, toggleTimer);
       dispatch(setSocketStatus("CONNECTED"));
       dispatch(showNotificationMessage({message: "연결 성공", status: "success"}));
-      dispatch(setJoiningCode(inviteCode));
+      dispatch(setJoiningCode(joinRequest.inviteCode));
     })
-    stompClient?.publish({ destination: "/app/remote/joinAsCode", body: JSON.stringify({name: username, inviteCode: inviteCode})})
+    stompClient?.publish({ destination: "/app/remote/joinAsCode", body: JSON.stringify({name: username, inviteCode: joinRequest.inviteCode, isReconnect:joinRequest.isReconnect})})
   }
 
   const publishUpdate = () => {
