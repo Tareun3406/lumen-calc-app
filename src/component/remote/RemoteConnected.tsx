@@ -33,7 +33,7 @@ function RemoteConnected() {
     return playerInviteCode
       ? (
         <Grid2 size={6} marginBottom={1}>
-          <div>진행자 초대 코드</div>
+          <div>플레이어 초대 코드</div>
           <Chip color={"primary"} label={viewPlayerCode ? playerInviteCode : "초대 코드 확인"}
           onClick={onClickPlayerCodeChip} sx={{minWidth: 98}}/>
         </Grid2>
@@ -76,7 +76,7 @@ function RemoteConnected() {
             borderColor: "divider"
           }
         })}>
-        <Grid2 size={6}>참가자 목록</Grid2>
+        <Grid2 size={6}>플레이어 목록</Grid2>
         <Grid2 size={6}>관전자 목록</Grid2>
         <Grid2 size={6}>
           <List>
