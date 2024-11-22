@@ -20,8 +20,7 @@ import { Person, Refresh, EditNote, Cable } from "@mui/icons-material";
 import TokenDisplay from "../component/TokenDisplay";
 import ButtonPanelProps from "../component/ButtonPanelProps";
 import DamageLogs from "../component/DamageLogs";
-import RemoteConnectDialog from "../component/RemoteConnectDialog";
-import { selectRemote } from "../features/board/remoteSlice";
+import { selectRemote, setShowRemoteDialog } from "../features/board/remoteSlice";
 import { useRemote } from "../component/remote/Remote";
 import {
   decreaseReadyTimerTime, preventReadyTimer,
@@ -40,18 +39,14 @@ function Play() {
   const { readyTimer } = useAppSelector(selectTimer);
 
   const [drawDamageLog, setDrawDamageLog] = useState(false);
-  const [openRemoteDialog, setOpenRemoteDialog] = useState(false);
   const remoteButtonRef = useRef<HTMLButtonElement | null>(null);
   const readyTimerIntervalId = useRef<NodeJS.Timer>();
 
   const dispatch = useAppDispatch();
 
-  const handleCloseRemoteDialog = () => {
-    setOpenRemoteDialog(false);
-  }
   const handleOpenRemoteDialog = () => {
     remoteButtonRef.current?.blur();
-    setOpenRemoteDialog(true);
+    dispatch(setShowRemoteDialog(true))
   }
 
   const toggleDamageLog = (toggle: boolean) => () => {
@@ -271,7 +266,6 @@ function Play() {
       <Drawer open={drawDamageLog} onClose={toggleDamageLog(false)} anchor="bottom">
         <DamageLogs damageLogs={damageLogs}></DamageLogs>
       </Drawer>
-      <RemoteConnectDialog open={openRemoteDialog} handleClose={handleCloseRemoteDialog}></RemoteConnectDialog>
     </Grid2>
   );
 }

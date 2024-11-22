@@ -2,20 +2,25 @@ import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { initialize, selectBoard } from "../features/board/boardSlice";
 import { useEffect } from "react";
 import { Outlet } from "react-router-dom";
-import { closeNotification, selectRemote } from "../features/board/remoteSlice";
+import { closeNotification, selectRemote, setShowRemoteDialog } from "../features/board/remoteSlice";
 import { useRemote } from "../component/remote/Remote";
 import { Alert, Snackbar } from "@mui/material";
 import { SnackbarCloseReason } from "@mui/material/Snackbar/useSnackbar.types";
+import RemoteConnectDialog from "../component/RemoteConnectDialog";
 
 function Board() {
   const dispatch = useAppDispatch();
   const boardState = useAppSelector(selectBoard);
-  const { isPlayer, socketStatus, notification } = useAppSelector(selectRemote);
+  const { isPlayer, socketStatus, notification, showRemoteDialog } = useAppSelector(selectRemote);
   const { disconnectRemote, publishUpdate } = useRemote();
 
   const handleCloseSnackBar = (event: React.SyntheticEvent | Event, reason?: SnackbarCloseReason) => {
     if (reason === 'clickaway') return;
     dispatch(closeNotification());
+  }
+
+  const handleCloseRemoteDialog = () => {
+    dispatch(setShowRemoteDialog(false));
   }
 
   useEffect(() => {
@@ -49,6 +54,7 @@ function Board() {
           {notification.message}
         </Alert>
       </Snackbar>
+      <RemoteConnectDialog open={showRemoteDialog} handleClose={handleCloseRemoteDialog}></RemoteConnectDialog>
     </div>
   );
 }

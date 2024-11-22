@@ -16,6 +16,7 @@ export interface RemoteState {
   joiningCode: string;
   notification: Notification;
   confirmReconnectModal: boolean;
+  showRemoteDialog: boolean;
 }
 
 export interface Notification {
@@ -67,6 +68,7 @@ const initialState: RemoteState = {
     show: false
   },
   confirmReconnectModal: false,
+  showRemoteDialog: false,
 };
 
 let stompClient: Client | null = null;
@@ -90,12 +92,14 @@ export const activateRemote = createAsyncThunk(
         console.error("WebSocket STOMP 오류:", frame);
         dispatch(setSocketStatus("DISCONNECTED"))
         dispatch(showNotificationMessage({message:"서버와의 통신중 오류가 발생했습니다.", status: "error"}))
+        dispatch(setShowRemoteDialog(true))
         reject(`Stomp Error: ${frame.body}`);
       }
       stompClient!.onWebSocketError = (error) => {
         console.error("WebSocket 오류:", error);
         dispatch(setSocketStatus("DISCONNECTED"))
         dispatch(showNotificationMessage({message: "서버와의 연결에 실패하였습니다.", status: "error"}))
+        dispatch(setShowRemoteDialog(true))
         reject(`Stomp Error: ${error.message}`);
       }
       stompClient!.onWebSocketClose = (event: CloseEvent) => {
@@ -106,6 +110,7 @@ export const activateRemote = createAsyncThunk(
         }
         dispatch(setSocketStatus("DISCONNECTED"));
         dispatch(showNotificationMessage({message: "서버와의 통신이 끊어졌습니다.", status: "error"}))
+        dispatch(setShowRemoteDialog(true))
       }
       stompClient!.activate();
     })
@@ -176,6 +181,9 @@ export const remoteSlice = createSlice({
     },
     closeNotification: (state) => {
       state.notification.show = false;
+    },
+    setShowRemoteDialog: (state, action: PayloadAction<boolean>) => {
+      state.showRemoteDialog = action.payload;
     }
   },
   extraReducers: (builder) => {
@@ -195,7 +203,8 @@ export const {
   setName,
   setJoiningCode,
   showNotificationMessage,
-  closeNotification
+  closeNotification,
+  setShowRemoteDialog
 } = remoteSlice.actions;
 
 export const selectRemote = (state: RootState) => state.remote;
