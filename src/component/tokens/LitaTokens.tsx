@@ -1,7 +1,8 @@
 import { TokensInterface, useToken } from "./Token";
 import {
   Button,
-  Grid2,
+  ToggleButton,
+  ToggleButtonGroup,
   Tooltip
 } from "@mui/material";
 import React, { useMemo } from "react";
@@ -45,26 +46,16 @@ function LitaTokens(props: TokensInterface) {
     }
   };
 
-  const renderLegions = (tokenIndex: number) => (
-    <Tooltip title={character.tokens[tokenIndex].description} placement={tokenIndex === 1 ? "top" : "bottom"}>
-    <div
-      style={{ position: "relative", display: "flex", justifyContent: "center" }}
-      onClick={() => litaToggleChange(tokenIndex)}>
-      <img src={character.tokens[tokenIndex].img} alt={character.tokens[tokenIndex].img} style={{ width: 55, height: 55 }} />
-      <div
-        style={{
-          position: "absolute",
-          top: 0,
-          left: '50%',
-          transform: 'translateX(-50%)',
-          background: "black",
-          width: 55,
-          height: "100%",
-          opacity: player.character.tokens[tokenIndex].toggle ? "0" : "0.6"
-        }}></div>
-    </div>
-    </Tooltip>
-  );
+  const getEnabledLegionTokens = useMemo(() => {
+    return character.tokens.filter((token, index)=> token.toggle && index !== 4).map(token => token.name)
+  }, [character.tokens])
+
+  const getTokenImage = useMemo(() => {
+    if (character.tokens[4].toggle) return character.tokens[0].img
+
+    return character.tokens.find((token, index) => token.toggle && (index !== 0 && index !== 4))?.img
+      ?? character.tokens[0].img
+  }, [character.tokens])
 
   const getLumenButtonStyle = useMemo(() => {
     if (player.currentHp > 1000) {
@@ -99,7 +90,7 @@ function LitaTokens(props: TokensInterface) {
 
       <Tooltip title={character.tokens[0].description} placement={"top"}>
       <div style={{ position: "relative", display: "flex" }} onClick={() => changeToggle(0)}>
-        <img src={character.tokens[0].img} height={116} alt={character.tokens[0].img} />
+        <img src={getTokenImage} height={116} alt={character.tokens[0].img} />
         <div
           style={{
             position: "absolute",
@@ -112,6 +103,11 @@ function LitaTokens(props: TokensInterface) {
           }}></div>
       </div>
       </Tooltip>
+      <ToggleButtonGroup orientation={"vertical"} sx={{height:116.5}} value={getEnabledLegionTokens} size={"small"} color={"lita"}>
+        <ToggleButton value={"축복-가디언"} onClick={() => litaToggleChange(1)}>가디언</ToggleButton>
+        <ToggleButton value={"축복-어쌔신"} onClick={() => litaToggleChange(2)}>어쌔신</ToggleButton>
+        <ToggleButton value={"축복-팔라딘"} onClick={() => litaToggleChange(3)}>팔라딘</ToggleButton>
+      </ToggleButtonGroup>
       <div style={{ display: "grid", placeContent: "center" }}>
         <Tooltip title={character.tokens[4].description} placement={"top"}>
           <span>
@@ -121,17 +117,6 @@ function LitaTokens(props: TokensInterface) {
           </span>
         </Tooltip>
       </div>
-      <Grid2 container width={120}>
-        <Grid2 size={12}>
-          {renderLegions(1)}
-        </Grid2>
-        <Grid2 size={6}>
-          {renderLegions(2)}
-        </Grid2>
-        <Grid2 size={6}>
-          {renderLegions(3)}
-        </Grid2>
-      </Grid2>
     </div>
   );
 }
