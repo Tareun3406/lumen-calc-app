@@ -173,6 +173,33 @@ const characters: Character[] = [
         description: "체력 1000 이하 발동 가능. 모든 레기온의 축복 효과 적용, 모든 받는 데미지 -100, [성녀] 효과 기술 데미지 +100"
       }
     ]
+  },
+  {
+    name: "세츠메이",
+    portrait: "/portrait/setz.png",
+    tokens: [
+      {
+        name: "훈련 부대",
+        img: "",
+        type: "TOGGLE",
+        toggle: false,
+        description: "루멘 페이즈 시 상대보다 체력이 적다면 [연습] 1장을 루멘 존에 배치할 수 있다. (최대 1장)",
+      },
+      {
+        name: "신속",
+        img: "",
+        type: "TOGGLE",
+        toggle: false,
+        description: "자신에게 [성녀] 부여, 루멘 페이즈 시 하나의 레기온을 축복한다.",
+      },
+      {
+        name: "정확",
+        img: "",
+        type: "TOGGLE",
+        toggle: false,
+        description: "자신에게 [성녀] 부여, 루멘 페이즈 시 하나의 레기온을 축복한다.",
+      }
+    ]
   }
 ];
 
@@ -188,7 +215,7 @@ export interface Token {
 }
 
 export interface Character {
-  name: "루트" | "울프" | "비올라" | "델피" | "키스" | "니아" | "레브" | "타오" | "리타" | "선택없음";
+  name: "루트" | "울프" | "비올라" | "델피" | "키스" | "니아" | "레브" | "타오" | "리타" | "세츠메이" |"선택없음";
   portrait: string;
   tokens: Token[];
 }
