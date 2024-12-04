@@ -1,43 +1,22 @@
 import {
-  damageToFirst,
-  damageToSecond,
-  healToFirst,
-  healToSecond,
-  PlayerState, triggerPublish
+  PlayerState
 } from "../app/slices/boardSlice";
 import { Button, Stack } from "@mui/material";
-import { useAppDispatch, useAppSelector } from "../app/hooks/storeHooks";
-import { selectRemote } from "../app/slices/remoteSlice";
+import { useAction } from "../app/hooks/actionHooks";
 
 interface ButtonPanelProps {
   player: PlayerState
 }
 
 function ButtonPanelProps(props:ButtonPanelProps) {
-  const dispatch = useAppDispatch();
-  const { isPlayer, socketStatus } = useAppSelector(selectRemote);
-
+  const { damageToHp, healToHp } = useAction({ player: props.player });
   const isFirstPlayer = props.player.isFirst
 
   const getClassNameAsIsFirst = () => {
     return isFirstPlayer ? "" : "reverseFlexRow";
   }
 
-  // todo action 컴포넌트 생성 및 이동
-  const dispatchDamage = (value: number) =>  {
-    if (!isPlayer && socketStatus === "CONNECTED") return;
-    if (isFirstPlayer) dispatch(damageToFirst(value))
-    else dispatch(damageToSecond(value))
-    dispatch(triggerPublish());
-  }
 
-  // todo action 컴포넌트 생성 및 이동
-  const dispatchHeal = (value: number) => {
-    if (!isPlayer && socketStatus === "CONNECTED") return;
-    if (isFirstPlayer) dispatch(healToFirst(value))
-    else dispatch(healToSecond(value));
-    dispatch(triggerPublish());
-  }
 
   const buttonStyle = {
     width: 70
@@ -52,29 +31,29 @@ function ButtonPanelProps(props:ButtonPanelProps) {
   return(
     <Stack padding={1} paddingLeft={paddingAsPlayer().left} paddingRight={paddingAsPlayer().right} spacing={1}>
       <div style={{ display: "flex", justifyContent: "space-between" }} className={ getClassNameAsIsFirst() }>
-        <Button variant={"outlined"} size={"medium"} sx={buttonStyle} onClick={() => dispatchDamage(100)}>
+        <Button variant={"outlined"} size={"medium"} sx={buttonStyle} onClick={() => damageToHp(100)}>
           -100
         </Button>
-        <Button variant={"outlined"} size={"medium"} sx={buttonStyle} onClick={() => dispatchDamage(200)}>
+        <Button variant={"outlined"} size={"medium"} sx={buttonStyle} onClick={() => damageToHp(200)}>
           -200
         </Button>
-        <Button variant={"outlined"} size={"medium"} sx={buttonStyle} onClick={() => dispatchDamage(300)}>
+        <Button variant={"outlined"} size={"medium"} sx={buttonStyle} onClick={() => damageToHp(300)}>
           -300
         </Button>
       </div>
       <div style={{ display: "flex", justifyContent: "space-between" }} className={ getClassNameAsIsFirst() }>
-        <Button variant={"outlined"} size={"medium"} sx={buttonStyle} onClick={() => dispatchDamage(400)}>
+        <Button variant={"outlined"} size={"medium"} sx={buttonStyle} onClick={() => damageToHp(400)}>
           -400
         </Button>
-        <Button variant={"outlined"} size={"medium"} sx={buttonStyle} onClick={() => dispatchDamage(500)}>
+        <Button variant={"outlined"} size={"medium"} sx={buttonStyle} onClick={() => damageToHp(500)}>
           -500
         </Button>
-        <Button variant={"outlined"} size={"medium"} sx={buttonStyle} onClick={() => dispatchDamage(600)}>
+        <Button variant={"outlined"} size={"medium"} sx={buttonStyle} onClick={() => damageToHp(600)}>
           -600
         </Button>
       </div>
       <div style={{ display: "flex", justifyContent: "space-between" }} className={ getClassNameAsIsFirst() }>
-        <Button variant={"outlined"} size={"medium"} sx={buttonStyle} onClick={() => dispatchDamage(700)}>
+        <Button variant={"outlined"} size={"medium"} sx={buttonStyle} onClick={() => damageToHp(700)}>
           -700
         </Button>
         <Button
@@ -82,7 +61,7 @@ function ButtonPanelProps(props:ButtonPanelProps) {
           size={"medium"}
           color={"error"}
           sx={buttonStyle}
-          onClick={() => dispatchDamage(1000)}>
+          onClick={() => damageToHp(1000)}>
           -1000
         </Button>
         <Button
@@ -90,7 +69,7 @@ function ButtonPanelProps(props:ButtonPanelProps) {
           color={"success"}
           size={"medium"}
           sx={buttonStyle}
-          onClick={() => dispatchHeal(100)}>
+          onClick={() => healToHp(100)}>
           +100
         </Button>
       </div>

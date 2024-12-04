@@ -2,17 +2,10 @@ import { Button, ButtonGroup, Drawer, Grid2, IconButton } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../app/hooks/storeHooks";
 import {
-  decreaseFpToFirst,
-  decreaseFpToSecond,
   deselectCharacter,
-  increaseFpToFirst,
-  increaseFpToSecond,
-  initialize,
-  resetFpToFirst,
-  resetFpToSecond,
   selectFirstPlayer,
   selectSecondPlayer,
-  selectDamageLogs, triggerPublish
+  selectDamageLogs
 } from "../app/slices/boardSlice";
 import HpBar from "../component/HpBar";
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -28,6 +21,7 @@ import {
   setReadyTimerTime,
   toggleReadyTimer
 } from "../app/slices/timerSlice";
+import { useAction } from "../app/hooks/actionHooks";
 
 function Play() {
   const firstPlayer = useAppSelector(selectFirstPlayer);
@@ -35,6 +29,8 @@ function Play() {
   const damageLogs = useAppSelector(selectDamageLogs);
   const navigate = useNavigate();
   const { publishTimer } = useRemote();
+  const firstPlayerAction = useAction({ player: firstPlayer })
+  const secondPlayerAction = useAction({ player: secondPlayer })
   const { socketStatus, isPlayer } = useAppSelector(selectRemote);
   const { readyTimer } = useAppSelector(selectTimer);
 
@@ -105,31 +101,6 @@ function Play() {
       second
     };
   }, [firstPlayer.fp, secondPlayer.fp]);
-  const handleIncreaseFp = (isFirst: boolean, value: number) => {
-    if (!isPlayer && socketStatus === "CONNECTED") return;
-    if (isFirst) dispatch(increaseFpToFirst(value));
-    else dispatch(increaseFpToSecond(value));
-    dispatch(triggerPublish());
-  }
-  const handleDecreaseFp = (isFirst: boolean, value: number) => {
-    if (!isPlayer && socketStatus === "CONNECTED") return;
-    if (isFirst) dispatch(decreaseFpToFirst(value));
-    else dispatch(decreaseFpToSecond(value));
-    dispatch(triggerPublish());
-  }
-  const handleResetFp = (isFirst: boolean) => {
-    if (!isPlayer && socketStatus === "CONNECTED") return;
-    if (isFirst) dispatch(resetFpToFirst());
-    else dispatch(resetFpToSecond());
-    dispatch(triggerPublish());
-  }
-
-  // todo action 컴포넌트 생성 및 이동
-  const handleInitialize = () => {
-    if (!isPlayer && socketStatus === "CONNECTED") return;
-    dispatch(initialize());
-    dispatch(triggerPublish());
-  }
 
   // todo timer 컴포넌트로 이동
   useEffect(() => {
@@ -151,10 +122,8 @@ function Play() {
   }, [readyTimer.toggle]);
 
   useEffect(() => {
-    if (!isPlayer && socketStatus === "CONNECTED") return;
-    dispatch(initialize());
-    dispatch(triggerPublish());
-  }, [dispatch]);
+    firstPlayerAction.initializeBoard();
+  }, []);
   return (
     <Grid2 container padding={1}>
 
@@ -174,7 +143,7 @@ function Play() {
             }}>
             <Person />
           </Button>
-          <Button onClick={handleInitialize}>
+          <Button onClick={firstPlayerAction.initializeBoard}>
             <Refresh />
           </Button>
           <Button ref={remoteButtonRef}>
@@ -215,15 +184,15 @@ function Play() {
       <Grid2 size={4} display={"flex"} justifyContent={"space-between"}>
         <div style={{ display: "inline-block" }}></div>
         <div style={{ display: "inline-block", width: 72 }}>
-          <IconButton onClick={() => handleIncreaseFp(true, 1)}>+</IconButton>
+          <IconButton onClick={() => firstPlayerAction.increaseFp(1)}>+</IconButton>
           <Button
             variant={firstPlayer.fp === 0 ? "outlined" : "contained"}
             fullWidth={true}
             color={getFpColor.first}
-            onClick={() => handleResetFp(true)}>
+            onClick={() => firstPlayerAction.resetFp()}>
             {firstPlayer.fp} fp
           </Button>
-          <IconButton onClick={() => handleDecreaseFp(true, 1)}>-</IconButton>
+          <IconButton onClick={() => firstPlayerAction.decreaseFp(1)}>-</IconButton>
         </div>
         <Button
           variant={"contained"}
@@ -234,15 +203,15 @@ function Play() {
           {readyTimer.time}
         </Button>
         <div style={{ display: "inline-block", width: 72 }}>
-          <IconButton onClick={() => handleIncreaseFp(false, 1)}>+</IconButton>
+          <IconButton onClick={() => secondPlayerAction.increaseFp(1)}>+</IconButton>
           <Button
             variant={secondPlayer.fp === 0 ? "outlined" : "contained"}
             fullWidth={true}
             color={getFpColor.second}
-            onClick={() => handleResetFp(false)}>
+            onClick={() => secondPlayerAction.resetFp()}>
             {secondPlayer.fp} fp
           </Button>
-          <IconButton onClick={() => handleDecreaseFp(false, 1)}>-</IconButton>
+          <IconButton onClick={() => secondPlayerAction.decreaseFp(1)}>-</IconButton>
         </div>
         <div style={{ display: "inline-block" }}></div>
       </Grid2>

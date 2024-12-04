@@ -4,12 +4,21 @@ import {
   addTokenToFirst,
   addTokenToSecond,
   changeTokenToggleToFirst,
-  changeTokenToggleToSecond, PlayerState,
+  changeTokenToggleToSecond, damageToFirst, damageToSecond,
+  decreaseFpToFirst,
+  decreaseFpToSecond, healToFirst, healToSecond,
+  increaseFpToFirst,
+  increaseFpToSecond,
+  initialize,
+  PlayerState,
   removeTokenToFirst,
-  removeTokenToSecond,
+  removeTokenToSecond, resetFpToFirst, resetFpToSecond,
   setTokenCountToFirst,
   setTokenCountToSecond,
-  setTokenToggleToFirst, setTokenToggleToFirstAsList, setTokenToggleToSecond, setTokenToggleToSecondAsList,
+  setTokenToggleToFirst,
+  setTokenToggleToFirstAsList,
+  setTokenToggleToSecond,
+  setTokenToggleToSecondAsList,
   triggerPublish
 } from "../slices/boardSlice";
 
@@ -23,41 +32,82 @@ export function useAction(props: IActionProps) {
   const { isFirst } = props.player;
   const { isPlayer, socketStatus } = useAppSelector(selectRemote);
 
+
+  // 플레이어 무관
+  const initializeBoard = () => {
+    if (!isPlayer && socketStatus === "CONNECTED") return;
+    dispatch(initialize());
+    dispatch(triggerPublish());
+  }
+
+
+  // HP 관련
+  const damageToHp = (value: number) =>  {
+    if (!isPlayer && socketStatus === "CONNECTED") return;
+    if (isFirst) dispatch(damageToFirst(value))
+    else dispatch(damageToSecond(value))
+    dispatch(triggerPublish());
+  }
+  const healToHp = (value: number) => {
+    if (!isPlayer && socketStatus === "CONNECTED") return;
+    if (isFirst) dispatch(healToFirst(value))
+    else dispatch(healToSecond(value));
+    dispatch(triggerPublish());
+  }
+
+
+  // FP 관련
+  const increaseFp = (value: number) => {
+    if (!isPlayer && socketStatus === "CONNECTED") return;
+    if (isFirst) dispatch(increaseFpToFirst(value));
+    else dispatch(increaseFpToSecond(value));
+    dispatch(triggerPublish());
+  }
+  const decreaseFp = (value: number) => {
+    if (!isPlayer && socketStatus === "CONNECTED") return;
+    if (isFirst) dispatch(decreaseFpToFirst(value));
+    else dispatch(decreaseFpToSecond(value));
+    dispatch(triggerPublish());
+  }
+  const resetFp = () => {
+    if (!isPlayer && socketStatus === "CONNECTED") return;
+    if (isFirst) dispatch(resetFpToFirst());
+    else dispatch(resetFpToSecond());
+    dispatch(triggerPublish());
+  }
+
+
+  // token 관련
   const changeToggle = (index: number) => {
     if (!isPlayer && socketStatus === "CONNECTED") return;
     if (isFirst) dispatch(changeTokenToggleToFirst(index));
     else dispatch(changeTokenToggleToSecond(index));
     dispatch(triggerPublish());
   }
-
   const addToken = (index: number) => {
     if (!isPlayer && socketStatus === "CONNECTED") return;
     if (isFirst) dispatch(addTokenToFirst(index));
     else dispatch(addTokenToSecond(index));
     dispatch(triggerPublish());
   }
-
   const removeToken = (index: number) => {
     if (!isPlayer && socketStatus === "CONNECTED") return;
     if (isFirst) dispatch(removeTokenToFirst(index));
     else dispatch(removeTokenToSecond(index));
     dispatch(triggerPublish());
   }
-
   const setTokenCount = (index: number, value: number) => {
     if (!isPlayer && socketStatus === "CONNECTED") return;
     if (isFirst) dispatch(setTokenCountToFirst({ index, value }))
     else dispatch(setTokenCountToSecond({ index, value }));
     dispatch(triggerPublish());
   }
-
   const setTokenToggle = (payload: { index: number; value: boolean }) => {
     if (!isPlayer && socketStatus === "CONNECTED") return;
     if (isFirst) dispatch(setTokenToggleToFirst(payload))
     else dispatch(setTokenToggleToSecond(payload));
     dispatch(triggerPublish());
   }
-
   const setTokenToggleAsList = (payload: { [key: number]: boolean }) => {
     if (!isPlayer && socketStatus === "CONNECTED") return;
     if (isFirst) dispatch(setTokenToggleToFirstAsList(payload));
@@ -65,5 +115,5 @@ export function useAction(props: IActionProps) {
     dispatch(triggerPublish());
   }
 
-  return {changeToggle, addToken, removeToken, setTokenCount, setTokenToggle, setTokenToggleAsList }
+  return { initializeBoard, damageToHp, healToHp,increaseFp, decreaseFp, resetFp,changeToggle, addToken, removeToken, setTokenCount, setTokenToggle, setTokenToggleAsList }
 }
