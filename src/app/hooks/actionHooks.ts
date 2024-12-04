@@ -21,25 +21,17 @@ import {
   setTokenToggleToSecondAsList,
   triggerPublish
 } from "../slices/boardSlice";
+import { selectTimer, toggleReadyTimer } from "../slices/timerSlice";
+import { useRemote } from "./remoteHooks";
 
 export interface IActionProps {
   player: PlayerState
 }
 
-
-export function useAction(props: IActionProps) {
+export function usePlayerAction(props: IActionProps) {
   const dispatch = useAppDispatch();
   const { isFirst } = props.player;
   const { isPlayer, socketStatus } = useAppSelector(selectRemote);
-
-
-  // 플레이어 무관
-  const initializeBoard = () => {
-    if (!isPlayer && socketStatus === "CONNECTED") return;
-    dispatch(initialize());
-    dispatch(triggerPublish());
-  }
-
 
   // HP 관련
   const damageToHp = (value: number) =>  {
@@ -115,5 +107,32 @@ export function useAction(props: IActionProps) {
     dispatch(triggerPublish());
   }
 
-  return { initializeBoard, damageToHp, healToHp,increaseFp, decreaseFp, resetFp,changeToggle, addToken, removeToken, setTokenCount, setTokenToggle, setTokenToggleAsList }
+
+  return { damageToHp, healToHp,increaseFp, decreaseFp, resetFp,changeToggle, addToken, removeToken, setTokenCount, setTokenToggle, setTokenToggleAsList  }
+}
+
+export function useGlobalAction() {
+  const dispatch = useAppDispatch();
+  const { isPlayer, socketStatus } = useAppSelector(selectRemote);
+  const { readyTimer } = useAppSelector(selectTimer)
+  const { publishTimer } = useRemote();
+
+  // 초기화
+  const initializeBoard = () => {
+    if (!isPlayer && socketStatus === "CONNECTED") return;
+    dispatch(initialize());
+    dispatch(triggerPublish());
+  }
+
+  // 타이머 관련
+  const toggleReadyTimerAction = () => {
+    if (!isPlayer && socketStatus === "CONNECTED") return;
+    if (socketStatus === "CONNECTED") {
+      publishTimer(!readyTimer.toggle);
+      return;
+    }
+    dispatch(toggleReadyTimer(!readyTimer.toggle));
+  };
+
+  return { initializeBoard, toggleReadyTimerAction }
 }

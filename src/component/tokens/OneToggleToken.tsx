@@ -1,11 +1,11 @@
 import { Tooltip } from "@mui/material";
 import React from "react";
-import { IActionProps, useAction } from "../../app/hooks/actionHooks";
+import { IActionProps, usePlayerAction } from "../../app/hooks/actionHooks";
 
 function OneToggleToken(props: IActionProps) {
   const { player } = props;
   const { character } = player;
-  const { changeToggle } = useAction(props);
+  const { changeToggle } = usePlayerAction(props);
 
   return (
     <div>

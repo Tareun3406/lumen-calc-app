@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { Button, IconButton } from "@mui/material";
 import { PlayerState } from "../app/slices/boardSlice";
-import { useAction } from "../app/hooks/actionHooks";
+import { usePlayerAction } from "../app/hooks/actionHooks";
 
 export interface IFpDisplay {
   player: PlayerState
@@ -9,7 +9,7 @@ export interface IFpDisplay {
 
 function fpDisplay(props: IFpDisplay) {
   const player = props.player;
-  const {increaseFp, decreaseFp, resetFp} = useAction({ player });
+  const {increaseFp, decreaseFp, resetFp} = usePlayerAction({ player });
 
   const getFpColor = useMemo(() => {
     if (player.fp > 0) return "info";

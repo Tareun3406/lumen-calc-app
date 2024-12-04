@@ -14,29 +14,20 @@ import TokenDisplay from "../component/TokenDisplay";
 import ButtonPanelProps from "../component/ButtonPanelProps";
 import DamageLogs from "../component/DamageLogs";
 import { selectRemote, setShowRemoteDialog } from "../app/slices/remoteSlice";
-import { useRemote } from "../app/hooks/remoteHooks";
-import {
-  decreaseReadyTimerTime, preventReadyTimer,
-  selectTimer,
-  setReadyTimerTime,
-  toggleReadyTimer
-} from "../app/slices/timerSlice";
-import { useAction } from "../app/hooks/actionHooks";
+import { useGlobalAction } from "../app/hooks/actionHooks";
 import FpDisplay from "../component/FpDisplay";
+import TimerDisplay from "../component/TimerDisplay";
 
 function Play() {
   const firstPlayer = useAppSelector(selectFirstPlayer);
   const secondPlayer = useAppSelector(selectSecondPlayer);
   const damageLogs = useAppSelector(selectDamageLogs);
   const navigate = useNavigate();
-  const { publishTimer } = useRemote();
-  const { initializeBoard } = useAction({ player: firstPlayer })
+  const { initializeBoard } = useGlobalAction()
   const { socketStatus, isPlayer } = useAppSelector(selectRemote);
-  const { readyTimer } = useAppSelector(selectTimer);
 
   const [drawDamageLog, setDrawDamageLog] = useState(false);
   const remoteButtonRef = useRef<HTMLButtonElement | null>(null);
-  const readyTimerIntervalId = useRef<NodeJS.Timer>();
 
   const dispatch = useAppDispatch();
 
@@ -64,46 +55,6 @@ function Play() {
     if (secondPlayer.currentHp <= 4000) return 7;
     return 6;
   }, [secondPlayer.currentHp, secondPlayer.character.name]);
-
-  // todo timer 컴포넌트 만들기
-  const timerColor = useMemo(() => {
-    if (readyTimer.toggle) {
-      if (readyTimer.time === 0) {
-        return "error";
-      }
-      return "secondary";
-    }
-    return "info";
-  }, [readyTimer]);
-
-  // todo timer 컴포넌트 만들기
-  const handleTimerButton = () => {
-    if (!isPlayer && socketStatus === "CONNECTED") return;
-    if (socketStatus === "CONNECTED") {
-      publishTimer(!readyTimer.toggle);
-      return;
-    }
-    dispatch(toggleReadyTimer(!readyTimer.toggle));
-  };
-
-  // todo timer 컴포넌트로 이동
-  useEffect(() => {
-    if (readyTimer.time < 1) {
-      clearInterval(readyTimerIntervalId.current);
-    }
-  }, [readyTimer.time]);
-  useEffect(() => {
-    if (readyTimer.preventTrigger) return;
-    if (readyTimer.toggle) {
-      readyTimerIntervalId.current = setInterval(() => {
-        dispatch(decreaseReadyTimerTime());
-      }, 1000);
-    } else {
-      clearInterval(readyTimerIntervalId.current);
-      dispatch(setReadyTimerTime(10));
-    }
-    dispatch(preventReadyTimer());
-  }, [readyTimer.toggle]);
 
   useEffect(() => {
     initializeBoard();
@@ -168,14 +119,7 @@ function Play() {
       <Grid2 size={4} display={"flex"} justifyContent={"space-between"}>
         <div style={{ display: "inline-block" }}></div>
         <FpDisplay player={firstPlayer} />
-        <Button
-          variant={"contained"}
-          size={"large"}
-          style={{ borderRadius: 50, fontSize: 45, width: 90 }}
-          color={timerColor}
-          onClick={handleTimerButton}>
-          {readyTimer.time}
-        </Button>
+        <TimerDisplay />
         <FpDisplay player={secondPlayer} />
         <div style={{ display: "inline-block" }}></div>
       </Grid2>

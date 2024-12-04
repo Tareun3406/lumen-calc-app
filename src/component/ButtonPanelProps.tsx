@@ -2,14 +2,14 @@ import {
   PlayerState
 } from "../app/slices/boardSlice";
 import { Button, Stack } from "@mui/material";
-import { useAction } from "../app/hooks/actionHooks";
+import { usePlayerAction } from "../app/hooks/actionHooks";
 
 interface ButtonPanelProps {
   player: PlayerState
 }
 
 function ButtonPanelProps(props:ButtonPanelProps) {
-  const { damageToHp, healToHp } = useAction({ player: props.player });
+  const { damageToHp, healToHp } = usePlayerAction({ player: props.player });
   const isFirstPlayer = props.player.isFirst
 
   const getClassNameAsIsFirst = () => {

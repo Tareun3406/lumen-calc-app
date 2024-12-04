@@ -6,7 +6,7 @@ import { BoardState } from "./boardSlice";
 export interface RemoteState {
   socketStatus: "DISCONNECTED" | "CONNECTED" | "PENDING" | "IDLE" | "ERROR" | "NONE";
   username: string;
-  isPlayer: boolean;
+  isPlayer: boolean; // todo hasControl 로 이름 변경
   playerInviteCode: string;
   observerInviteCode: string;
   playerList: Array<string>;

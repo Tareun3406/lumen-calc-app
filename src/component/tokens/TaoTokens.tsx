@@ -1,13 +1,13 @@
 import { Button, IconButton, Tooltip } from "@mui/material";
 import { ControlPoint, RemoveCircleOutline } from "@mui/icons-material";
 import React, { useEffect } from "react";
-import { IActionProps, useAction } from "../../app/hooks/actionHooks";
+import { IActionProps, usePlayerAction } from "../../app/hooks/actionHooks";
 
 function TaoTokens(props: IActionProps) {
   const player = props.player;
   const { character } = props.player;
 
-  const { addToken, removeToken, setTokenCount, setTokenToggle, setTokenToggleAsList} = useAction(props);
+  const { addToken, removeToken, setTokenCount, setTokenToggle, setTokenToggleAsList} = usePlayerAction(props);
 
   // 타오 토큰 활성화 조건
   useEffect(() => {

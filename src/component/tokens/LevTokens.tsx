@@ -1,4 +1,4 @@
-import { IActionProps, useAction } from "../../app/hooks/actionHooks";
+import { IActionProps, usePlayerAction } from "../../app/hooks/actionHooks";
 import { Button, IconButton, Tooltip } from "@mui/material";
 import { ControlPoint, RemoveCircleOutline } from "@mui/icons-material";
 import React from "react";
@@ -8,7 +8,7 @@ import { damageToFirst, damageToSecond } from "../../app/slices/boardSlice";
 function LevTokens(props: IActionProps) {
   const { player } = props;
   const { character } = player;
-  const { addToken, setTokenCount, removeToken, changeToggle } = useAction(props);
+  const { addToken, setTokenCount, removeToken, changeToggle } = usePlayerAction(props);
   const dispatch = useAppDispatch();
 
   const handleDaggerClick = () => {
