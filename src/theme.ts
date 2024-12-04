@@ -17,7 +17,11 @@ declare module "@mui/material/ToggleButtonGroup" {
 }
 
 export const theme = createTheme({
+  colorSchemes: {
+    dark: true
+  },
   palette: {
+    mode: "light",
     lita: {
       main: yellow["A700"]
     }

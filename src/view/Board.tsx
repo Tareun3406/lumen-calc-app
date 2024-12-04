@@ -6,7 +6,7 @@ import { closeNotification, selectRemote, setShowRemoteDialog } from "../app/sli
 import { useRemote } from "../app/hooks/remoteHooks";
 import { Alert, Snackbar } from "@mui/material";
 import { SnackbarCloseReason } from "@mui/material/Snackbar/useSnackbar.types";
-import RemoteConnectDialog from "../component/RemoteConnectDialog";
+import RemoteConnectDialog from "../component/dialog/RemoteConnectDialog";
 
 function Board() {
   const dispatch = useAppDispatch();

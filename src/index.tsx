@@ -3,12 +3,11 @@ import ReactDOM from "react-dom/client";
 import "./index.css";
 import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
 import reportWebVitals from "./reportWebVitals";
-import { RouterProvider } from "react-router-dom";
-import { mainRouter } from "./app/router";
 import { Provider } from "react-redux";
 import { store } from "./app/store";
-import { Box, CssBaseline, ThemeProvider } from "@mui/material";
+import { CssBaseline, ThemeProvider } from "@mui/material";
 import { theme } from "./theme";
+import App from "./view/App";
 
 const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement);
 root.render(
@@ -16,9 +15,7 @@ root.render(
     <Provider store={store}>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <Box sx={{ display: "grid", placeContent: "center", width: "100vw", height: "100vh", minWidth: 781 }}>
-          <RouterProvider router={mainRouter}></RouterProvider>
-        </Box>
+        <App/>
       </ThemeProvider>
     </Provider>
   </React.StrictMode>

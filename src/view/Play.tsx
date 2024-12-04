@@ -4,7 +4,7 @@ import { useAppDispatch, useAppSelector } from "../app/hooks/storeHooks";
 import { deselectCharacter, selectFirstPlayer, selectSecondPlayer, selectDamageLogs } from "../app/slices/boardSlice";
 import HpBar from "../component/HpBar";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Person, Refresh, EditNote, Cable } from "@mui/icons-material";
+import { Person, Refresh, EditNote, Cable, Settings } from "@mui/icons-material";
 import TokenDisplay from "../component/TokenDisplay";
 import ButtonPanelProps from "../component/ButtonPanelProps";
 import DamageLogs from "../component/DamageLogs";
@@ -12,6 +12,7 @@ import { selectRemote, setShowRemoteDialog } from "../app/slices/remoteSlice";
 import { useGlobalAction } from "../app/hooks/actionHooks";
 import FpDisplay from "../component/FpDisplay";
 import TimerDisplay from "../component/TimerDisplay";
+import { setOpenSettingsDialog } from "../app/slices/dialogSlice";
 
 function Play() {
   const firstPlayer = useAppSelector(selectFirstPlayer);
@@ -23,6 +24,7 @@ function Play() {
 
   const [drawDamageLog, setDrawDamageLog] = useState(false);
   const remoteButtonRef = useRef<HTMLButtonElement | null>(null);
+  const settingsButtonRef = useRef<HTMLButtonElement | null>(null);
 
   const dispatch = useAppDispatch();
 
@@ -30,6 +32,10 @@ function Play() {
     remoteButtonRef.current?.blur();
     dispatch(setShowRemoteDialog(true));
   };
+  const handleOpenSettingsDialog = () => {
+    settingsButtonRef.current?.blur();
+    dispatch(setOpenSettingsDialog(true));
+  }
 
   const toggleDamageLog = (toggle: boolean) => () => {
     setDrawDamageLog(toggle);
@@ -56,13 +62,13 @@ function Play() {
   }, []);
   return (
     <Grid2 container padding={1}>
-      <Grid2 size={4.5} display={"flex"} justifyContent={"space-between"} paddingX={2.5}>
+      <Grid2 size={4} display={"flex"} justifyContent={"space-between"} paddingX={2.5}>
         <img style={{ height: 31 }} src={firstPlayer.character.portrait} alt={firstPlayer.character.portrait} />
         <div style={{ display: "flex", alignItems: "center" }}>{firstPlayer.character.name}</div>
         <div></div>
       </Grid2>
 
-      <Grid2 size={3} paddingBottom={0.5}>
+      <Grid2 size={4} paddingBottom={0.5}>
         <ButtonGroup variant={"outlined"} size={"small"}>
           <Button
             onClick={() => {
@@ -75,8 +81,11 @@ function Play() {
           <Button onClick={initializeBoard}>
             <Refresh />
           </Button>
-          <Button ref={remoteButtonRef}>
-            <Cable onClick={handleOpenRemoteDialog} />
+          <Button onClick={handleOpenRemoteDialog} ref={remoteButtonRef}>
+            <Cable/>
+          </Button>
+          <Button onClick={handleOpenSettingsDialog} ref={settingsButtonRef}>
+            <Settings />
           </Button>
           <Button onClick={toggleDamageLog(true)}>
             <EditNote />
@@ -84,7 +93,7 @@ function Play() {
         </ButtonGroup>
       </Grid2>
 
-      <Grid2 size={4.5} display={"flex"} justifyContent={"space-between"} paddingX={2.5}>
+      <Grid2 size={4} display={"flex"} justifyContent={"space-between"} paddingX={2.5}>
         <div></div>
         <div style={{ display: "flex", alignItems: "center" }}>{secondPlayer.character.name}</div>
         <img style={{ height: 31 }} src={secondPlayer.character.portrait} alt={secondPlayer.character.portrait} />
