@@ -1,11 +1,11 @@
 import { Button, Grid2, TextField } from "@mui/material";
-import { useAppDispatch, useAppSelector } from "../../app/hooks";
+import { useAppDispatch, useAppSelector } from "../../app/hooks/storeHooks";
 import {
   selectRemote,
   setName,
-} from "../../features/board/remoteSlice";
+} from "../../app/slices/remoteSlice";
 import { ChangeEvent, useState } from "react";
-import { useRemote } from "./Remote";
+import { useRemote } from "../../app/hooks/remoteHooks";
 
 export interface RemoteJoinProps {
   onClickBack: () => void;

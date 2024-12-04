@@ -1,4 +1,4 @@
-import { TokensInterface, useToken } from "./Token";
+import { TokensInterface, useToken } from "../../app/hooks/tokenHooks";
 import { Button, IconButton, Tooltip } from "@mui/material";
 import React, { useMemo } from "react";
 import { ControlPoint, RemoveCircleOutline } from "@mui/icons-material";

@@ -1,7 +1,7 @@
 import { configureStore, ThunkAction, Action } from "@reduxjs/toolkit";
-import boardSlice from "../features/board/boardSlice";
-import remoteSlice from "../features/board/remoteSlice";
-import timerSlice from "../features/board/timerSlice";
+import boardSlice from "./slices/boardSlice";
+import remoteSlice from "./slices/remoteSlice";
+import timerSlice from "./slices/timerSlice";
 
 export const store = configureStore({
   reducer: {

@@ -1,4 +1,4 @@
-import { PlayerState } from "../features/board/boardSlice";
+import { PlayerState } from "../app/slices/boardSlice";
 
 import React from "react";
 import TaoTokens from "./tokens/TaoTokens";

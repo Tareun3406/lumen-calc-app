@@ -10,9 +10,9 @@ import {
   setTokenCountToSecond,
   setTokenToggleToFirst, setTokenToggleToFirstAsList,
   setTokenToggleToSecond, setTokenToggleToSecondAsList, triggerPublish
-} from "../../features/board/boardSlice";
-import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import { selectRemote } from "../../features/board/remoteSlice";
+} from "../slices/boardSlice";
+import { useAppDispatch, useAppSelector } from "./storeHooks";
+import { selectRemote } from "../slices/remoteSlice";
 
 export interface TokensInterface {
   player: PlayerState

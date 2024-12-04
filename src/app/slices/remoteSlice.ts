@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Client } from "@stomp/stompjs";
-import { RootState } from "../../app/store";
+import { RootState } from "../store";
 import { BoardState } from "./boardSlice";
 
 export interface RemoteState {

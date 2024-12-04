@@ -1,6 +1,6 @@
 import { Chip, Grid2, List, ListItemText } from "@mui/material";
-import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import { selectRemote, showNotificationMessage } from "../../features/board/remoteSlice";
+import { useAppDispatch, useAppSelector } from "../../app/hooks/storeHooks";
+import { selectRemote, showNotificationMessage } from "../../app/slices/remoteSlice";
 import { useCallback, useMemo, useState } from "react";
 
 function RemoteConnected() {

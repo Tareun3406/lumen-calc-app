@@ -1,4 +1,4 @@
-import { TokensInterface, useToken } from "./Token";
+import { TokensInterface, useToken } from "../../app/hooks/tokenHooks";
 import {
   Button,
   ToggleButton,

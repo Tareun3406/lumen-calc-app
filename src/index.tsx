@@ -4,7 +4,7 @@ import "./index.css";
 import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
 import reportWebVitals from "./reportWebVitals";
 import { RouterProvider } from "react-router-dom";
-import { mainRouter } from "./router";
+import { mainRouter } from "./app/router";
 import { Provider } from "react-redux";
 import { store } from "./app/store";
 import { Box, ThemeProvider } from "@mui/material";

@@ -1,6 +1,6 @@
 import { Tooltip } from "@mui/material";
 import React from "react";
-import { TokensInterface, useToken } from "./Token";
+import { TokensInterface, useToken } from "../../app/hooks/tokenHooks";
 
 function OneToggleToken(props: TokensInterface) {
   const { player } = props;

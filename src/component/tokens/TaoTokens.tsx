@@ -1,7 +1,7 @@
 import { Button, IconButton, Tooltip } from "@mui/material";
 import { ControlPoint, RemoveCircleOutline } from "@mui/icons-material";
 import React, { useEffect } from "react";
-import { TokensInterface, useToken } from "./Token";
+import { TokensInterface, useToken } from "../../app/hooks/tokenHooks";
 
 function TaoTokens(props: TokensInterface) {
   const player = props.player;

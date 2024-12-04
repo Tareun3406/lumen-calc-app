@@ -1,8 +1,8 @@
 import { createMemoryRouter } from "react-router-dom";
-import Title from "./view/Title";
-import Board from "./view/Board";
-import CharacterSelect from "./view/CharacterSelect";
-import Play from "./view/Play";
+import Title from "../view/Title";
+import Board from "../view/Board";
+import CharacterSelect from "../view/CharacterSelect";
+import Play from "../view/Play";
 
 const routes = [
   {

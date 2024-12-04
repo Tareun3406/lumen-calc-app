@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { RootState } from "../../app/store";
-import { Character } from "../Characters";
+import { RootState } from "../store";
+import { Character } from "../scripts/Characters";
 
 export interface PlayerState {
   isFirst: boolean;

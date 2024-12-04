@@ -4,10 +4,10 @@ import {
   healToFirst,
   healToSecond,
   PlayerState, triggerPublish
-} from "../features/board/boardSlice";
+} from "../app/slices/boardSlice";
 import { Button, Stack } from "@mui/material";
-import { useAppDispatch, useAppSelector } from "../app/hooks";
-import { selectRemote } from "../features/board/remoteSlice";
+import { useAppDispatch, useAppSelector } from "../app/hooks/storeHooks";
+import { selectRemote } from "../app/slices/remoteSlice";
 
 interface ButtonPanelProps {
   player: PlayerState

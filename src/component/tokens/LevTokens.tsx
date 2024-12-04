@@ -1,9 +1,9 @@
-import { TokensInterface, useToken } from "./Token";
+import { TokensInterface, useToken } from "../../app/hooks/tokenHooks";
 import { Button, IconButton, Tooltip } from "@mui/material";
 import { ControlPoint, RemoveCircleOutline } from "@mui/icons-material";
 import React from "react";
-import { useAppDispatch } from "../../app/hooks";
-import { damageToFirst, damageToSecond } from "../../features/board/boardSlice";
+import { useAppDispatch } from "../../app/hooks/storeHooks";
+import { damageToFirst, damageToSecond } from "../../app/slices/boardSlice";
 
 function LevTokens(props: TokensInterface) {
   const { player } = props;

@@ -1,5 +1,5 @@
 import { Grid2, List, ListItemText } from "@mui/material";
-import { damageLog } from "../features/board/boardSlice";
+import { damageLog } from "../app/slices/boardSlice";
 
 export interface damageLogs {
   damageLogs: damageLog[]

@@ -1,8 +1,8 @@
 import { Button, CircularProgress, Grid2, TextField } from "@mui/material";
-import { selectRemote, setName } from "../../features/board/remoteSlice";
+import { selectRemote, setName } from "../../app/slices/remoteSlice";
 import { ChangeEvent } from "react";
-import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import { useRemote } from "./Remote";
+import { useAppDispatch, useAppSelector } from "../../app/hooks/storeHooks";
+import { useRemote } from "../../app/hooks/remoteHooks";
 import { green } from "@mui/material/colors";
 
 export interface RemoteHostProps {

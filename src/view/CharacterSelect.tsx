@@ -1,13 +1,13 @@
 import { useNavigate } from "react-router-dom";
 import { Grid2, ImageList, ImageListItem } from "@mui/material";
-import { useAppDispatch, useAppSelector } from "../app/hooks";
+import { useAppDispatch, useAppSelector } from "../app/hooks/storeHooks";
 import {
   selectFirstPlayer,
   selectSecondPlayer,
   setCharacterToFirst,
   setCharacterToSecond
-} from "../features/board/boardSlice";
-import characters, { Character } from "../features/Characters";
+} from "../app/slices/boardSlice";
+import characters, { Character } from "../app/scripts/Characters";
 import { useEffect } from "react";
 import { grey } from "@mui/material/colors";
 

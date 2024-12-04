@@ -1,4 +1,4 @@
-import { useAppDispatch, useAppSelector } from "../../app/hooks";
+import { useAppDispatch, useAppSelector } from "./storeHooks";
 import {
   activateRemote, deactivateRemote,
   getStompClient, initializeRemote, INotificationMessage,
@@ -7,9 +7,9 @@ import {
   setHostRoom,
   setJoiningCode,
   setJoinRoom, setMemberList, setSocketStatus, showNotificationMessage
-} from "../../features/board/remoteSlice";
-import { selectBoard, setBoardState, setPreventTrigger } from "../../features/board/boardSlice";
-import { toggleReadyTimer } from "../../features/board/timerSlice";
+} from "../slices/remoteSlice";
+import { selectBoard, setBoardState, setPreventTrigger } from "../slices/boardSlice";
+import { toggleReadyTimer } from "../slices/timerSlice";
 import { IMessage } from "@stomp/stompjs";
 
 export function useRemote() {

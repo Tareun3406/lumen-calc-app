@@ -1,9 +1,9 @@
-import { useAppDispatch, useAppSelector } from "../app/hooks";
-import { initialize, selectBoard } from "../features/board/boardSlice";
+import { useAppDispatch, useAppSelector } from "../app/hooks/storeHooks";
+import { initialize, selectBoard } from "../app/slices/boardSlice";
 import { useEffect } from "react";
 import { Outlet } from "react-router-dom";
-import { closeNotification, selectRemote, setShowRemoteDialog } from "../features/board/remoteSlice";
-import { useRemote } from "../component/remote/Remote";
+import { closeNotification, selectRemote, setShowRemoteDialog } from "../app/slices/remoteSlice";
+import { useRemote } from "../app/hooks/remoteHooks";
 import { Alert, Snackbar } from "@mui/material";
 import { SnackbarCloseReason } from "@mui/material/Snackbar/useSnackbar.types";
 import RemoteConnectDialog from "../component/RemoteConnectDialog";

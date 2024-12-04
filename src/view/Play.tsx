@@ -1,6 +1,6 @@
 import { Button, ButtonGroup, Drawer, Grid2, IconButton } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import { useAppDispatch, useAppSelector } from "../app/hooks";
+import { useAppDispatch, useAppSelector } from "../app/hooks/storeHooks";
 import {
   decreaseFpToFirst,
   decreaseFpToSecond,
@@ -13,21 +13,21 @@ import {
   selectFirstPlayer,
   selectSecondPlayer,
   selectDamageLogs, triggerPublish
-} from "../features/board/boardSlice";
+} from "../app/slices/boardSlice";
 import HpBar from "../component/HpBar";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Person, Refresh, EditNote, Cable } from "@mui/icons-material";
 import TokenDisplay from "../component/TokenDisplay";
 import ButtonPanelProps from "../component/ButtonPanelProps";
 import DamageLogs from "../component/DamageLogs";
-import { selectRemote, setShowRemoteDialog } from "../features/board/remoteSlice";
-import { useRemote } from "../component/remote/Remote";
+import { selectRemote, setShowRemoteDialog } from "../app/slices/remoteSlice";
+import { useRemote } from "../app/hooks/remoteHooks";
 import {
   decreaseReadyTimerTime, preventReadyTimer,
   selectTimer,
   setReadyTimerTime,
   toggleReadyTimer
-} from "../features/board/timerSlice";
+} from "../app/slices/timerSlice";
 
 function Play() {
   const firstPlayer = useAppSelector(selectFirstPlayer);

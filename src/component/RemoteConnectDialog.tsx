@@ -7,10 +7,10 @@ import { useEffect, useState } from "react";
 import RemoteConnected from "./remote/RemoteConnected";
 import RemoteDefault from "./remote/RemoteDefault";
 import RemoteJoin from "./remote/RemoteJoin";
-import { useAppSelector } from "../app/hooks";
-import { selectRemote } from "../features/board/remoteSlice";
+import { useAppSelector } from "../app/hooks/storeHooks";
+import { selectRemote } from "../app/slices/remoteSlice";
 import RemoteHost from "./remote/RemoteHost";
-import { useRemote } from "./remote/Remote";
+import { useRemote } from "../app/hooks/remoteHooks";
 
 export interface RemoteConnectDialogProps {
   open: boolean;
