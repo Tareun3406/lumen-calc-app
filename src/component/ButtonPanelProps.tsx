@@ -1,18 +1,17 @@
-import { PlayerState } from "../app/slices/boardSlice";
 import { Button, Stack } from "@mui/material";
-import { usePlayerAction } from "../app/hooks/actionHooks";
+import { IActionProps, usePlayerAction } from "../app/hooks/actionHooks";
+import { useAppSelector } from "../app/hooks/storeHooks";
+import { selectSettings } from "../app/slices/settingsSlice";
+import { useMemo } from "react";
 
-interface ButtonPanelProps {
-  player: PlayerState;
-}
-
-function ButtonPanelProps(props: ButtonPanelProps) {
-  const { damageToHp, healToHp } = usePlayerAction({ player: props.player });
+function ButtonPanelProps(props: IActionProps) {
+  const { damageToHp, healToHp } = usePlayerAction(props);
+  const { flipPanel } = useAppSelector(selectSettings);
   const isFirstPlayer = props.player.isFirst;
 
-  const getClassNameAsIsFirst = () => {
-    return isFirstPlayer ? "" : "reverseFlexRow";
-  };
+  const getClassNameAsIsFirst = useMemo( () => {
+    return isFirstPlayer || !flipPanel ? "" : "reverseFlexRow";
+  }, [flipPanel]);
 
   const buttonStyle = {
     width: 70
@@ -24,7 +23,7 @@ function ButtonPanelProps(props: ButtonPanelProps) {
 
   return (
     <Stack padding={1} paddingLeft={paddingAsPlayer().left} paddingRight={paddingAsPlayer().right} spacing={1}>
-      <div style={{ display: "flex", justifyContent: "space-between" }} className={getClassNameAsIsFirst()}>
+      <div style={{ display: "flex", justifyContent: "space-between" }} className={getClassNameAsIsFirst}>
         <Button variant={"outlined"} size={"medium"} sx={buttonStyle} onClick={() => damageToHp(100)}>
           -100
         </Button>
@@ -35,7 +34,7 @@ function ButtonPanelProps(props: ButtonPanelProps) {
           -300
         </Button>
       </div>
-      <div style={{ display: "flex", justifyContent: "space-between" }} className={getClassNameAsIsFirst()}>
+      <div style={{ display: "flex", justifyContent: "space-between" }} className={getClassNameAsIsFirst}>
         <Button variant={"outlined"} size={"medium"} sx={buttonStyle} onClick={() => damageToHp(400)}>
           -400
         </Button>
@@ -46,7 +45,7 @@ function ButtonPanelProps(props: ButtonPanelProps) {
           -600
         </Button>
       </div>
-      <div style={{ display: "flex", justifyContent: "space-between" }} className={getClassNameAsIsFirst()}>
+      <div style={{ display: "flex", justifyContent: "space-between" }} className={getClassNameAsIsFirst}>
         <Button variant={"outlined"} size={"medium"} sx={buttonStyle} onClick={() => damageToHp(700)}>
           -700
         </Button>

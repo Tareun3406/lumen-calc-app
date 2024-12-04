@@ -2,14 +2,16 @@ import { IActionProps, usePlayerAction } from "../../app/hooks/actionHooks";
 import { Button, IconButton, Tooltip } from "@mui/material";
 import { ControlPoint, RemoveCircleOutline } from "@mui/icons-material";
 import React from "react";
-import { useAppDispatch } from "../../app/hooks/storeHooks";
+import { useAppDispatch, useAppSelector } from "../../app/hooks/storeHooks";
 import { damageToFirst, damageToSecond } from "../../app/slices/boardSlice";
+import { selectSettings } from "../../app/slices/settingsSlice";
 
 function LevTokens(props: IActionProps) {
   const { player } = props;
   const { character } = player;
   const { addToken, setTokenCount, removeToken, changeToggle } = usePlayerAction(props);
   const dispatch = useAppDispatch();
+  const { flipPanel } = useAppSelector(selectSettings);
 
   const handleDaggerClick = () => {
     if (character.tokens[1].count && character.tokens[1].count < 3) return;
@@ -27,7 +29,7 @@ function LevTokens(props: IActionProps) {
   return (
     <div
       style={{ display: "flex", justifyContent: "space-between" }}
-      className={player.isFirst ? "" : "reverseFlexRow"}>
+      className={player.isFirst || !flipPanel ? "" : "reverseFlexRow"}>
       <Tooltip title={character.tokens[0].description} placement={"top"}>
         <div style={{ position: "relative", display: "flex" }} onClick={() => changeToggle(0)}>
           <img src={character.tokens[0].img} height={116} alt={character.tokens[0].img} />

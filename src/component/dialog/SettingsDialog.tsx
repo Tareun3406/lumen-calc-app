@@ -7,9 +7,10 @@ import {
   Switch,
   useColorScheme
 } from "@mui/material";
-import { useAppDispatch } from "../../app/hooks/storeHooks";
+import { useAppDispatch, useAppSelector } from "../../app/hooks/storeHooks";
 import { setOpenSettingsDialog } from "../../app/slices/dialogSlice";
 import { ChangeEvent } from "react";
+import { selectSettings, setFlipPanel } from "../../app/slices/settingsSlice";
 
 export interface ISettingsDialogProps {
   open: boolean
@@ -18,6 +19,7 @@ export interface ISettingsDialogProps {
 
 function SettingsDialog(props: ISettingsDialogProps) {
   const dispatch = useAppDispatch();
+  const settingsState = useAppSelector(selectSettings)
   const { mode: themeMode, setMode: setThemeMode } = useColorScheme();
 
   const handleClose = () => {
@@ -32,13 +34,16 @@ function SettingsDialog(props: ISettingsDialogProps) {
     }
     setThemeMode("light");
   }
-
+  const handleFlipToggle = () => {
+    dispatch(setFlipPanel(!settingsState.flipPanel));
+  }
   return (
     <Dialog open={props.open} onClose={handleClose}>
       <DialogTitle>설정</DialogTitle>
       <DialogContent>
         <FormGroup>
-          <FormControlLabel control={<Switch value={themeMode === "dark"} onChange={handleThemeToggle}/>} label="다크 모드" />
+          <FormControlLabel control={<Switch defaultChecked={themeMode === "dark"} onChange={handleThemeToggle}/>} label="다크 모드" />
+          <FormControlLabel control={<Switch defaultChecked={settingsState.flipPanel} onChange={handleFlipToggle}/>} label="좌우 반전 모드" />
         </FormGroup>
       </DialogContent>
     </Dialog>

@@ -2,12 +2,15 @@
 import { IActionProps, usePlayerAction } from "../../app/hooks/actionHooks";
 import { Card, ToggleButton, ToggleButtonGroup, Typography } from "@mui/material";
 import React, { useMemo } from "react";
+import { useAppSelector } from "../../app/hooks/storeHooks";
+import { selectSettings } from "../../app/slices/settingsSlice";
 
 function SetzTokens(props: IActionProps) {
   const { player } = props;
   const { character } = player;
   const { tokens } = character;
   const { setTokenToggleAsList, changeToggle } = usePlayerAction(props);
+  const { flipPanel } = useAppSelector(selectSettings);
   
   const toggledToken = useMemo(() => {
     const toggledToken = tokens.find((token, index) => index !== 0 && token.toggle)
@@ -29,7 +32,7 @@ function SetzTokens(props: IActionProps) {
   }
   return (
     <div style={{ display: "flex", justifyContent: "space-between", gap: 10 }}
-         className={player.isFirst ? "" : "reverseFlexRow"}>
+         className={player.isFirst || !flipPanel ? "" : "reverseFlexRow"}>
       <img src={toggledToken.img} height={116} alt={toggledToken.img} onClick={handleClickTokenImg}/>
       <ToggleButtonGroup
         orientation={"vertical"}

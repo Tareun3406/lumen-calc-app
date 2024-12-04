@@ -2,11 +2,14 @@ import { IActionProps, usePlayerAction } from "../../app/hooks/actionHooks";
 import { Button, IconButton, Tooltip } from "@mui/material";
 import React, { useMemo } from "react";
 import { ControlPoint, RemoveCircleOutline } from "@mui/icons-material";
+import { useAppSelector } from "../../app/hooks/storeHooks";
+import { selectSettings } from "../../app/slices/settingsSlice";
 
 function OneCounterToken(props: IActionProps) {
   const { player } = props;
   const { character } = player;
   const { addToken, removeToken, setTokenCount } = usePlayerAction(props);
+  const { flipPanel } = useAppSelector(selectSettings)
 
   const getCounterToggle = useMemo(() => {
     if (character.tokens[0].count && character.tokens[0].toggleCount)
@@ -29,7 +32,7 @@ function OneCounterToken(props: IActionProps) {
 
   return (
     <div style={{ display: "flex", justifyContent: "center" }}>
-      {player.isFirst ? "" : counterToken}
+      {player.isFirst  || !flipPanel ? "" : counterToken}
       <Tooltip title={character.tokens[0].description} placement={"top"}>
         <div
           style={{

@@ -2,11 +2,13 @@ import { Button, IconButton, Tooltip } from "@mui/material";
 import { ControlPoint, RemoveCircleOutline } from "@mui/icons-material";
 import React, { useEffect } from "react";
 import { IActionProps, usePlayerAction } from "../../app/hooks/actionHooks";
+import { useAppSelector } from "../../app/hooks/storeHooks";
+import { selectSettings } from "../../app/slices/settingsSlice";
 
 function TaoTokens(props: IActionProps) {
   const player = props.player;
   const { character } = props.player;
-
+  const { flipPanel } = useAppSelector(selectSettings)
   const { addToken, removeToken, setTokenCount, setTokenToggle, setTokenToggleAsList } = usePlayerAction(props);
 
   // 타오 토큰 활성화 조건
@@ -48,7 +50,7 @@ function TaoTokens(props: IActionProps) {
   return (
     <div
       style={{ display: "flex", justifyContent: "space-between" }}
-      className={player.isFirst ? "" : "reverseFlexRow"}>
+      className={player.isFirst || !flipPanel ? "" : "reverseFlexRow"}>
       <div
         onClick={() => {
           if (character.tokens[0].toggle) {
