@@ -6,7 +6,7 @@ import { BoardState } from "./boardSlice";
 export interface RemoteState {
   socketStatus: "DISCONNECTED" | "CONNECTED" | "PENDING" | "IDLE" | "ERROR" | "NONE";
   username: string;
-  isPlayer: boolean; // todo hasControl 로 이름 변경
+  hasControl: boolean;
   playerInviteCode: string;
   observerInviteCode: string;
   playerList: Array<string>;
@@ -42,7 +42,7 @@ export interface JoinedRoomInfo {
   playerList: Array<string>;
   observerList: Array<string>;
   board: BoardState;
-  isPlayer: boolean;
+  hasControl: boolean;
 }
 
 export interface RemoteCreatedInfo {
@@ -54,7 +54,7 @@ export interface RemoteCreatedInfo {
 const initialState: RemoteState = {
   socketStatus: "NONE",
   username: "",
-  isPlayer: true,
+  hasControl: true,
   playerInviteCode: "",
   observerInviteCode: "",
   playerList: [],
@@ -140,7 +140,7 @@ export const remoteSlice = createSlice({
   reducers: {
     initializeRemote: (state) => {
       state.username= "";
-      state.isPlayer= true;
+      state.hasControl= true;
       state.playerInviteCode= "";
       state.observerInviteCode= "";
       state.playerList= [];
@@ -162,7 +162,7 @@ export const remoteSlice = createSlice({
       state.hostName = action.payload.hostName;
       state.playerList = action.payload.playerList;
       state.observerList = action.payload.observerList;
-      state.isPlayer = action.payload.isPlayer;
+      state.hasControl = action.payload.hasControl;
     },
     setMemberList: (state, action: PayloadAction<MemberListMessage>) => {
       state.playerList = action.payload.playerList;

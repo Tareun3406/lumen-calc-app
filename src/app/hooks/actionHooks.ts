@@ -31,17 +31,17 @@ export interface IActionProps {
 export function usePlayerAction(props: IActionProps) {
   const dispatch = useAppDispatch();
   const { isFirst } = props.player;
-  const { isPlayer, socketStatus } = useAppSelector(selectRemote);
+  const { hasControl, socketStatus } = useAppSelector(selectRemote);
 
   // HP 관련
   const damageToHp = (value: number) =>  {
-    if (!isPlayer && socketStatus === "CONNECTED") return;
+    if (!hasControl && socketStatus === "CONNECTED") return;
     if (isFirst) dispatch(damageToFirst(value))
     else dispatch(damageToSecond(value))
     dispatch(triggerPublish());
   }
   const healToHp = (value: number) => {
-    if (!isPlayer && socketStatus === "CONNECTED") return;
+    if (!hasControl && socketStatus === "CONNECTED") return;
     if (isFirst) dispatch(healToFirst(value))
     else dispatch(healToSecond(value));
     dispatch(triggerPublish());
@@ -50,19 +50,19 @@ export function usePlayerAction(props: IActionProps) {
 
   // FP 관련
   const increaseFp = (value: number) => {
-    if (!isPlayer && socketStatus === "CONNECTED") return;
+    if (!hasControl && socketStatus === "CONNECTED") return;
     if (isFirst) dispatch(increaseFpToFirst(value));
     else dispatch(increaseFpToSecond(value));
     dispatch(triggerPublish());
   }
   const decreaseFp = (value: number) => {
-    if (!isPlayer && socketStatus === "CONNECTED") return;
+    if (!hasControl && socketStatus === "CONNECTED") return;
     if (isFirst) dispatch(decreaseFpToFirst(value));
     else dispatch(decreaseFpToSecond(value));
     dispatch(triggerPublish());
   }
   const resetFp = () => {
-    if (!isPlayer && socketStatus === "CONNECTED") return;
+    if (!hasControl && socketStatus === "CONNECTED") return;
     if (isFirst) dispatch(resetFpToFirst());
     else dispatch(resetFpToSecond());
     dispatch(triggerPublish());
@@ -71,37 +71,37 @@ export function usePlayerAction(props: IActionProps) {
 
   // token 관련
   const changeToggle = (index: number) => {
-    if (!isPlayer && socketStatus === "CONNECTED") return;
+    if (!hasControl && socketStatus === "CONNECTED") return;
     if (isFirst) dispatch(changeTokenToggleToFirst(index));
     else dispatch(changeTokenToggleToSecond(index));
     dispatch(triggerPublish());
   }
   const addToken = (index: number) => {
-    if (!isPlayer && socketStatus === "CONNECTED") return;
+    if (!hasControl && socketStatus === "CONNECTED") return;
     if (isFirst) dispatch(addTokenToFirst(index));
     else dispatch(addTokenToSecond(index));
     dispatch(triggerPublish());
   }
   const removeToken = (index: number) => {
-    if (!isPlayer && socketStatus === "CONNECTED") return;
+    if (!hasControl && socketStatus === "CONNECTED") return;
     if (isFirst) dispatch(removeTokenToFirst(index));
     else dispatch(removeTokenToSecond(index));
     dispatch(triggerPublish());
   }
   const setTokenCount = (index: number, value: number) => {
-    if (!isPlayer && socketStatus === "CONNECTED") return;
+    if (!hasControl && socketStatus === "CONNECTED") return;
     if (isFirst) dispatch(setTokenCountToFirst({ index, value }))
     else dispatch(setTokenCountToSecond({ index, value }));
     dispatch(triggerPublish());
   }
   const setTokenToggle = (payload: { index: number; value: boolean }) => {
-    if (!isPlayer && socketStatus === "CONNECTED") return;
+    if (!hasControl && socketStatus === "CONNECTED") return;
     if (isFirst) dispatch(setTokenToggleToFirst(payload))
     else dispatch(setTokenToggleToSecond(payload));
     dispatch(triggerPublish());
   }
   const setTokenToggleAsList = (payload: { [key: number]: boolean }) => {
-    if (!isPlayer && socketStatus === "CONNECTED") return;
+    if (!hasControl && socketStatus === "CONNECTED") return;
     if (isFirst) dispatch(setTokenToggleToFirstAsList(payload));
     else dispatch(setTokenToggleToSecondAsList(payload));
     dispatch(triggerPublish());
@@ -113,20 +113,20 @@ export function usePlayerAction(props: IActionProps) {
 
 export function useGlobalAction() {
   const dispatch = useAppDispatch();
-  const { isPlayer, socketStatus } = useAppSelector(selectRemote);
+  const { hasControl, socketStatus } = useAppSelector(selectRemote);
   const { readyTimer } = useAppSelector(selectTimer)
   const { publishTimer } = useRemote();
 
   // 초기화
   const initializeBoard = () => {
-    if (!isPlayer && socketStatus === "CONNECTED") return;
+    if (!hasControl && socketStatus === "CONNECTED") return;
     dispatch(initialize());
     dispatch(triggerPublish());
   }
 
   // 타이머 관련
   const toggleReadyTimerAction = () => {
-    if (!isPlayer && socketStatus === "CONNECTED") return;
+    if (!hasControl && socketStatus === "CONNECTED") return;
     if (socketStatus === "CONNECTED") {
       publishTimer(!readyTimer.toggle);
       return;

@@ -15,7 +15,7 @@ import { IMessage } from "@stomp/stompjs";
 export function useRemote() {
   const dispatch = useAppDispatch();
   const boardState = useAppSelector(selectBoard);
-  const { isPlayer, username, roomId, socketStatus, joiningCode } = useAppSelector(selectRemote);
+  const { hasControl, username, roomId, socketStatus, joiningCode } = useAppSelector(selectRemote);
 
   const connectRemote = async () => {
     dispatch(initializeRemote());
@@ -84,7 +84,7 @@ export function useRemote() {
   }
 
   const publishUpdate = () => {
-    if (!isPlayer || boardState.preventTrigger) return;
+    if (!hasControl || boardState.preventTrigger) return;
     if (socketStatus !== "CONNECTED") return;
     dispatch(setPreventTrigger(true));
     const stompClient = getStompClient();

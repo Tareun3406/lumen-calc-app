@@ -24,7 +24,7 @@ function Play() {
   const damageLogs = useAppSelector(selectDamageLogs);
   const navigate = useNavigate();
   const { initializeBoard } = useGlobalAction()
-  const { socketStatus, isPlayer } = useAppSelector(selectRemote);
+  const { socketStatus, hasControl } = useAppSelector(selectRemote);
 
   const [drawDamageLog, setDrawDamageLog] = useState(false);
   const remoteButtonRef = useRef<HTMLButtonElement | null>(null);
@@ -72,7 +72,7 @@ function Play() {
         <ButtonGroup variant={"outlined"} size={"small"}>
           <Button
             onClick={() => {
-              if (!isPlayer && socketStatus === "CONNECTED") return;
+              if (!hasControl && socketStatus === "CONNECTED") return;
               dispatch(deselectCharacter());
               navigate("/board/characterSelect");
             }}>

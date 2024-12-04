@@ -11,7 +11,7 @@ import RemoteConnectDialog from "../component/RemoteConnectDialog";
 function Board() {
   const dispatch = useAppDispatch();
   const boardState = useAppSelector(selectBoard);
-  const { isPlayer, socketStatus, notification, showRemoteDialog } = useAppSelector(selectRemote);
+  const { hasControl, socketStatus, notification, showRemoteDialog } = useAppSelector(selectRemote);
   const { disconnectRemote, publishUpdate } = useRemote();
 
   const handleCloseSnackBar = (event: React.SyntheticEvent | Event, reason?: SnackbarCloseReason) => {
@@ -24,7 +24,7 @@ function Board() {
   }
 
   useEffect(() => {
-    if (!isPlayer && socketStatus === "CONNECTED") return;
+    if (!hasControl && socketStatus === "CONNECTED") return;
     dispatch(initialize());
     return () => {
       if (socketStatus === "CONNECTED") {
@@ -35,7 +35,7 @@ function Board() {
   }, []);
 
   useEffect(() => {
-    if (isPlayer && !boardState.preventTrigger) {
+    if (hasControl && !boardState.preventTrigger) {
       publishUpdate();
     }
     //eslint-disable-next-line
