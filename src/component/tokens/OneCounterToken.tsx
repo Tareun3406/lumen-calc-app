@@ -1,12 +1,12 @@
-import { TokensInterface, useToken } from "../../app/hooks/tokenHooks";
+import { IActionProps, useAction } from "../../app/hooks/actionHooks";
 import { Button, IconButton, Tooltip } from "@mui/material";
 import React, { useMemo } from "react";
 import { ControlPoint, RemoveCircleOutline } from "@mui/icons-material";
 
-function OneCounterToken(props: TokensInterface) {
+function OneCounterToken(props: IActionProps) {
   const { player } = props;
   const { character } = player;
-  const { addToken, removeToken, setTokenCount} = useToken(props);
+  const { addToken, removeToken, setTokenCount} = useAction(props);
 
   const getCounterToggle = useMemo(() => {
     if (character.tokens[0].count && character.tokens[0].toggleCount)

@@ -1,25 +1,24 @@
+import { useAppDispatch, useAppSelector } from "./storeHooks";
+import { selectRemote } from "../slices/remoteSlice";
 import {
   addTokenToFirst,
   addTokenToSecond,
   changeTokenToggleToFirst,
-  changeTokenToggleToSecond,
-  PlayerState,
+  changeTokenToggleToSecond, PlayerState,
   removeTokenToFirst,
   removeTokenToSecond,
   setTokenCountToFirst,
   setTokenCountToSecond,
-  setTokenToggleToFirst, setTokenToggleToFirstAsList,
-  setTokenToggleToSecond, setTokenToggleToSecondAsList, triggerPublish
+  setTokenToggleToFirst, setTokenToggleToFirstAsList, setTokenToggleToSecond, setTokenToggleToSecondAsList,
+  triggerPublish
 } from "../slices/boardSlice";
-import { useAppDispatch, useAppSelector } from "./storeHooks";
-import { selectRemote } from "../slices/remoteSlice";
 
-export interface TokensInterface {
+export interface IActionProps {
   player: PlayerState
 }
 
-// todo action 컴포넌트 생성 및 이동
-export function useToken(props: TokensInterface) {
+
+export function useAction(props: IActionProps) {
   const dispatch = useAppDispatch();
   const { isFirst } = props.player;
   const { isPlayer, socketStatus } = useAppSelector(selectRemote);

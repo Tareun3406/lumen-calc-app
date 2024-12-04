@@ -1,14 +1,14 @@
-import { TokensInterface, useToken } from "../../app/hooks/tokenHooks";
+import { IActionProps, useAction } from "../../app/hooks/actionHooks";
 import { Button, IconButton, Tooltip } from "@mui/material";
 import { ControlPoint, RemoveCircleOutline } from "@mui/icons-material";
 import React from "react";
 import { useAppDispatch } from "../../app/hooks/storeHooks";
 import { damageToFirst, damageToSecond } from "../../app/slices/boardSlice";
 
-function LevTokens(props: TokensInterface) {
+function LevTokens(props: IActionProps) {
   const { player } = props;
   const { character } = player;
-  const { addToken, setTokenCount, removeToken, changeToggle } = useToken(props);
+  const { addToken, setTokenCount, removeToken, changeToggle } = useAction(props);
   const dispatch = useAppDispatch();
 
   const handleDaggerClick = () => {

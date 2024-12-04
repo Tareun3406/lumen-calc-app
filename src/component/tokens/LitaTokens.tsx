@@ -1,4 +1,4 @@
-import { TokensInterface, useToken } from "../../app/hooks/tokenHooks";
+import { IActionProps, useAction } from "../../app/hooks/actionHooks";
 import {
   Button,
   ToggleButton,
@@ -8,10 +8,10 @@ import {
 import React, { useMemo } from "react";
 import { grey, yellow } from "@mui/material/colors";
 
-function LitaTokens(props: TokensInterface) {
+function LitaTokens(props: IActionProps) {
   const { player } = props;
   const { character } = player;
-  const { changeToggle, setTokenToggleAsList } = useToken(props);
+  const { changeToggle, setTokenToggleAsList } = useAction(props);
 
   const litaToggleChange = (targetIndex: number) => {
     if (character.tokens[4].toggle) return;
