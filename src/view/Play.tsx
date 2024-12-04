@@ -1,4 +1,4 @@
-import { Button, ButtonGroup, Drawer, Grid2, IconButton } from "@mui/material";
+import { Button, ButtonGroup, Drawer, Grid2 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../app/hooks/storeHooks";
 import {
@@ -22,6 +22,7 @@ import {
   toggleReadyTimer
 } from "../app/slices/timerSlice";
 import { useAction } from "../app/hooks/actionHooks";
+import FpDisplay from "../component/FpDisplay";
 
 function Play() {
   const firstPlayer = useAppSelector(selectFirstPlayer);
@@ -29,8 +30,7 @@ function Play() {
   const damageLogs = useAppSelector(selectDamageLogs);
   const navigate = useNavigate();
   const { publishTimer } = useRemote();
-  const firstPlayerAction = useAction({ player: firstPlayer })
-  const secondPlayerAction = useAction({ player: secondPlayer })
+  const { initializeBoard } = useAction({ player: firstPlayer })
   const { socketStatus, isPlayer } = useAppSelector(selectRemote);
   const { readyTimer } = useAppSelector(selectTimer);
 
@@ -86,22 +86,6 @@ function Play() {
     dispatch(toggleReadyTimer(!readyTimer.toggle));
   };
 
-  // todo action 컴포넌트 생성 및 이동
-  const getFpColor = useMemo(() => {
-    const getColor = (fp: number): "success" | "info" | "error" => {
-      if (fp > 0) return "info";
-      if (fp < 0) return "error";
-      return "success";
-    };
-
-    const first = getColor(firstPlayer.fp);
-    const second = getColor(secondPlayer.fp);
-    return {
-      first,
-      second
-    };
-  }, [firstPlayer.fp, secondPlayer.fp]);
-
   // todo timer 컴포넌트로 이동
   useEffect(() => {
     if (readyTimer.time < 1) {
@@ -122,7 +106,7 @@ function Play() {
   }, [readyTimer.toggle]);
 
   useEffect(() => {
-    firstPlayerAction.initializeBoard();
+    initializeBoard();
   }, []);
   return (
     <Grid2 container padding={1}>
@@ -143,7 +127,7 @@ function Play() {
             }}>
             <Person />
           </Button>
-          <Button onClick={firstPlayerAction.initializeBoard}>
+          <Button onClick={initializeBoard}>
             <Refresh />
           </Button>
           <Button ref={remoteButtonRef}>
@@ -183,17 +167,7 @@ function Play() {
 
       <Grid2 size={4} display={"flex"} justifyContent={"space-between"}>
         <div style={{ display: "inline-block" }}></div>
-        <div style={{ display: "inline-block", width: 72 }}>
-          <IconButton onClick={() => firstPlayerAction.increaseFp(1)}>+</IconButton>
-          <Button
-            variant={firstPlayer.fp === 0 ? "outlined" : "contained"}
-            fullWidth={true}
-            color={getFpColor.first}
-            onClick={() => firstPlayerAction.resetFp()}>
-            {firstPlayer.fp} fp
-          </Button>
-          <IconButton onClick={() => firstPlayerAction.decreaseFp(1)}>-</IconButton>
-        </div>
+        <FpDisplay player={firstPlayer} />
         <Button
           variant={"contained"}
           size={"large"}
@@ -202,17 +176,7 @@ function Play() {
           onClick={handleTimerButton}>
           {readyTimer.time}
         </Button>
-        <div style={{ display: "inline-block", width: 72 }}>
-          <IconButton onClick={() => secondPlayerAction.increaseFp(1)}>+</IconButton>
-          <Button
-            variant={secondPlayer.fp === 0 ? "outlined" : "contained"}
-            fullWidth={true}
-            color={getFpColor.second}
-            onClick={() => secondPlayerAction.resetFp()}>
-            {secondPlayer.fp} fp
-          </Button>
-          <IconButton onClick={() => secondPlayerAction.decreaseFp(1)}>-</IconButton>
-        </div>
+        <FpDisplay player={secondPlayer} />
         <div style={{ display: "inline-block" }}></div>
       </Grid2>
 
