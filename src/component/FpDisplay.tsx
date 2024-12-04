@@ -7,7 +7,7 @@ export interface IFpDisplay {
   player: PlayerState;
 }
 
-function fpDisplay(props: IFpDisplay) {
+function FpDisplay(props: IFpDisplay) {
   const player = props.player;
   const { increaseFp, decreaseFp, resetFp } = usePlayerAction({ player });
 
@@ -24,7 +24,7 @@ function fpDisplay(props: IFpDisplay) {
         variant={player.fp === 0 ? "outlined" : "contained"}
         fullWidth={true}
         color={getFpColor}
-        onClick={() => resetFp()}>
+        onClick={resetFp}>
         {player.fp} fp
       </Button>
       <IconButton onClick={() => decreaseFp(1)}>-</IconButton>
@@ -32,4 +32,4 @@ function fpDisplay(props: IFpDisplay) {
   );
 }
 
-export default fpDisplay;
+export default FpDisplay;
