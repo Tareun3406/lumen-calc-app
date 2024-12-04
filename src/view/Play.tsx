@@ -1,12 +1,7 @@
 import { Button, ButtonGroup, Drawer, Grid2 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../app/hooks/storeHooks";
-import {
-  deselectCharacter,
-  selectFirstPlayer,
-  selectSecondPlayer,
-  selectDamageLogs
-} from "../app/slices/boardSlice";
+import { deselectCharacter, selectFirstPlayer, selectSecondPlayer, selectDamageLogs } from "../app/slices/boardSlice";
 import HpBar from "../component/HpBar";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Person, Refresh, EditNote, Cable } from "@mui/icons-material";
@@ -23,7 +18,7 @@ function Play() {
   const secondPlayer = useAppSelector(selectSecondPlayer);
   const damageLogs = useAppSelector(selectDamageLogs);
   const navigate = useNavigate();
-  const { initializeBoard } = useGlobalAction()
+  const { initializeBoard } = useGlobalAction();
   const { socketStatus, hasControl } = useAppSelector(selectRemote);
 
   const [drawDamageLog, setDrawDamageLog] = useState(false);
@@ -33,12 +28,12 @@ function Play() {
 
   const handleOpenRemoteDialog = () => {
     remoteButtonRef.current?.blur();
-    dispatch(setShowRemoteDialog(true))
-  }
+    dispatch(setShowRemoteDialog(true));
+  };
 
   const toggleDamageLog = (toggle: boolean) => () => {
     setDrawDamageLog(toggle);
-  }
+  };
 
   // todo HpBar 컴포넌트로 이동
   const handFirst = useMemo(() => {
@@ -61,7 +56,6 @@ function Play() {
   }, []);
   return (
     <Grid2 container padding={1}>
-
       <Grid2 size={4.5} display={"flex"} justifyContent={"space-between"} paddingX={2.5}>
         <img style={{ height: 31 }} src={firstPlayer.character.portrait} alt={firstPlayer.character.portrait} />
         <div style={{ display: "flex", alignItems: "center" }}>{firstPlayer.character.name}</div>
@@ -82,7 +76,7 @@ function Play() {
             <Refresh />
           </Button>
           <Button ref={remoteButtonRef}>
-            <Cable onClick={handleOpenRemoteDialog}/>
+            <Cable onClick={handleOpenRemoteDialog} />
           </Button>
           <Button onClick={toggleDamageLog(true)}>
             <EditNote />
@@ -96,8 +90,6 @@ function Play() {
         <img style={{ height: 31 }} src={secondPlayer.character.portrait} alt={secondPlayer.character.portrait} />
       </Grid2>
 
-
-
       <Grid2 size={6} paddingLeft={4} paddingRight={6} position={"relative"}>
         <HpBar player={firstPlayer} />
         <span style={{ position: "absolute", top: 3, right: 70 }}>{firstPlayer.currentHp}</span>
@@ -109,8 +101,6 @@ function Play() {
         <span style={{ position: "absolute", top: 3, left: 70 }}>{secondPlayer.currentHp}</span>
         <span style={{ position: "absolute", top: 3, right: 70 }}>Hand: {handSecond}</span>
       </Grid2>
-
-
 
       <Grid2 size={4}>
         <ButtonPanelProps player={firstPlayer}></ButtonPanelProps>
@@ -128,8 +118,6 @@ function Play() {
         <ButtonPanelProps player={secondPlayer}></ButtonPanelProps>
       </Grid2>
 
-
-
       <Grid2 size={6} display={"flex"} justifyContent={"center"}>
         <TokenDisplay player={firstPlayer}></TokenDisplay>
       </Grid2>
@@ -137,8 +125,6 @@ function Play() {
       <Grid2 size={6} display={"flex"} justifyContent={"center"}>
         <TokenDisplay player={secondPlayer}></TokenDisplay>
       </Grid2>
-
-
 
       <Drawer open={drawDamageLog} onClose={toggleDamageLog(false)} anchor="bottom">
         <DamageLogs damageLogs={damageLogs}></DamageLogs>

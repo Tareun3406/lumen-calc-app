@@ -4,12 +4,12 @@ import { PlayerState } from "../app/slices/boardSlice";
 import { usePlayerAction } from "../app/hooks/actionHooks";
 
 export interface IFpDisplay {
-  player: PlayerState
+  player: PlayerState;
 }
 
 function fpDisplay(props: IFpDisplay) {
   const player = props.player;
-  const {increaseFp, decreaseFp, resetFp} = usePlayerAction({ player });
+  const { increaseFp, decreaseFp, resetFp } = usePlayerAction({ player });
 
   const getFpColor = useMemo(() => {
     if (player.fp > 0) return "info";
@@ -29,7 +29,7 @@ function fpDisplay(props: IFpDisplay) {
       </Button>
       <IconButton onClick={() => decreaseFp(1)}>-</IconButton>
     </div>
-  )
+  );
 }
 
 export default fpDisplay;

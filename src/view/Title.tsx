@@ -17,7 +17,7 @@ function Title() {
       <img src={"/android.png"} alt={"android.png"} /> 터치 - 홈 화면에 추가
     </div>
   );
-  
+
   const iosPcElement = (
     <div>
       사파리 브라우저: 우측 상단 공유 아이콘 <img src={"/ios.png"} alt={"ios.png"} height={25} /> 클릭 - 홈 화면에 추가
@@ -41,8 +41,8 @@ function Title() {
         {/macintosh|mac os x/i.test(userAgent) && windowElement}
         {/macintosh|mac os x/i.test(userAgent) && iosPcElement}
       </div>
-    )
-  }, [window.navigator.userAgent])
+    );
+  }, [window.navigator.userAgent]);
 
   return (
     <Box>

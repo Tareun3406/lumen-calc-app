@@ -7,7 +7,7 @@ function TaoTokens(props: IActionProps) {
   const player = props.player;
   const { character } = props.player;
 
-  const { addToken, removeToken, setTokenCount, setTokenToggle, setTokenToggleAsList} = usePlayerAction(props);
+  const { addToken, removeToken, setTokenCount, setTokenToggle, setTokenToggleAsList } = usePlayerAction(props);
 
   // 타오 토큰 활성화 조건
   useEffect(() => {
@@ -17,15 +17,13 @@ function TaoTokens(props: IActionProps) {
     const yinToggle = player.character.tokens[1].toggle;
     const yangToggle = player.character.tokens[2].toggle;
 
-    const payload: {[type: number]: boolean} = {};
+    const payload: { [type: number]: boolean } = {};
 
     if (yinCount === 4 && yangCount === 4 && !harmonyToggle) {
       payload[0] = true;
       payload[1] = true;
       payload[2] = true;
-    }
-
-    else if ((yinCount! < 3 || yangCount! < 3) && harmonyToggle) {
+    } else if ((yinCount! < 3 || yangCount! < 3) && harmonyToggle) {
       payload[0] = false;
     }
 
@@ -36,7 +34,7 @@ function TaoTokens(props: IActionProps) {
       } else if (yinCount! < yangCount! && (yinToggle || !yangToggle)) {
         payload[1] = false;
         payload[2] = true;
-      } else if (yinCount === yangCount && (yinToggle || yangToggle)){
+      } else if (yinCount === yangCount && (yinToggle || yangToggle)) {
         payload[1] = false;
         payload[2] = false;
       }
@@ -148,7 +146,7 @@ function TaoTokens(props: IActionProps) {
         </Tooltip>
       </div>
     </div>
-  )
+  );
 }
 
 export default TaoTokens;

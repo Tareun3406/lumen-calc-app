@@ -24,7 +24,8 @@ const characters: Character[] = [
         count: 0,
         maxCount: 5,
         toggleCount: 5,
-        description: "하울링 카운터가 5 소모하고 위압 발동 가능. 위압시 자신은 공격기술만 레디 가능하며 상대는 수비기술만 레디할 수 있다."
+        description:
+          "하울링 카운터가 5 소모하고 위압 발동 가능. 위압시 자신은 공격기술만 레디 가능하며 상대는 수비기술만 레디할 수 있다."
       }
     ]
   },
@@ -66,7 +67,8 @@ const characters: Character[] = [
         img: "/token/kiss.png",
         type: "TOGGLE",
         toggle: false,
-        description: "[예고장]이 루멘존을 벗어날 경우 [예고] 상태가 해제된다. [예고장] 브레이크시 -2fp 및 사이드덱 1장 브레이크"
+        description:
+          "[예고장]이 루멘존을 벗어날 경우 [예고] 상태가 해제된다. [예고장] 브레이크시 -2fp 및 사이드덱 1장 브레이크"
       }
     ]
   },
@@ -79,7 +81,8 @@ const characters: Character[] = [
         img: "/token/nia.png",
         type: "TOGGLE",
         toggle: false,
-        description: "[오버리밋] 모든 니아 공격 데미지 +100, 리커버리 페이즈시 루멘존 니아 기술 1장 브레이크 또는 패,리스트에서 2장 루멘존으로 이동"
+        description:
+          "[오버리밋] 모든 니아 공격 데미지 +100, 리커버리 페이즈시 루멘존 니아 기술 1장 브레이크 또는 패,리스트에서 2장 루멘존으로 이동"
       }
     ]
   },
@@ -92,7 +95,8 @@ const characters: Character[] = [
         img: "/token/rev.png",
         type: "TOGGLE",
         toggle: false,
-        description: "상쇄시 자신이 데미지를 주었다면 추가로 100 데미지 주고 [암야] 상태가 된다. [암야] 상대 특수판정 제거"
+        description:
+          "상쇄시 자신이 데미지를 주었다면 추가로 100 데미지 주고 [암야] 상태가 된다. [암야] 상대 특수판정 제거"
       },
       {
         name: "단검",
@@ -113,7 +117,8 @@ const characters: Character[] = [
         img: "/token/harmony.png",
         type: "TOGGLE",
         toggle: false,
-        description: "음, 양 카운터가 모두 최대일때 [조화] 상태가 되며 어느 한쪽이 3 미만이 될경우 [조화] 상태가 해제된다."
+        description:
+          "음, 양 카운터가 모두 최대일때 [조화] 상태가 되며 어느 한쪽이 3 미만이 될경우 [조화] 상태가 해제된다."
       },
       {
         name: "음",
@@ -142,7 +147,7 @@ const characters: Character[] = [
         img: "/token/lita.png",
         type: "TOGGLE",
         toggle: false,
-        description: "자신에게 [성녀] 부여, 루멘 페이즈 시 하나의 레기온을 축복한다.",
+        description: "자신에게 [성녀] 부여, 루멘 페이즈 시 하나의 레기온을 축복한다."
       },
       {
         name: "축복-가디언",
@@ -170,7 +175,8 @@ const characters: Character[] = [
         img: "/token/lita-effect.png",
         type: "TOGGLE",
         toggle: false,
-        description: "체력 1000 이하 발동 가능. 모든 레기온의 축복 효과 적용, 모든 받는 데미지 -100, [성녀] 효과 기술 데미지 +100"
+        description:
+          "체력 1000 이하 발동 가능. 모든 레기온의 축복 효과 적용, 모든 받는 데미지 -100, [성녀] 효과 기술 데미지 +100"
       }
     ]
   },
@@ -183,21 +189,21 @@ const characters: Character[] = [
         img: "",
         type: "TOGGLE",
         toggle: false,
-        description: "루멘 페이즈 시 상대보다 체력이 적다면 [연습] 1장을 루멘 존에 배치할 수 있다. (최대 1장)",
+        description: "루멘 페이즈 시 상대보다 체력이 적다면 [연습] 1장을 루멘 존에 배치할 수 있다. (최대 1장)"
       },
       {
         name: "신속",
         img: "",
         type: "TOGGLE",
         toggle: false,
-        description: "자신에게 [성녀] 부여, 루멘 페이즈 시 하나의 레기온을 축복한다.",
+        description: "자신에게 [성녀] 부여, 루멘 페이즈 시 하나의 레기온을 축복한다."
       },
       {
         name: "정확",
         img: "",
         type: "TOGGLE",
         toggle: false,
-        description: "자신에게 [성녀] 부여, 루멘 페이즈 시 하나의 레기온을 축복한다.",
+        description: "자신에게 [성녀] 부여, 루멘 페이즈 시 하나의 레기온을 축복한다."
       }
     ]
   }
@@ -215,7 +221,7 @@ export interface Token {
 }
 
 export interface Character {
-  name: "루트" | "울프" | "비올라" | "델피" | "키스" | "니아" | "레브" | "타오" | "리타" | "세츠메이" |"선택없음";
+  name: "루트" | "울프" | "비올라" | "델피" | "키스" | "니아" | "레브" | "타오" | "리타" | "세츠메이" | "선택없음";
   portrait: string;
   tokens: Token[];
 }

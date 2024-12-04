@@ -25,7 +25,7 @@ function OneToggleToken(props: IActionProps) {
         </div>
       </Tooltip>
     </div>
-  )
+  );
 }
 
 export default OneToggleToken;

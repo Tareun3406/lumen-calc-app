@@ -16,21 +16,23 @@ function LevTokens(props: IActionProps) {
     const damage = getDaggerDamage();
     if (player.isFirst) dispatch(damageToSecond(damage));
     else dispatch(damageToFirst(damage));
-    setTokenCount(1, 0)
-  }
+    setTokenCount(1, 0);
+  };
 
   const getDaggerDamage = () => {
     if (!player.character.tokens[1].count) return 0;
     return Math.floor(player.character.tokens[1].count / 3) * 200;
-  }
+  };
 
   return (
-    <div style={{ display: "flex", justifyContent: "space-between" }}
-         className={!player.isFirst ? "" : "reverseFlexRow"}>
-      <div style={{
-        display: "grid",
-        placeContent: "center"
-      }}>
+    <div
+      style={{ display: "flex", justifyContent: "space-between" }}
+      className={!player.isFirst ? "" : "reverseFlexRow"}>
+      <div
+        style={{
+          display: "grid",
+          placeContent: "center"
+        }}>
         <Tooltip title={character.tokens[1].description} placement={"top"}>
           <div style={{ position: "relative", display: "flex" }} onClick={handleDaggerClick}>
             <img src={character.tokens[1].img} height={80} alt={character.tokens[1].img} />
@@ -42,7 +44,7 @@ function LevTokens(props: IActionProps) {
                 background: "black",
                 width: "100%",
                 height: "100%",
-                opacity: (player.character.tokens[1].count && player.character.tokens[1].count >= 3) ? "0" : "0.6"
+                opacity: player.character.tokens[1].count && player.character.tokens[1].count >= 3 ? "0" : "0.6"
               }}></div>
           </div>
         </Tooltip>
@@ -74,7 +76,7 @@ function LevTokens(props: IActionProps) {
         </div>
       </Tooltip>
     </div>
-  )
+  );
 }
 
 export default LevTokens;

@@ -8,7 +8,7 @@ export const store = configureStore({
     board: boardSlice,
     remote: remoteSlice,
     timer: timerSlice
-  },
+  }
 });
 
 export type AppDispatch = typeof store.dispatch;

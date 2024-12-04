@@ -21,7 +21,6 @@ function RemoteDefault(props: RemoteDefaultProps) {
         </Grid2>
       </Grid2>
     </div>
-
-  )
+  );
 }
-export default RemoteDefault
+export default RemoteDefault;

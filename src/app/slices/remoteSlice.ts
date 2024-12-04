@@ -20,14 +20,14 @@ export interface RemoteState {
 }
 
 export interface Notification {
-  show: boolean,
-  status: "success" | "info" | "warning" | "error",
-  message: string,
+  show: boolean;
+  status: "success" | "info" | "warning" | "error";
+  message: string;
 }
 
 export interface INotificationMessage {
-  status: "success" | "info" | "warning" | "error",
-  message: string,
+  status: "success" | "info" | "warning" | "error";
+  message: string;
 }
 
 export interface MemberListMessage {
@@ -68,87 +68,82 @@ const initialState: RemoteState = {
     show: false
   },
   confirmReconnectModal: false,
-  showRemoteDialog: false,
+  showRemoteDialog: false
 };
 
 let stompClient: Client | null = null;
 
-export const activateRemote = createAsyncThunk(
-  "remote/activateRemote",
-  async (_, { dispatch }) => {
-    stompClient = new Client({
-      brokerURL: `${process.env.REACT_APP_WS_HOSTNAME}/remote-ws`,
-      reconnectDelay: 0,
-      heartbeatIncoming: 5000,
-      heartbeatOutgoing: 5000
-    });
+export const activateRemote = createAsyncThunk("remote/activateRemote", async (_, { dispatch }) => {
+  stompClient = new Client({
+    brokerURL: `${process.env.REACT_APP_WS_HOSTNAME}/remote-ws`,
+    reconnectDelay: 0,
+    heartbeatIncoming: 5000,
+    heartbeatOutgoing: 5000
+  });
 
-    return new Promise<void>((resolve, reject) => {
-      stompClient!.onConnect = () => {
-        dispatch(setSocketStatus("IDLE"));
-        resolve();
+  return new Promise<void>((resolve, reject) => {
+    stompClient!.onConnect = () => {
+      dispatch(setSocketStatus("IDLE"));
+      resolve();
+    };
+    stompClient!.onStompError = frame => {
+      console.error("WebSocket STOMP 오류:", frame);
+      dispatch(setSocketStatus("DISCONNECTED"));
+      dispatch(showNotificationMessage({ message: "서버와의 통신중 오류가 발생했습니다.", status: "error" }));
+      dispatch(setShowRemoteDialog(true));
+      reject(`Stomp Error: ${frame.body}`);
+    };
+    stompClient!.onWebSocketError = error => {
+      console.error("WebSocket 오류:", error);
+      dispatch(setSocketStatus("DISCONNECTED"));
+      dispatch(showNotificationMessage({ message: "서버와의 연결에 실패하였습니다.", status: "error" }));
+      dispatch(setShowRemoteDialog(true));
+      reject(`Stomp Error: ${error.message}`);
+    };
+    stompClient!.onWebSocketClose = (event: CloseEvent) => {
+      if (event.wasClean) {
+        stompClient = null;
+        dispatch(setSocketStatus("NONE"));
+        return;
       }
-      stompClient!.onStompError = (frame) => {
-        console.error("WebSocket STOMP 오류:", frame);
-        dispatch(setSocketStatus("DISCONNECTED"))
-        dispatch(showNotificationMessage({message:"서버와의 통신중 오류가 발생했습니다.", status: "error"}))
-        dispatch(setShowRemoteDialog(true))
-        reject(`Stomp Error: ${frame.body}`);
-      }
-      stompClient!.onWebSocketError = (error) => {
-        console.error("WebSocket 오류:", error);
-        dispatch(setSocketStatus("DISCONNECTED"))
-        dispatch(showNotificationMessage({message: "서버와의 연결에 실패하였습니다.", status: "error"}))
-        dispatch(setShowRemoteDialog(true))
-        reject(`Stomp Error: ${error.message}`);
-      }
-      stompClient!.onWebSocketClose = (event: CloseEvent) => {
-        if (event.wasClean) {
-          stompClient = null;
-          dispatch(setSocketStatus("NONE"));
-          return;
-        }
-        dispatch(setSocketStatus("DISCONNECTED"));
-        dispatch(showNotificationMessage({message: "서버와의 통신이 끊어졌습니다.", status: "error"}))
-        dispatch(setShowRemoteDialog(true))
-      }
-      stompClient!.activate();
-    })
-  }
-);
+      dispatch(setSocketStatus("DISCONNECTED"));
+      dispatch(showNotificationMessage({ message: "서버와의 통신이 끊어졌습니다.", status: "error" }));
+      dispatch(setShowRemoteDialog(true));
+    };
+    stompClient!.activate();
+  });
+});
 
-export const deactivateRemote = createAsyncThunk(
-  "remote/deleteRemote",
-  async (_, { dispatch }) => {
-    try {
-      if (stompClient) {
-        await stompClient.deactivate();
-      }
-    } catch (error) {
-      console.error("Error disconnecting:", error);
-      dispatch(setSocketStatus("ERROR"));
-      throw error;  // 에러를 던져서 호출한 곳에서 확인할 수 있도록 처리
+export const deactivateRemote = createAsyncThunk("remote/deleteRemote", async (_, { dispatch }) => {
+  try {
+    if (stompClient) {
+      await stompClient.deactivate();
     }
+  } catch (error) {
+    console.error("Error disconnecting:", error);
+    dispatch(setSocketStatus("ERROR"));
+    throw error; // 에러를 던져서 호출한 곳에서 확인할 수 있도록 처리
   }
-);
-
-
+});
 
 export const remoteSlice = createSlice({
   name: "remote",
   initialState,
   reducers: {
-    initializeRemote: (state) => {
-      state.username= "";
-      state.hasControl= true;
-      state.playerInviteCode= "";
-      state.observerInviteCode= "";
-      state.playerList= [];
-      state.observerList= [];
-      state.roomId= "";
-      state.joiningCode= "";
+    initializeRemote: state => {
+      state.username = "";
+      state.hasControl = true;
+      state.playerInviteCode = "";
+      state.observerInviteCode = "";
+      state.playerList = [];
+      state.observerList = [];
+      state.roomId = "";
+      state.joiningCode = "";
     },
-    setSocketStatus: (state, action: PayloadAction<"DISCONNECTED" | "CONNECTED" | "PENDING" | "IDLE" | "ERROR" | "NONE">) => {
+    setSocketStatus: (
+      state,
+      action: PayloadAction<"DISCONNECTED" | "CONNECTED" | "PENDING" | "IDLE" | "ERROR" | "NONE">
+    ) => {
       state.socketStatus = action.payload;
     },
     setHostRoom: (state, action: PayloadAction<RemoteCreatedInfo>) => {
@@ -174,22 +169,25 @@ export const remoteSlice = createSlice({
     setJoiningCode: (state, action: PayloadAction<string>) => {
       state.joiningCode = action.payload;
     },
-    showNotificationMessage: (state, action: PayloadAction<{message: string, status: "success" | "info" | "warning" | "error"}>) => {
+    showNotificationMessage: (
+      state,
+      action: PayloadAction<{ message: string; status: "success" | "info" | "warning" | "error" }>
+    ) => {
       state.notification.message = action.payload.message;
       state.notification.status = action.payload.status;
       state.notification.show = true;
     },
-    closeNotification: (state) => {
+    closeNotification: state => {
       state.notification.show = false;
     },
     setShowRemoteDialog: (state, action: PayloadAction<boolean>) => {
       state.showRemoteDialog = action.payload;
     }
   },
-  extraReducers: (builder) => {
+  extraReducers: builder => {
     builder.addCase(activateRemote.pending, state => {
       state.socketStatus = "PENDING";
-    })
+    });
   }
 });
 

@@ -1,8 +1,4 @@
-import {
-  Button,
-  Dialog, DialogActions,
-  DialogTitle
-} from "@mui/material";
+import { Button, Dialog, DialogActions, DialogTitle } from "@mui/material";
 import { useEffect, useState } from "react";
 import RemoteConnected from "./remote/RemoteConnected";
 import RemoteDefault from "./remote/RemoteDefault";
@@ -18,7 +14,9 @@ export interface RemoteConnectDialogProps {
 }
 
 function RemoteConnectDialog(props: RemoteConnectDialogProps) {
-  const [selectType, setSelectType] = useState<"NONE" | "HOST" | "JOIN" | "PENDING" | "CONNECTED" | "DISCONNECTED">("NONE");
+  const [selectType, setSelectType] = useState<"NONE" | "HOST" | "JOIN" | "PENDING" | "CONNECTED" | "DISCONNECTED">(
+    "NONE"
+  );
   const { socketStatus } = useAppSelector(selectRemote);
 
   const { disconnectRemote, reconnectRemote } = useRemote();
@@ -31,48 +29,51 @@ function RemoteConnectDialog(props: RemoteConnectDialogProps) {
   const handleCancel = async () => {
     await disconnectRemote();
     setSelectType("NONE");
-  }
+  };
   const handleReconnect = async () => {
     await reconnectRemote();
-  }
+  };
   const handleClose = () => {
     if (selectType === "DISCONNECTED") {
-      console.log("닫기 캔슬")
+      console.log("닫기 캔슬");
       return;
     }
     props.handleClose();
-  }
-
+  };
 
   const reconnectConfirmMessage = (
-    <div style={{textAlign:"left", marginLeft: 20, marginRight: 20}}>
-      서버와의 연결이 끊어졌습니다. <br/>
+    <div style={{ textAlign: "left", marginLeft: 20, marginRight: 20 }}>
+      서버와의 연결이 끊어졌습니다. <br />
       재연결을 시도하시겠습니까?
     </div>
-  )
+  );
   const reconnectConfirmButton = (
     <DialogActions>
       <Button onClick={handleCancel}>취소</Button>
       <Button onClick={handleReconnect}>재연결</Button>
     </DialogActions>
-  )
+  );
 
   return (
     <Dialog open={props.open} onClose={handleClose} disableEnforceFocus>
       <DialogTitle>
-        <span>리모트 연결</span> {selectType === "DISCONNECTED" && (<span> 오류</span>)}
-        {
-          socketStatus === "CONNECTED" &&
-          (<Button size={"small"} variant={"outlined"} sx={{position: "absolute", right: 20}} onClick={() => disconnectRemote()}>
+        <span>리모트 연결</span> {selectType === "DISCONNECTED" && <span> 오류</span>}
+        {socketStatus === "CONNECTED" && (
+          <Button
+            size={"small"}
+            variant={"outlined"}
+            sx={{ position: "absolute", right: 20 }}
+            onClick={() => disconnectRemote()}>
             연결 끊기
-          </Button>)
-        }
+          </Button>
+        )}
       </DialogTitle>
-      {selectType === "NONE" && <RemoteDefault onClickHost={() => setSelectType("HOST")}
-                                               onClickJoin={() => setSelectType("JOIN")} />}
+      {selectType === "NONE" && (
+        <RemoteDefault onClickHost={() => setSelectType("HOST")} onClickJoin={() => setSelectType("JOIN")} />
+      )}
       {selectType === "HOST" && <RemoteHost onClickBack={() => setSelectType("NONE")} />}
       {selectType === "JOIN" && <RemoteJoin onClickBack={() => setSelectType("NONE")} />}
-      {selectType === "CONNECTED" && <RemoteConnected/>}
+      {selectType === "CONNECTED" && <RemoteConnected />}
 
       {selectType === "DISCONNECTED" && reconnectConfirmMessage}
       {selectType === "DISCONNECTED" && reconnectConfirmButton}

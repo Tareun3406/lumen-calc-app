@@ -4,15 +4,21 @@ import {
   addTokenToFirst,
   addTokenToSecond,
   changeTokenToggleToFirst,
-  changeTokenToggleToSecond, damageToFirst, damageToSecond,
+  changeTokenToggleToSecond,
+  damageToFirst,
+  damageToSecond,
   decreaseFpToFirst,
-  decreaseFpToSecond, healToFirst, healToSecond,
+  decreaseFpToSecond,
+  healToFirst,
+  healToSecond,
   increaseFpToFirst,
   increaseFpToSecond,
   initialize,
   PlayerState,
   removeTokenToFirst,
-  removeTokenToSecond, resetFpToFirst, resetFpToSecond,
+  removeTokenToSecond,
+  resetFpToFirst,
+  resetFpToSecond,
   setTokenCountToFirst,
   setTokenCountToSecond,
   setTokenToggleToFirst,
@@ -25,7 +31,7 @@ import { selectTimer, toggleReadyTimer } from "../slices/timerSlice";
 import { useRemote } from "./remoteHooks";
 
 export interface IActionProps {
-  player: PlayerState
+  player: PlayerState;
 }
 
 export function usePlayerAction(props: IActionProps) {
@@ -34,19 +40,18 @@ export function usePlayerAction(props: IActionProps) {
   const { hasControl, socketStatus } = useAppSelector(selectRemote);
 
   // HP 관련
-  const damageToHp = (value: number) =>  {
+  const damageToHp = (value: number) => {
     if (!hasControl && socketStatus === "CONNECTED") return;
-    if (isFirst) dispatch(damageToFirst(value))
-    else dispatch(damageToSecond(value))
+    if (isFirst) dispatch(damageToFirst(value));
+    else dispatch(damageToSecond(value));
     dispatch(triggerPublish());
-  }
+  };
   const healToHp = (value: number) => {
     if (!hasControl && socketStatus === "CONNECTED") return;
-    if (isFirst) dispatch(healToFirst(value))
+    if (isFirst) dispatch(healToFirst(value));
     else dispatch(healToSecond(value));
     dispatch(triggerPublish());
-  }
-
+  };
 
   // FP 관련
   const increaseFp = (value: number) => {
@@ -54,20 +59,19 @@ export function usePlayerAction(props: IActionProps) {
     if (isFirst) dispatch(increaseFpToFirst(value));
     else dispatch(increaseFpToSecond(value));
     dispatch(triggerPublish());
-  }
+  };
   const decreaseFp = (value: number) => {
     if (!hasControl && socketStatus === "CONNECTED") return;
     if (isFirst) dispatch(decreaseFpToFirst(value));
     else dispatch(decreaseFpToSecond(value));
     dispatch(triggerPublish());
-  }
+  };
   const resetFp = () => {
     if (!hasControl && socketStatus === "CONNECTED") return;
     if (isFirst) dispatch(resetFpToFirst());
     else dispatch(resetFpToSecond());
     dispatch(triggerPublish());
-  }
-
+  };
 
   // token 관련
   const changeToggle = (index: number) => {
@@ -75,46 +79,57 @@ export function usePlayerAction(props: IActionProps) {
     if (isFirst) dispatch(changeTokenToggleToFirst(index));
     else dispatch(changeTokenToggleToSecond(index));
     dispatch(triggerPublish());
-  }
+  };
   const addToken = (index: number) => {
     if (!hasControl && socketStatus === "CONNECTED") return;
     if (isFirst) dispatch(addTokenToFirst(index));
     else dispatch(addTokenToSecond(index));
     dispatch(triggerPublish());
-  }
+  };
   const removeToken = (index: number) => {
     if (!hasControl && socketStatus === "CONNECTED") return;
     if (isFirst) dispatch(removeTokenToFirst(index));
     else dispatch(removeTokenToSecond(index));
     dispatch(triggerPublish());
-  }
+  };
   const setTokenCount = (index: number, value: number) => {
     if (!hasControl && socketStatus === "CONNECTED") return;
-    if (isFirst) dispatch(setTokenCountToFirst({ index, value }))
+    if (isFirst) dispatch(setTokenCountToFirst({ index, value }));
     else dispatch(setTokenCountToSecond({ index, value }));
     dispatch(triggerPublish());
-  }
+  };
   const setTokenToggle = (payload: { index: number; value: boolean }) => {
     if (!hasControl && socketStatus === "CONNECTED") return;
-    if (isFirst) dispatch(setTokenToggleToFirst(payload))
+    if (isFirst) dispatch(setTokenToggleToFirst(payload));
     else dispatch(setTokenToggleToSecond(payload));
     dispatch(triggerPublish());
-  }
+  };
   const setTokenToggleAsList = (payload: { [key: number]: boolean }) => {
     if (!hasControl && socketStatus === "CONNECTED") return;
     if (isFirst) dispatch(setTokenToggleToFirstAsList(payload));
     else dispatch(setTokenToggleToSecondAsList(payload));
     dispatch(triggerPublish());
-  }
+  };
 
-
-  return { damageToHp, healToHp,increaseFp, decreaseFp, resetFp,changeToggle, addToken, removeToken, setTokenCount, setTokenToggle, setTokenToggleAsList  }
+  return {
+    damageToHp,
+    healToHp,
+    increaseFp,
+    decreaseFp,
+    resetFp,
+    changeToggle,
+    addToken,
+    removeToken,
+    setTokenCount,
+    setTokenToggle,
+    setTokenToggleAsList
+  };
 }
 
 export function useGlobalAction() {
   const dispatch = useAppDispatch();
   const { hasControl, socketStatus } = useAppSelector(selectRemote);
-  const { readyTimer } = useAppSelector(selectTimer)
+  const { readyTimer } = useAppSelector(selectTimer);
   const { publishTimer } = useRemote();
 
   // 초기화
@@ -122,7 +137,7 @@ export function useGlobalAction() {
     if (!hasControl && socketStatus === "CONNECTED") return;
     dispatch(initialize());
     dispatch(triggerPublish());
-  }
+  };
 
   // 타이머 관련
   const toggleReadyTimerAction = () => {
@@ -134,5 +149,5 @@ export function useGlobalAction() {
     dispatch(toggleReadyTimer(!readyTimer.toggle));
   };
 
-  return { initializeBoard, toggleReadyTimerAction }
+  return { initializeBoard, toggleReadyTimerAction };
 }

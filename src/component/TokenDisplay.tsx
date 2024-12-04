@@ -21,11 +21,11 @@ function TokenDisplay(props: TokenDisplayProps) {
       case "니아":
       case "델피":
       case "키스":
-        return <OneToggleToken player={player} />
+        return <OneToggleToken player={player} />;
 
       // 토글형 다수
       case "리타":
-        return <LitaTokens player={player} />
+        return <LitaTokens player={player} />;
 
       // 카운터 형 한가지
       case "울프":
@@ -33,15 +33,15 @@ function TokenDisplay(props: TokenDisplayProps) {
         return <OneCounterToken player={player} />;
 
       case "타오":
-        return <TaoTokens player={player} />
-      case "레브" :
-        return <LevTokens player={player} />
+        return <TaoTokens player={player} />;
+      case "레브":
+        return <LevTokens player={player} />;
       default:
-        return (<div></div>)
+        return <div></div>;
     }
-  }
+  };
 
-  return (renderToken());
+  return renderToken();
 }
 
 export default TokenDisplay;

@@ -15,13 +15,13 @@ function Board() {
   const { disconnectRemote, publishUpdate } = useRemote();
 
   const handleCloseSnackBar = (event: React.SyntheticEvent | Event, reason?: SnackbarCloseReason) => {
-    if (reason === 'clickaway') return;
+    if (reason === "clickaway") return;
     dispatch(closeNotification());
-  }
+  };
 
   const handleCloseRemoteDialog = () => {
     dispatch(setShowRemoteDialog(false));
-  }
+  };
 
   useEffect(() => {
     if (!hasControl && socketStatus === "CONNECTED") return;
@@ -30,7 +30,7 @@ function Board() {
       if (socketStatus === "CONNECTED") {
         disconnectRemote().then();
       }
-    }
+    };
     //eslint-disable-next-line
   }, []);
 
@@ -39,17 +39,16 @@ function Board() {
       publishUpdate();
     }
     //eslint-disable-next-line
-  }, [boardState.triggerPublish, boardState.preventTrigger])
+  }, [boardState.triggerPublish, boardState.preventTrigger]);
   return (
     <div style={{ width: "100%", height: "100%" }}>
       <Outlet />
       <Snackbar
-        anchorOrigin={{ vertical:"top", horizontal:"center" }}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
         open={notification.show}
         autoHideDuration={3000}
         onClose={handleCloseSnackBar}
-        onClick={() => dispatch(closeNotification())}
-      >
+        onClick={() => dispatch(closeNotification())}>
         <Alert severity={notification.status} variant={"standard"}>
           {notification.message}
         </Alert>

@@ -1,9 +1,5 @@
 import { useEffect, useMemo, useRef } from "react";
-import {
-  decreaseReadyTimerTime,
-  preventReadyTimer, selectTimer,
-  setReadyTimerTime,
-} from "../app/slices/timerSlice";
+import { decreaseReadyTimerTime, preventReadyTimer, selectTimer, setReadyTimerTime } from "../app/slices/timerSlice";
 import { Button } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "../app/hooks/storeHooks";
 import { useGlobalAction } from "../app/hooks/actionHooks";
@@ -12,7 +8,7 @@ function TimerDisplay() {
   const dispatch = useAppDispatch();
   const { readyTimer } = useAppSelector(selectTimer);
   const readyTimerIntervalId = useRef<NodeJS.Timer>();
-  const { toggleReadyTimerAction } = useGlobalAction()
+  const { toggleReadyTimerAction } = useGlobalAction();
 
   const timerColor = useMemo(() => {
     if (readyTimer.toggle) {
@@ -51,7 +47,7 @@ function TimerDisplay() {
       onClick={toggleReadyTimerAction}>
       {readyTimer.time}
     </Button>
-  )
+  );
 }
 
 export default TimerDisplay;

@@ -1,36 +1,30 @@
-import {
-  PlayerState
-} from "../app/slices/boardSlice";
+import { PlayerState } from "../app/slices/boardSlice";
 import { Button, Stack } from "@mui/material";
 import { usePlayerAction } from "../app/hooks/actionHooks";
 
 interface ButtonPanelProps {
-  player: PlayerState
+  player: PlayerState;
 }
 
-function ButtonPanelProps(props:ButtonPanelProps) {
+function ButtonPanelProps(props: ButtonPanelProps) {
   const { damageToHp, healToHp } = usePlayerAction({ player: props.player });
-  const isFirstPlayer = props.player.isFirst
+  const isFirstPlayer = props.player.isFirst;
 
   const getClassNameAsIsFirst = () => {
     return isFirstPlayer ? "" : "reverseFlexRow";
-  }
-
-
+  };
 
   const buttonStyle = {
     width: 70
   };
 
   const paddingAsPlayer = () => {
-    return isFirstPlayer
-      ? {left: 3, right: 0}
-      : {left: 0, right: 3}
-  }
+    return isFirstPlayer ? { left: 3, right: 0 } : { left: 0, right: 3 };
+  };
 
-  return(
+  return (
     <Stack padding={1} paddingLeft={paddingAsPlayer().left} paddingRight={paddingAsPlayer().right} spacing={1}>
-      <div style={{ display: "flex", justifyContent: "space-between" }} className={ getClassNameAsIsFirst() }>
+      <div style={{ display: "flex", justifyContent: "space-between" }} className={getClassNameAsIsFirst()}>
         <Button variant={"outlined"} size={"medium"} sx={buttonStyle} onClick={() => damageToHp(100)}>
           -100
         </Button>
@@ -41,7 +35,7 @@ function ButtonPanelProps(props:ButtonPanelProps) {
           -300
         </Button>
       </div>
-      <div style={{ display: "flex", justifyContent: "space-between" }} className={ getClassNameAsIsFirst() }>
+      <div style={{ display: "flex", justifyContent: "space-between" }} className={getClassNameAsIsFirst()}>
         <Button variant={"outlined"} size={"medium"} sx={buttonStyle} onClick={() => damageToHp(400)}>
           -400
         </Button>
@@ -52,30 +46,19 @@ function ButtonPanelProps(props:ButtonPanelProps) {
           -600
         </Button>
       </div>
-      <div style={{ display: "flex", justifyContent: "space-between" }} className={ getClassNameAsIsFirst() }>
+      <div style={{ display: "flex", justifyContent: "space-between" }} className={getClassNameAsIsFirst()}>
         <Button variant={"outlined"} size={"medium"} sx={buttonStyle} onClick={() => damageToHp(700)}>
           -700
         </Button>
-        <Button
-          variant={"contained"}
-          size={"medium"}
-          color={"error"}
-          sx={buttonStyle}
-          onClick={() => damageToHp(1000)}>
+        <Button variant={"contained"} size={"medium"} color={"error"} sx={buttonStyle} onClick={() => damageToHp(1000)}>
           -1000
         </Button>
-        <Button
-          variant={"contained"}
-          color={"success"}
-          size={"medium"}
-          sx={buttonStyle}
-          onClick={() => healToHp(100)}>
+        <Button variant={"contained"} color={"success"} size={"medium"} sx={buttonStyle} onClick={() => healToHp(100)}>
           +100
         </Button>
       </div>
     </Stack>
-  )
-
+  );
 }
 
 export default ButtonPanelProps;

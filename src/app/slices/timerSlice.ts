@@ -2,22 +2,22 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../store";
 
 export interface ITimer {
-  time: number,
-  toggle: boolean,
-  preventTrigger: boolean,
+  time: number;
+  toggle: boolean;
+  preventTrigger: boolean;
 }
 
 export interface ITimerState {
-  readyTimer: ITimer,
+  readyTimer: ITimer;
 }
 
 const initialState: ITimerState = {
   readyTimer: {
     time: 10,
     toggle: false,
-    preventTrigger: true,
+    preventTrigger: true
   }
-}
+};
 
 const timerSlice = createSlice({
   name: "timer",
@@ -30,14 +30,14 @@ const timerSlice = createSlice({
     setReadyTimerTime: (state, action: PayloadAction<number>) => {
       state.readyTimer.time = action.payload;
     },
-    decreaseReadyTimerTime: (state) => {
+    decreaseReadyTimerTime: state => {
       state.readyTimer.time--;
     },
-    preventReadyTimer: (state) => {
+    preventReadyTimer: state => {
       state.readyTimer.preventTrigger = true;
     }
   }
-})
+});
 
 export const { toggleReadyTimer, setReadyTimerTime, decreaseReadyTimerTime, preventReadyTimer } = timerSlice.actions;
 export const selectTimer = (state: RootState) => state.timer;

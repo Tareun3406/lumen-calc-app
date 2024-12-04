@@ -17,7 +17,7 @@ import { StaleWhileRevalidate } from "workbox-strategies";
 declare const self: ServiceWorkerGlobalScope;
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const SERVICE_WORKER_VERSION = '1.0.4'
+const SERVICE_WORKER_VERSION = "1.0.4";
 console.log(SERVICE_WORKER_VERSION);
 
 clientsClaim();
@@ -82,11 +82,11 @@ self.addEventListener("message", event => {
 });
 
 // Any other custom service worker logic can go here.
-self.addEventListener('install', function(event) {
+self.addEventListener("install", function (event) {
   event.waitUntil(
-    caches.keys().then(function(cacheNames) {
+    caches.keys().then(function (cacheNames) {
       return Promise.all(
-        cacheNames.map(function(cacheName) {
+        cacheNames.map(function (cacheName) {
           return caches.delete(cacheName);
         })
       );

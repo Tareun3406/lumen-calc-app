@@ -6,7 +6,7 @@ import { ControlPoint, RemoveCircleOutline } from "@mui/icons-material";
 function OneCounterToken(props: IActionProps) {
   const { player } = props;
   const { character } = player;
-  const { addToken, removeToken, setTokenCount} = usePlayerAction(props);
+  const { addToken, removeToken, setTokenCount } = usePlayerAction(props);
 
   const getCounterToggle = useMemo(() => {
     if (character.tokens[0].count && character.tokens[0].toggleCount)
@@ -52,7 +52,7 @@ function OneCounterToken(props: IActionProps) {
       </Tooltip>
       {player.isFirst ? counterToken : ""}
     </div>
-  )
+  );
 }
 
 export default OneCounterToken;
