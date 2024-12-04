@@ -186,24 +186,24 @@ const characters: Character[] = [
     tokens: [
       {
         name: "훈련 부대",
-        img: "",
+        img: "/token/setz.png",
         type: "TOGGLE",
         toggle: false,
         description: "루멘 페이즈 시 상대보다 체력이 적다면 [연습] 1장을 루멘 존에 배치할 수 있다. (최대 1장)"
       },
       {
         name: "신속",
-        img: "",
+        img: "/token/fast.png",
         type: "TOGGLE",
         toggle: false,
-        description: "자신에게 [성녀] 부여, 루멘 페이즈 시 하나의 레기온을 축복한다."
+        description: "자신의 모든 기술 속도가 1 빨라진다. 수비 기술 사용 시 사이드 덱에 돌아간다."
       },
       {
         name: "정확",
-        img: "",
+        img: "/token/accurate.png",
         type: "TOGGLE",
         toggle: false,
-        description: "자신에게 [성녀] 부여, 루멘 페이즈 시 하나의 레기온을 축복한다."
+        description: "자신의 모든 기술 데미지 + 100, 수비 기술 사용 시 사이드 덱에 돌아간다."
       }
     ]
   }

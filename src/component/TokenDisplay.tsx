@@ -6,6 +6,7 @@ import OneToggleToken from "./tokens/OneToggleToken";
 import LevTokens from "./tokens/LevTokens";
 import LitaTokens from "./tokens/LitaTokens";
 import OneCounterToken from "./tokens/OneCounterToken";
+import SetzTokens from "./tokens/SetzTokens";
 
 interface TokenDisplayProps {
   player: PlayerState;
@@ -24,6 +25,8 @@ function TokenDisplay(props: TokenDisplayProps) {
         return <OneToggleToken player={player} />;
 
       // 토글형 다수
+      case "세츠메이":
+        return <SetzTokens player={player} />;
       case "리타":
         return <LitaTokens player={player} />;
 
