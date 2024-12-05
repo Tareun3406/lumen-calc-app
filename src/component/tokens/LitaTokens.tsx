@@ -4,12 +4,14 @@ import React, { useMemo } from "react";
 import { grey, yellow } from "@mui/material/colors";
 import { useAppSelector } from "../../app/hooks/storeHooks";
 import { selectSettings } from "../../app/slices/settingsSlice";
+import { useTokenImageStyle } from "../../app/hooks/styleHooks";
 
 function LitaTokens(props: IActionProps) {
   const { player } = props;
   const { character } = player;
   const { changeToggle, setTokenToggleAsList } = usePlayerAction(props);
   const { flipPanel } = useAppSelector(selectSettings);
+  const { largeTokenStyle } = useTokenImageStyle();
 
   const litaToggleChange = (targetIndex: number) => {
     if (character.tokens[4].toggle) return;
@@ -88,7 +90,7 @@ function LitaTokens(props: IActionProps) {
       className={player.isFirst || !flipPanel ? "" : "reverseFlexRow"}>
       <Tooltip title={character.tokens[0].description} placement={"top"}>
         <div style={{ position: "relative", display: "flex" }} onClick={() => changeToggle(0)}>
-          <img src={getTokenImage} height={116} alt={character.tokens[0].img} />
+          <img src={getTokenImage} style={largeTokenStyle} alt={character.tokens[0].img} />
           <div
             style={{
               position: "absolute",

@@ -4,6 +4,7 @@ import { Card, ToggleButton, ToggleButtonGroup, Typography } from "@mui/material
 import React, { useMemo } from "react";
 import { useAppSelector } from "../../app/hooks/storeHooks";
 import { selectSettings } from "../../app/slices/settingsSlice";
+import { useTokenImageStyle } from "../../app/hooks/styleHooks";
 
 function SetzTokens(props: IActionProps) {
   const { player } = props;
@@ -11,7 +12,8 @@ function SetzTokens(props: IActionProps) {
   const { tokens } = character;
   const { setTokenToggleAsList, changeToggle } = usePlayerAction(props);
   const { flipPanel } = useAppSelector(selectSettings);
-  
+  const { largeTokenStyle } = useTokenImageStyle();
+
   const toggledToken = useMemo(() => {
     const toggledToken = tokens.find((token, index) => index !== 0 && token.toggle)
     if (toggledToken) {
@@ -33,7 +35,7 @@ function SetzTokens(props: IActionProps) {
   return (
     <div style={{ display: "flex", justifyContent: "space-between", gap: 10 }}
          className={player.isFirst || !flipPanel ? "" : "reverseFlexRow"}>
-      <img src={toggledToken.img} height={116} alt={toggledToken.img} onClick={handleClickTokenImg}/>
+      <img src={toggledToken.img} style={largeTokenStyle} alt={toggledToken.img} onClick={handleClickTokenImg}/>
       <ToggleButtonGroup
         orientation={"vertical"}
         sx={{ height: 116 }}
@@ -47,7 +49,7 @@ function SetzTokens(props: IActionProps) {
           정확
         </ToggleButton>
       </ToggleButtonGroup>
-      <Card sx={{ width: 116, height: 116 }}>
+      <Card sx={largeTokenStyle}>
         <Typography variant="body2">{toggledToken.description}</Typography>
       </Card>
     </div>

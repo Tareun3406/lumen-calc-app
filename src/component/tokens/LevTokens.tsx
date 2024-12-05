@@ -5,11 +5,13 @@ import React from "react";
 import { useAppDispatch, useAppSelector } from "../../app/hooks/storeHooks";
 import { damageToFirst, damageToSecond } from "../../app/slices/boardSlice";
 import { selectSettings } from "../../app/slices/settingsSlice";
+import { useTokenImageStyle } from "../../app/hooks/styleHooks";
 
 function LevTokens(props: IActionProps) {
   const { player } = props;
   const { character } = player;
   const { addToken, setTokenCount, removeToken, changeToggle } = usePlayerAction(props);
+  const { largeTokenStyle, mediumTokenStyle } = useTokenImageStyle();
   const dispatch = useAppDispatch();
   const { flipPanel } = useAppSelector(selectSettings);
 
@@ -32,7 +34,7 @@ function LevTokens(props: IActionProps) {
       className={player.isFirst || !flipPanel ? "" : "reverseFlexRow"}>
       <Tooltip title={character.tokens[0].description} placement={"top"}>
         <div style={{ position: "relative", display: "flex" }} onClick={() => changeToggle(0)}>
-          <img src={character.tokens[0].img} height={116} alt={character.tokens[0].img} />
+          <img src={character.tokens[0].img} style={largeTokenStyle} alt={character.tokens[0].img} />
           <div
             style={{
               position: "absolute",
@@ -63,7 +65,7 @@ function LevTokens(props: IActionProps) {
         }}>
         <Tooltip title={character.tokens[1].description} placement={"top"}>
           <div style={{ position: "relative", display: "flex" }} onClick={handleDaggerClick}>
-            <img src={character.tokens[1].img} height={80} alt={character.tokens[1].img} />
+            <img src={character.tokens[1].img} style={mediumTokenStyle} alt={character.tokens[1].img} />
             <div
               style={{
                 position: "absolute",

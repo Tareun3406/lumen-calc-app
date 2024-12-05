@@ -4,12 +4,14 @@ import React, { useEffect } from "react";
 import { IActionProps, usePlayerAction } from "../../app/hooks/actionHooks";
 import { useAppSelector } from "../../app/hooks/storeHooks";
 import { selectSettings } from "../../app/slices/settingsSlice";
+import { useTokenImageStyle } from "../../app/hooks/styleHooks";
 
 function TaoTokens(props: IActionProps) {
   const player = props.player;
   const { character } = props.player;
   const { flipPanel } = useAppSelector(selectSettings)
   const { addToken, removeToken, setTokenCount, setTokenToggle, setTokenToggleAsList } = usePlayerAction(props);
+  const { largeTokenStyle, smallTokenStyle } = useTokenImageStyle();
 
   // 타오 토큰 활성화 조건
   useEffect(() => {
@@ -64,7 +66,7 @@ function TaoTokens(props: IActionProps) {
         }}>
         <Tooltip title={character.tokens[1].description} placement={"top"}>
           <div style={{ position: "relative", display: "flex" }}>
-            <img src={character.tokens[1].img} height={50} alt={character.tokens[1].img} />
+            <img src={character.tokens[1].img} style={smallTokenStyle} alt={character.tokens[1].img} />
             <div
               style={{
                 position: "absolute",
@@ -96,7 +98,7 @@ function TaoTokens(props: IActionProps) {
             placeContent: "center",
             position: "relative"
           }}>
-          <img src={character.tokens[0].img} height={116} alt={character.tokens[0].img} />
+          <img src={character.tokens[0].img} style={largeTokenStyle} alt={character.tokens[0].img} />
           <div
             style={{
               position: "absolute",
@@ -132,8 +134,8 @@ function TaoTokens(props: IActionProps) {
           placeContent: "center"
         }}>
         <Tooltip title={character.tokens[2].description} placement={"top"}>
-          <div style={{ position: "relative", height: 50 }}>
-            <img src={character.tokens[2].img} height={50} alt={character.tokens[2].img} />
+          <div style={{ position: "relative" }}>
+            <img src={character.tokens[2].img} style={smallTokenStyle} alt={character.tokens[2].img} />
             <div
               style={{
                 position: "absolute",

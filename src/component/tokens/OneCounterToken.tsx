@@ -4,12 +4,14 @@ import React, { useMemo } from "react";
 import { ControlPoint, RemoveCircleOutline } from "@mui/icons-material";
 import { useAppSelector } from "../../app/hooks/storeHooks";
 import { selectSettings } from "../../app/slices/settingsSlice";
+import { useTokenImageStyle } from "../../app/hooks/styleHooks";
 
 function OneCounterToken(props: IActionProps) {
   const { player } = props;
   const { character } = player;
   const { addToken, removeToken, setTokenCount } = usePlayerAction(props);
-  const { flipPanel } = useAppSelector(selectSettings)
+  const { flipPanel } = useAppSelector(selectSettings);
+  const { largeTokenStyle } = useTokenImageStyle();
 
   const getCounterToggle = useMemo(() => {
     if (character.tokens[0].count && character.tokens[0].toggleCount)
@@ -40,7 +42,7 @@ function OneCounterToken(props: IActionProps) {
             placeContent: "center",
             position: "relative"
           }}>
-          <img src={character.tokens[0].img} height={116} alt={character.tokens[0].img} />
+          <img src={character.tokens[0].img} style={largeTokenStyle} alt={character.tokens[0].img} />
           <div
             style={{
               position: "absolute",

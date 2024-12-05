@@ -1,17 +1,19 @@
 import { Tooltip } from "@mui/material";
 import React from "react";
 import { IActionProps, usePlayerAction } from "../../app/hooks/actionHooks";
+import { useTokenImageStyle } from "../../app/hooks/styleHooks";
 
 function OneToggleToken(props: IActionProps) {
   const { player } = props;
   const { character } = player;
   const { changeToggle } = usePlayerAction(props);
+  const { largeTokenStyle } = useTokenImageStyle();
 
   return (
     <div>
       <Tooltip title={character.tokens[0].description} placement={"top"}>
         <div style={{ position: "relative", display: "flex" }} onClick={() => changeToggle(0)}>
-          <img src={character.tokens[0].img} height={116} alt={character.tokens[0].img} />
+          <img src={character.tokens[0].img} style={largeTokenStyle} alt={character.tokens[0].img} />
           <div
             style={{
               position: "absolute",
