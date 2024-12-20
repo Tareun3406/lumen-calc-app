@@ -1,11 +1,14 @@
 import { useEffect, useMemo, useRef } from "react";
 import { PlayerState } from "../app/slices/boardSlice";
+import { deepPurple, lightBlue, pink, purple, teal } from "@mui/material/colors";
+import { useColorScheme } from "@mui/material";
 
 interface HpBarProps {
   player: PlayerState;
 }
 
 function HpBar(props: HpBarProps) {
+  const { mode: themeMode } = useColorScheme();
   const barClass = props.player.isFirst ? "healthBarFirst" : "healthBarSecond";
   const barStyle = {
     thickness: 15,
@@ -22,12 +25,12 @@ function HpBar(props: HpBarProps) {
   }, [props.player.currentHp, props.player.damagedHp]);
 
   const hpColor = useMemo(() => {
-    if (percentHp.current > 80) return "#69f0ae";
-    else if (percentHp.current > 60) return "#81d4fa";
-    else if (percentHp.current > 40) return "#b39ddb";
-    else if (percentHp.current > 20) return "#ab47bc";
-    return "#e91e63";
-  }, [percentHp.current]);
+    if (percentHp.current > 80) return themeMode === "dark" ? teal["A700"] : teal["A400"];
+    else if (percentHp.current > 60) return themeMode === "dark" ? lightBlue["A700"] : lightBlue["A200"];
+    else if (percentHp.current > 40) return themeMode === "dark" ? deepPurple["A200"] : deepPurple["A100"];
+    else if (percentHp.current > 20) return purple[400];
+    return pink["A400"];
+  }, [percentHp.current, themeMode]);
 
   const animateElementId = props.player.isFirst ? "pauseBarAnimateFirst" : "pauseBarAnimateSecond";
 
