@@ -1,7 +1,7 @@
 import { Button, ButtonGroup, Drawer, Grid2 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../app/hooks/storeHooks";
-import { deselectCharacter, selectFirstPlayer, selectSecondPlayer, selectDamageLogs } from "../app/slices/boardSlice";
+import { selectFirstPlayer, selectSecondPlayer, selectDamageLogs } from "../app/slices/boardSlice";
 import HpBar from "../component/HpBar";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Person, Refresh, EditNote, Cable, Settings } from "@mui/icons-material";
@@ -73,7 +73,6 @@ function Play() {
           <Button
             onClick={() => {
               if (!hasControl && socketStatus === "CONNECTED") return;
-              dispatch(deselectCharacter());
               navigate("/board/characterSelect");
             }}>
             <Person />
