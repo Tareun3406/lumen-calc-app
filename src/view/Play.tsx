@@ -11,7 +11,7 @@ import DamageLogs from "../component/DamageLogs";
 import { selectRemote, setShowRemoteDialog } from "../app/slices/remoteSlice";
 import { useGlobalAction } from "../app/hooks/actionHooks";
 import FpDisplay from "../component/FpDisplay";
-import TimerDisplay from "../component/TimerDisplay";
+import GetTimerDisplay from "../component/GetTimerDisplay";
 import { setOpenSettingsDialog } from "../app/slices/dialogSlice";
 
 function Play() {
@@ -118,7 +118,7 @@ function Play() {
       <Grid2 size={4} display={"flex"} justifyContent={"space-between"}>
         <div style={{ display: "inline-block" }}></div>
         <FpDisplay player={firstPlayer} />
-        <TimerDisplay />
+        <GetTimerDisplay />
         <FpDisplay player={secondPlayer} />
         <div style={{ display: "inline-block" }}></div>
       </Grid2>

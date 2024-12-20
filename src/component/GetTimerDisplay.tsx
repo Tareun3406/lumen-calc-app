@@ -4,7 +4,7 @@ import { Button } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "../app/hooks/storeHooks";
 import { useGlobalAction } from "../app/hooks/actionHooks";
 
-function TimerDisplay() {
+function GetTimerDisplay() {
   const dispatch = useAppDispatch();
   const { readyTimer } = useAppSelector(selectTimer);
   const readyTimerIntervalId = useRef<NodeJS.Timer>();
@@ -50,4 +50,4 @@ function TimerDisplay() {
   );
 }
 
-export default TimerDisplay;
+export default GetTimerDisplay;
