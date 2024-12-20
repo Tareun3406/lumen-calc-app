@@ -87,11 +87,11 @@ function CharacterSelect() {
 
   return (
     <Grid2 container width={700}>
-      <Grid2 size={4} height={112}>
+      <Grid2 size={3.75} height={112}>
         <div>{firstPlayer.character.name}</div>
         <img src={firstPlayer.character.portrait} height={80} alt={firstPlayer.character.portrait} style={firstPlayerSelectImgStyle}/>
       </Grid2>
-      <Grid2 size={4}>
+      <Grid2 size={4.5}>
         <div>
           <div>
             <Button size="large" variant="outlined" sx={{margin: 0.5}} onClick={() => setToNonSelectCharacter("first")}>1P 초기화</Button>
@@ -102,7 +102,7 @@ function CharacterSelect() {
           </div>
         </div>
       </Grid2>
-      <Grid2 size={4}>
+      <Grid2 size={3.75}>
         <div>{secondPlayer.character.name}</div>
         <img src={secondPlayer.character.portrait} height={80} alt={secondPlayer.character.portrait} style={secondPlayerSelectImgStyle}/>
       </Grid2>
