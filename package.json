@@ -1,6 +1,6 @@
 {
   "name": "lumen-calc-app",
-  "version": "1.0.5a",
+  "version": "1.0.5b",
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.13.3",

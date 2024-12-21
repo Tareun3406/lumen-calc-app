@@ -44,14 +44,14 @@ function Play() {
   // todo HpBar 컴포넌트로 이동
   const handFirst = useMemo(() => {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const [_hp, hand] = firstPlayer.character.hp.hpHand.find(([hp]) => firstPlayer.currentHp < hp) ?? [5000, 6]
+    const [_hp, hand] = firstPlayer.character.hp.hpHand.find(([hp]) => firstPlayer.currentHp <= hp) ?? [5000, 6]
     return hand;
 
   }, [firstPlayer.currentHp, firstPlayer.character]);
 
   const handSecond = useMemo(() => {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const [_hp, hand] = secondPlayer.character.hp.hpHand.find(([hp]) => secondPlayer.currentHp < hp) ?? [5000, 6]
+    const [_hp, hand] = secondPlayer.character.hp.hpHand.find(([hp]) => secondPlayer.currentHp <= hp) ?? [5000, 6]
     return hand;
   }, [secondPlayer.currentHp, secondPlayer.character.name]);
 
