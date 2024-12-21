@@ -43,7 +43,7 @@ function SettingsDialog(props: ISettingsDialogProps) {
       <DialogContent>
         <FormGroup>
           <FormControlLabel control={<Switch defaultChecked={themeMode === "dark"} onChange={handleThemeToggle}/>} label="다크 모드" />
-          <FormControlLabel control={<Switch defaultChecked={settingsState.flipPanel} onChange={handleFlipToggle}/>} label="좌우 반전 모드" />
+          <FormControlLabel control={<Switch defaultChecked={settingsState.flipPanel} onChange={handleFlipToggle}/>} label="2P 좌우 반전" />
         </FormGroup>
       </DialogContent>
     </Dialog>
