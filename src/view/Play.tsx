@@ -43,18 +43,16 @@ function Play() {
 
   // todo HpBar 컴포넌트로 이동
   const handFirst = useMemo(() => {
-    if (firstPlayer.currentHp <= 1000 && firstPlayer.character.name === "리타") return 10;
-    if (firstPlayer.currentHp <= 2000) return 9;
-    if (firstPlayer.currentHp <= 3000) return 8;
-    if (firstPlayer.currentHp <= 4000) return 7;
-    return 6;
-  }, [firstPlayer.currentHp, firstPlayer.character.name]);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const [_hp, hand] = firstPlayer.character.hp.hpHand.find(([hp]) => firstPlayer.currentHp < hp) ?? [5000, 6]
+    return hand;
+
+  }, [firstPlayer.currentHp, firstPlayer.character]);
+
   const handSecond = useMemo(() => {
-    if (secondPlayer.currentHp <= 1000 && secondPlayer.character.name === "리타") return 10;
-    if (secondPlayer.currentHp <= 2000) return 9;
-    if (secondPlayer.currentHp <= 3000) return 8;
-    if (secondPlayer.currentHp <= 4000) return 7;
-    return 6;
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const [_hp, hand] = secondPlayer.character.hp.hpHand.find(([hp]) => secondPlayer.currentHp < hp) ?? [5000, 6]
+    return hand;
   }, [secondPlayer.currentHp, secondPlayer.character.name]);
 
   useEffect(() => {

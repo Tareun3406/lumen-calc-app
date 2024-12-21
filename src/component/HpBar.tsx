@@ -19,8 +19,8 @@ function HpBar(props: HpBarProps) {
 
   const percentHp = useMemo(() => {
     return {
-      current: (props.player.currentHp / 5000) * 100,
-      damage: (props.player.damagedHp / 5000) * 100
+      current: (props.player.currentHp / props.player.character.hp.maxHp) * 100,
+      damage: (props.player.damagedHp / props.player.character.hp.maxHp) * 100
     };
   }, [props.player.currentHp, props.player.damagedHp]);
 

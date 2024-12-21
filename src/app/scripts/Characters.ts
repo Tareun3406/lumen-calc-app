@@ -2,6 +2,15 @@ const characters: Character[] = [
   {
     name: "세츠메이",
     portrait: "/portrait/setz.png",
+    hp: {
+      maxHp: 3000,
+      hpHand: [
+        [1500, 9],
+        [2000, 8],
+        [2500, 7],
+        [3000, 6],
+      ]
+    },
     tokens: [
       {
         name: "훈련 부대",
@@ -29,6 +38,15 @@ const characters: Character[] = [
   {
     name: "루트",
     portrait: "/portrait/root.png",
+    hp: {
+      maxHp: 5000,
+      hpHand: [
+        [2000, 9],
+        [3000, 8],
+        [4000, 7],
+        [5000, 6],
+      ]
+    },
     tokens: [
       {
         name: "차지",
@@ -42,6 +60,15 @@ const characters: Character[] = [
   {
     name: "울프",
     portrait: "/portrait/wolf.png",
+    hp: {
+      maxHp: 5000,
+      hpHand: [
+        [2000, 9],
+        [3000, 8],
+        [4000, 7],
+        [5000, 6],
+      ]
+    },
     tokens: [
       {
         name: "하울링",
@@ -59,6 +86,15 @@ const characters: Character[] = [
   {
     name: "비올라",
     portrait: "/portrait/viola.png",
+    hp: {
+      maxHp: 5000,
+      hpHand: [
+        [2000, 9],
+        [3000, 8],
+        [4000, 7],
+        [5000, 6],
+      ]
+    },
     tokens: [
       {
         name: "은연",
@@ -75,6 +111,15 @@ const characters: Character[] = [
   {
     name: "델피",
     portrait: "/portrait/delphi.png",
+    hp: {
+      maxHp: 5000,
+      hpHand: [
+        [2000, 9],
+        [3000, 8],
+        [4000, 7],
+        [5000, 6],
+      ]
+    },
     tokens: [
       {
         name: "다운 스탠스",
@@ -88,6 +133,15 @@ const characters: Character[] = [
   {
     name: "키스",
     portrait: "/portrait/kiss.png",
+    hp: {
+      maxHp: 5000,
+      hpHand: [
+        [2000, 9],
+        [3000, 8],
+        [4000, 7],
+        [5000, 6],
+      ]
+    },
     tokens: [
       {
         name: "예고",
@@ -102,6 +156,15 @@ const characters: Character[] = [
   {
     name: "니아",
     portrait: "/portrait/nia.png",
+    hp: {
+      maxHp: 5000,
+      hpHand: [
+        [2000, 9],
+        [3000, 8],
+        [4000, 7],
+        [5000, 6],
+      ]
+    },
     tokens: [
       {
         name: "오버리밋",
@@ -116,6 +179,15 @@ const characters: Character[] = [
   {
     name: "레브",
     portrait: "/portrait/rev.png",
+    hp: {
+      maxHp: 5000,
+      hpHand: [
+        [2000, 9],
+        [3000, 8],
+        [4000, 7],
+        [5000, 6],
+      ]
+    },
     tokens: [
       {
         name: "암야",
@@ -138,6 +210,15 @@ const characters: Character[] = [
   {
     name: "타오",
     portrait: "/portrait/tao.png",
+    hp: {
+      maxHp: 5000,
+      hpHand: [
+        [2000, 9],
+        [3000, 8],
+        [4000, 7],
+        [5000, 6],
+      ]
+    },
     tokens: [
       {
         name: "조화",
@@ -168,6 +249,16 @@ const characters: Character[] = [
   {
     name: "리타",
     portrait: "/portrait/lita.png",
+    hp: {
+      maxHp: 5000,
+      hpHand: [
+        [2000, 9],
+        [3000, 8],
+        [4000, 7],
+        [5000, 6],
+        [1000, 10]
+      ]
+    },
     tokens: [
       {
         name: "레기온",
@@ -223,6 +314,10 @@ export interface Token {
 export interface Character {
   name: "세츠메이" | "루트" | "울프" | "비올라" | "델피" | "키스" | "니아" | "레브" | "타오" | "리타" | "선택없음";
   portrait: string;
+  hp: {
+    maxHp: number;
+    hpHand: [number, number][]
+  }
   tokens: Token[];
 }
 

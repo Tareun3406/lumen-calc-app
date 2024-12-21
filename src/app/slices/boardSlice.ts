@@ -27,6 +27,10 @@ export interface BoardState {
 const noneCharacter: Character = {
   name: "선택없음",
   portrait: "",
+  hp: {
+    maxHp: 1000,
+    hpHand: []
+  },
   tokens: []
 };
 
@@ -55,9 +59,9 @@ export const boardSlice = createSlice({
   initialState,
   reducers: {
     initialize: state => {
-      state.firstPlayer.currentHp = 5000;
+      state.firstPlayer.currentHp = state.firstPlayer.character.hp.maxHp;
       state.firstPlayer.damagedHp = 0;
-      state.secondPlayer.currentHp = 5000;
+      state.secondPlayer.currentHp = state.secondPlayer.character.hp.maxHp;
       state.secondPlayer.damagedHp = 0;
       state.firstPlayer.fp = 0;
       state.secondPlayer.fp = 0;
