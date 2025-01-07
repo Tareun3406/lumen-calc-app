@@ -4,7 +4,7 @@ import { useAppDispatch, useAppSelector } from "../app/hooks/storeHooks";
 import { selectFirstPlayer, selectSecondPlayer, selectDamageLogs } from "../app/slices/boardSlice";
 import HpBar from "../component/HpBar";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Person, Refresh, EditNote, Cable, Settings } from "@mui/icons-material";
+import { Person, Refresh, EditNote, Cable, Settings, ArrowBack } from "@mui/icons-material";
 import TokenDisplay from "../component/TokenDisplay";
 import ButtonPanelProps from "../component/ButtonPanelProps";
 import DamageLogs from "../component/DamageLogs";
@@ -19,7 +19,7 @@ function Play() {
   const secondPlayer = useAppSelector(selectSecondPlayer);
   const damageLogs = useAppSelector(selectDamageLogs);
   const navigate = useNavigate();
-  const { initializeBoard } = useGlobalAction();
+  const { initializeBoard, goToPreviousDamage } = useGlobalAction();
   const { socketStatus, hasControl } = useAppSelector(selectRemote);
 
   const [drawDamageLog, setDrawDamageLog] = useState(false);
@@ -87,6 +87,9 @@ function Play() {
           <Button onClick={toggleDamageLog(true)}>
             <EditNote />
           </Button>
+          <Button onClick={goToPreviousDamage}>
+            <ArrowBack />
+          </Button>
         </ButtonGroup>
       </Grid2>
 
@@ -125,11 +128,11 @@ function Play() {
       </Grid2>
 
       <Grid2 size={6} display={"flex"} justifyContent={"center"}>
-        <TokenDisplay player={firstPlayer}></TokenDisplay>
+        <TokenDisplay player={firstPlayer} otherPlayer={secondPlayer}></TokenDisplay>
       </Grid2>
 
       <Grid2 size={6} display={"flex"} justifyContent={"center"}>
-        <TokenDisplay player={secondPlayer}></TokenDisplay>
+        <TokenDisplay player={secondPlayer} otherPlayer={firstPlayer}></TokenDisplay>
       </Grid2>
 
       <Drawer open={drawDamageLog} onClose={toggleDamageLog(false)} anchor="bottom">

@@ -19,7 +19,7 @@ import {
   removeTokenToFirst,
   removeTokenToSecond,
   resetFpToFirst,
-  resetFpToSecond,
+  resetFpToSecond, selectDamageLogs,
   setTokenCountToFirst,
   setTokenCountToSecond,
   setTokenToggleToFirst,
@@ -171,6 +171,7 @@ export function usePlayerAction(props: IActionProps) {
 
 export function useGlobalAction() {
   const dispatch = useAppDispatch();
+  const damageLogs = useAppSelector(selectDamageLogs)
   const { hasControl, socketStatus } = useAppSelector(selectRemote);
   const { readyTimer } = useAppSelector(selectTimer);
   const { publishTimer } = useRemote();
@@ -192,5 +193,21 @@ export function useGlobalAction() {
     dispatch(toggleReadyTimer(!readyTimer.toggle));
   };
 
-  return { initializeBoard, toggleReadyTimerAction };
+  // 데미지 로그
+  const goToPreviousDamage = () => {
+    const lastIndex = damageLogs.length - 1
+    const damageLog = damageLogs[lastIndex]
+
+    if (damageLog.type == "DAMAGE") {
+      if (damageLog.isFirstPlayer) dispatch(healToFirst(damageLog.payload))
+      else dispatch(healToSecond(damageLog.payload))
+    } else {
+      if (damageLog.isFirstPlayer) dispatch(damageToFirst(damageLog.payload))
+      else dispatch(damageToSecond(damageLog.payload))
+    }
+    dispatch(removeFromDamageLogs(lastIndex))
+    dispatch(triggerPublish())
+  }
+
+  return { initializeBoard, toggleReadyTimerAction, goToPreviousDamage };
 }
