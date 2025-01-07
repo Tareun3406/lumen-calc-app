@@ -2,24 +2,21 @@ import { IActionProps, usePlayerAction } from "../../app/hooks/actionHooks";
 import { Button, IconButton, Tooltip } from "@mui/material";
 import { ControlPoint, RemoveCircleOutline } from "@mui/icons-material";
 import React from "react";
-import { useAppDispatch, useAppSelector } from "../../app/hooks/storeHooks";
-import { damageToFirst, damageToSecond } from "../../app/slices/boardSlice";
+import { useAppSelector } from "../../app/hooks/storeHooks";
 import { selectSettings } from "../../app/slices/settingsSlice";
 import { useTokenImageStyle } from "../../app/hooks/styleHooks";
 
 function LevTokens(props: IActionProps) {
   const { player } = props;
   const { character } = player;
-  const { addToken, setTokenCount, removeToken, changeToggle } = usePlayerAction(props);
+  const { addToken, setTokenCount, removeToken, changeToggle, damageToOther } = usePlayerAction(props);
   const { largeTokenStyle, mediumTokenStyle } = useTokenImageStyle();
-  const dispatch = useAppDispatch();
   const { flipPanel } = useAppSelector(selectSettings);
 
   const handleDaggerClick = () => {
     if (character.tokens[1].count && character.tokens[1].count < 3) return;
     const damage = getDaggerDamage();
-    if (player.isFirst) dispatch(damageToSecond(damage));
-    else dispatch(damageToFirst(damage));
+    damageToOther(damage)
     setTokenCount(1, 0);
   };
 

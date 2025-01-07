@@ -1,6 +1,7 @@
 import { useAppDispatch, useAppSelector } from "./storeHooks";
 import { selectRemote } from "../slices/remoteSlice";
 import {
+  addToDamageLogs,
   addTokenToFirst,
   addTokenToSecond,
   changeTokenToggleToFirst,
@@ -10,11 +11,11 @@ import {
   decreaseFpToFirst,
   decreaseFpToSecond,
   healToFirst,
-  healToSecond,
+  healToSecond, IDamageLog,
   increaseFpToFirst,
   increaseFpToSecond,
   initialize,
-  PlayerState,
+  PlayerState, removeFromDamageLogs,
   removeTokenToFirst,
   removeTokenToSecond,
   resetFpToFirst,
@@ -32,24 +33,65 @@ import { useRemote } from "./remoteHooks";
 
 export interface IActionProps {
   player: PlayerState;
+  otherPlayer?: PlayerState;
 }
 
 export function usePlayerAction(props: IActionProps) {
   const dispatch = useAppDispatch();
-  const { isFirst } = props.player;
+  const { isFirst, currentHp, character } = props.player;
+  const otherPlayer = props.otherPlayer;
   const { hasControl, socketStatus } = useAppSelector(selectRemote);
 
   // HP 관련
   const damageToHp = (value: number) => {
     if (!hasControl && socketStatus === "CONNECTED") return;
-    if (isFirst) dispatch(damageToFirst(value));
-    else dispatch(damageToSecond(value));
+    const damaged = Math.min(currentHp, value);
+    const damageLog: IDamageLog = {
+      isFirstPlayer: isFirst,
+      type: "DAMAGE",
+      payload: damaged,
+      result: currentHp - damaged
+    };
+
+    if (isFirst) dispatch(damageToFirst(damaged));
+    else dispatch(damageToSecond(damaged));
+    dispatch(addToDamageLogs(damageLog))
     dispatch(triggerPublish());
   };
   const healToHp = (value: number) => {
     if (!hasControl && socketStatus === "CONNECTED") return;
-    if (isFirst) dispatch(healToFirst(value));
-    else dispatch(healToSecond(value));
+    const valueSum = currentHp + value
+    const healed = valueSum > character.hp.maxHp ? valueSum - character.hp.maxHp : value
+    const damageLog: IDamageLog = {
+      isFirstPlayer: isFirst,
+      type: "HEAL",
+      payload: healed,
+      result: currentHp + healed
+    };
+
+    if (isFirst) dispatch(healToFirst(healed));
+    else dispatch(healToSecond(healed));
+    dispatch(addToDamageLogs(damageLog))
+    dispatch(triggerPublish());
+  };
+  const damageToOther = (value: number) => {
+    if (!hasControl && socketStatus === "CONNECTED") return;
+    if (!otherPlayer) {
+      console.error("목표 대상이 지정되지 않았습니다.")
+      return;
+    }
+
+    const damaged = Math.min(otherPlayer.currentHp, value);
+    const damageLog: IDamageLog = {
+      isFirstPlayer: otherPlayer.isFirst,
+      type: "DAMAGE",
+      payload: damaged,
+      result: otherPlayer.currentHp - damaged
+    };
+
+    if (otherPlayer.isFirst) dispatch(damageToFirst(damaged));
+    else dispatch(damageToSecond(damaged));
+    dispatch(addToDamageLogs(damageLog))
     dispatch(triggerPublish());
   };
 
@@ -114,6 +156,7 @@ export function usePlayerAction(props: IActionProps) {
   return {
     damageToHp,
     healToHp,
+    damageToOther,
     increaseFp,
     decreaseFp,
     resetFp,

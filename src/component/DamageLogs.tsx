@@ -1,8 +1,8 @@
 import { Grid2, List, ListItemText } from "@mui/material";
-import { damageLog } from "../app/slices/boardSlice";
+import { IDamageLog } from "../app/slices/boardSlice";
 
 export interface damageLogs {
-  damageLogs: damageLog[];
+  damageLogs: IDamageLog[];
 }
 
 function damageLogs(props: damageLogs) {

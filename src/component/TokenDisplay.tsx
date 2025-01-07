@@ -10,9 +10,11 @@ import SetzTokens from "./tokens/SetzTokens";
 
 interface TokenDisplayProps {
   player: PlayerState;
+  otherPlayer: PlayerState;
 }
 function TokenDisplay(props: TokenDisplayProps) {
   const { player } = props;
+  const { otherPlayer } = props;
   const { character } = player;
 
   const renderToken = () => {
@@ -38,7 +40,7 @@ function TokenDisplay(props: TokenDisplayProps) {
       case "타오":
         return <TaoTokens player={player} />;
       case "레브":
-        return <LevTokens player={player} />;
+        return <LevTokens player={player} otherPlayer={otherPlayer} />;
       default:
         return <div></div>;
     }
