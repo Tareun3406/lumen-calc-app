@@ -252,11 +252,11 @@ const characters: Character[] = [
     hp: {
       maxHp: 5000,
       hpHand: [
+        [1000, 10],
         [2000, 9],
         [3000, 8],
         [4000, 7],
         [5000, 6],
-        [1000, 10]
       ]
     },
     tokens: [
