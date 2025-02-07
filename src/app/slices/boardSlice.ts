@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../store";
-import { Character } from "../scripts/Characters";
+import characters, { Character } from "../scripts/Characters";
+import _ from "lodash";
 
 export interface PlayerState {
   isFirst: boolean;
@@ -59,36 +60,17 @@ export const boardSlice = createSlice({
   initialState,
   reducers: {
     initialize: state => {
+      state.firstPlayer.character = _.cloneDeep(characters.find(character => state.firstPlayer.character.name === character.name))! // 타입 단언 주의
       state.firstPlayer.currentHp = state.firstPlayer.character.hp.maxHp;
       state.firstPlayer.damagedHp = 0;
+
+      state.secondPlayer.character = _.cloneDeep(characters.find(character => state.secondPlayer.character.name === character.name))! // 타입 단언 주의
       state.secondPlayer.currentHp = state.secondPlayer.character.hp.maxHp;
       state.secondPlayer.damagedHp = 0;
+
       state.firstPlayer.fp = 0;
       state.secondPlayer.fp = 0;
-      state.firstPlayer.character.tokens = state.firstPlayer.character.tokens.map(token => {
-        switch (token.type) {
-          case "TOGGLE":
-            token.toggle = false;
-            return token;
-          case "COUNTER":
-            token.count = 0;
-            return token;
-          default:
-            return token;
-        }
-      });
-      state.secondPlayer.character.tokens = state.secondPlayer.character.tokens.map(token => {
-        switch (token.type) {
-          case "TOGGLE":
-            token.toggle = false;
-            return token;
-          case "COUNTER":
-            token.count = 0;
-            return token;
-          default:
-            return token;
-        }
-      });
+
       state.damageLogs = [];
       state.triggerPublish = !state.triggerPublish;
     },

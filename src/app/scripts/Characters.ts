@@ -1,4 +1,4 @@
-const characters: Character[] = [
+const characters: readonly Character[] = Object.freeze([
   {
     name: "세츠메이",
     portrait: "/portrait/setz.png",
@@ -256,7 +256,7 @@ const characters: Character[] = [
         [2000, 9],
         [3000, 8],
         [4000, 7],
-        [5000, 6],
+        [5000, 6]
       ]
     },
     tokens: [
@@ -297,8 +297,75 @@ const characters: Character[] = [
           "체력 1000 이하 발동 가능. 모든 레기온의 축복 효과 적용, 모든 받는 데미지 -100, [성녀] 효과 기술 데미지 +100"
       }
     ]
+  },
+  {
+    name: "린",
+    portrait: "/portrait/lita.png",
+    hp: {
+      maxHp: 5000,
+      hpHand: [
+        [2000, 9],
+        [3000, 8],
+        [4000, 7],
+        [5000, 6]
+      ]
+    },
+    tokens: [
+      {
+        name: "불씨",
+        img: "/token/wolf.png",
+        type: "COUNTER",
+        toggle: false,
+        count: 0,
+        maxCount: 1000,
+        toggleCount: 1,
+        description:
+          "자신의 [린] 기술이 브레이크 될 때마다 불씨 카운터 +1"
+      }
+    ]
+  },
+  {
+    name: "요한",
+    portrait: "/portrait/lita.png",
+    hp: {
+      maxHp: 5000,
+      hpHand: [
+        [2000, 9],
+        [3000, 8],
+        [4000, 7],
+        [5000, 6]
+      ]
+    },
+    tokens: [
+      {
+        name: "예지",
+        img: "/token/wolf.png",
+        type: "COUNTER",
+        toggle: false,
+        count: 2,
+        maxCount: 3,
+        toggleCount: 1,
+        description:
+          "루멘 페이즈 시 -1 하고 발동가능, 이번턴 상대는 무작위 한장을 공개 및 유지하고 먼저 레디해야한다. 체력이 2000 이하가 될경우 +1"
+      }
+    ]
+  },
+  {
+    name: "선택없음",
+    portrait: "",
+    hp: {
+      maxHp: 5000,
+      hpHand: [
+        [2000, 9],
+        [3000, 8],
+        [4000, 7],
+        [5000, 6]
+      ]
+    },
+    tokens: [
+    ]
   }
-];
+]);
 
 export interface Token {
   name: string;
@@ -312,7 +379,7 @@ export interface Token {
 }
 
 export interface Character {
-  name: "세츠메이" | "루트" | "울프" | "비올라" | "델피" | "키스" | "니아" | "레브" | "타오" | "리타" | "선택없음";
+  name: "세츠메이" | "루트" | "울프" | "비올라" | "델피" | "키스" | "니아" | "레브" | "타오" | "리타" | "린" | "요한" | "선택없음";
   portrait: string;
   hp: {
     maxHp: number;

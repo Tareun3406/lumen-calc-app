@@ -35,6 +35,8 @@ function TokenDisplay(props: TokenDisplayProps) {
       // 카운터 형 한가지
       case "울프":
       case "비올라":
+      case "린" :
+      case "요한" :
         return <OneCounterToken player={player} />;
 
       case "타오":

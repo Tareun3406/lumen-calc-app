@@ -24,7 +24,7 @@ function OneCounterToken(props: IActionProps) {
         <ControlPoint />
       </IconButton>
       <Button variant={"contained"} style={{ borderRadius: 50 }} onClick={() => setTokenCount(0, 0)}>
-        {character.tokens[0].count} / {character.tokens[0].maxCount}
+        {character.tokens[0].count} {character.tokens[0].maxCount! < 1000 && "/ " + character.tokens[0].maxCount}
       </Button>
       <IconButton onClick={() => removeToken(0)}>
         <RemoveCircleOutline />

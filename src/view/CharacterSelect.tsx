@@ -108,7 +108,7 @@ function CharacterSelect() {
       </Grid2>
       <Grid2 size={12}>
         <ImageList cols={6} gap={5} sx={{ maxWidth: 660, margin: "auto" }}>
-          {characters.map(character => characterButton(character))}
+          {characters.filter(character => character.name !== "선택없음").map(character => characterButton(character))}
         </ImageList>
       </Grid2>
     </Grid2>
