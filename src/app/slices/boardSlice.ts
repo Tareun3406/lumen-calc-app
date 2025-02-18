@@ -84,24 +84,11 @@ export const boardSlice = createSlice({
     },
     healToFirst: (state, action: PayloadAction<number>) => {
       state.firstPlayer.damagedHp = 0;
-      state.damageLogs.push({
-        isFirstPlayer: true,
-        type: "HEAL",
-        payload: action.payload,
-        result: state.firstPlayer.currentHp
-      });
+      state.firstPlayer.currentHp = Math.min(state.firstPlayer.currentHp + action.payload, 5000);
     },
     healToSecond: (state, action: PayloadAction<number>) => {
-      const sum = state.secondPlayer.currentHp + action.payload;
-      const healed = sum > 5000 ? sum - 5000 : action.payload;
       state.secondPlayer.damagedHp = 0;
       state.secondPlayer.currentHp = Math.min(state.secondPlayer.currentHp + action.payload, 5000);
-      state.damageLogs.push({
-        isFirstPlayer: false,
-        type: "HEAL",
-        payload: healed,
-        result: state.secondPlayer.currentHp
-      });
     },
     setHealthToFirst: (state, action: PayloadAction<number>) => {
       const damage = action.payload - state.firstPlayer.currentHp;

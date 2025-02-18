@@ -300,7 +300,7 @@ const characters: readonly Character[] = Object.freeze([
   },
   {
     name: "린",
-    portrait: "/portrait/lita.png",
+    portrait: "/portrait/lin.png",
     hp: {
       maxHp: 5000,
       hpHand: [
@@ -313,7 +313,7 @@ const characters: readonly Character[] = Object.freeze([
     tokens: [
       {
         name: "불씨",
-        img: "/token/wolf.png",
+        img: "/token/ember.png",
         type: "COUNTER",
         toggle: false,
         count: 0,
@@ -326,7 +326,7 @@ const characters: readonly Character[] = Object.freeze([
   },
   {
     name: "요한",
-    portrait: "/portrait/lita.png",
+    portrait: "/portrait/joan.png",
     hp: {
       maxHp: 5000,
       hpHand: [
@@ -339,14 +339,22 @@ const characters: readonly Character[] = Object.freeze([
     tokens: [
       {
         name: "예지",
-        img: "/token/wolf.png",
+        img: "/token/coin.png",
         type: "COUNTER",
         toggle: false,
         count: 2,
         maxCount: 3,
         toggleCount: 1,
         description:
-          "루멘 페이즈 시 -1 하고 발동가능, 이번턴 상대는 무작위 한장을 공개 및 유지하고 먼저 레디해야한다. 체력이 2000 이하가 될경우 +1"
+          "루멘 페이즈 시 -1 하고 [서드아이] 발동가능, 이번턴 상대는 무작위 한장을 공개 및 유지하고 먼저 레디해야한다. 체력이 2000 이하가 될경우 +1"
+      },
+      {
+        name: "디제스터 원",
+        img: "/token/disaster-one.png",
+        type: "TOGGLE",
+        toggle: false,
+        description:
+          "판도라 박스의 효과로 활성화."
       }
     ]
   },

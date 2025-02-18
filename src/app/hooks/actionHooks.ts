@@ -61,7 +61,7 @@ export function usePlayerAction(props: IActionProps) {
   const healToHp = (value: number) => {
     if (!hasControl && socketStatus === "CONNECTED") return;
     const valueSum = currentHp + value
-    const healed = valueSum > character.hp.maxHp ? valueSum - character.hp.maxHp : value
+    const healed = valueSum > character.hp.maxHp ? character.hp.maxHp - currentHp : value
     const damageLog: IDamageLog = {
       isFirstPlayer: isFirst,
       type: "HEAL",
@@ -195,6 +195,9 @@ export function useGlobalAction() {
 
   // 데미지 로그
   const goToPreviousDamage = () => {
+    if (damageLogs.length == 0) {
+      return
+    }
     const lastIndex = damageLogs.length - 1
     const damageLog = damageLogs[lastIndex]
 
