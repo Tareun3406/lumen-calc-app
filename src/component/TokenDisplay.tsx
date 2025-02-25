@@ -8,6 +8,7 @@ import LitaTokens from "./tokens/LitaTokens";
 import OneCounterToken from "./tokens/OneCounterToken";
 import SetzTokens from "./tokens/SetzTokens";
 import JoanTokens from "./tokens/JoanTokens";
+import LinTokens from "./tokens/LinTokens";
 
 interface TokenDisplayProps {
   player: PlayerState;
@@ -36,9 +37,10 @@ function TokenDisplay(props: TokenDisplayProps) {
       // 카운터 형 한가지
       case "울프":
       case "비올라":
-      case "린" :
         return <OneCounterToken player={player} />;
 
+      case "린" :
+        return <LinTokens player={player} />;
       case "요한" :
         return <JoanTokens player={player} />;
       case "타오":

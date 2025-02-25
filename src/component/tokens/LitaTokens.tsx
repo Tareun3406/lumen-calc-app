@@ -130,7 +130,7 @@ function LitaTokens(props: IActionProps) {
               <img
                 src={character.tokens[4].img}
                 alt={character.tokens[4].img}
-                style={{ width: 60, height: 60 }}
+                style={{ width: 80, height: 80 }}
                 className={character.tokens[4].toggle ? "imageWhite" : ""}
               />
             </Button>

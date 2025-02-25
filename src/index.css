@@ -42,6 +42,15 @@ code {
   text-align: right;
 }
 
+.disasterOneDeActive {
+  /*border: 1px solid gray;*/
+  /*background-color: #e0e0e0;*/
+}
+.disasterOneActive {
+  /*border: 1px solid darkred;*/
+  filter: invert(22%) sepia(50%) saturate(4850%) hue-rotate(351deg) brightness(74%) contrast(91%);
+}
+
 .red {
   color: red;
 }

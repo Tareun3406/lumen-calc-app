@@ -11,12 +11,19 @@ function JoanTokens(props: IActionProps) {
   const { character } = player;
   const { addToken, removeToken, setTokenCount, changeToggle } = usePlayerAction(props);
   const { flipPanel } = useAppSelector(selectSettings);
-  const { largeTokenStyle, smallTokenStyle } = useTokenImageStyle();
+  const { largeTokenStyle, mediumTokenStyle, smallTokenStyle } = useTokenImageStyle();
 
   const getCounterToggle = useMemo(() => {
     if (character.tokens[0].count && character.tokens[0].toggleCount)
       return character.tokens[0].count >= character?.tokens[0]?.toggleCount;
   }, [character.tokens[0]]);
+
+  const getDisasterClassName = useMemo(() => {
+    if (character.tokens[1].toggle) {
+      return "disasterOneActive"
+    }
+    return "disasterOneDeActive"
+  }, [character.tokens[1].toggle])
 
   return (
     <div
@@ -58,17 +65,7 @@ function JoanTokens(props: IActionProps) {
       <div style={{ placeContent: "center" }}>
         <Tooltip title={character.tokens[1].description} placement={"top"}>
           <div style={{ position: "relative", display: "flex" }} onClick={() => changeToggle(1)}>
-            <img src={character.tokens[1].img} style={{height: smallTokenStyle.height}} alt={character.tokens[1].img} />
-            <div
-              style={{
-                position: "absolute",
-                top: 0,
-                left: 0,
-                background: "black",
-                width: "100%",
-                height: "100%",
-                opacity: player.character.tokens[1].toggle ? "0" : "0.6"
-              }}></div>
+            <img src={character.tokens[1].img} style={{height: mediumTokenStyle.height}} alt={character.tokens[1].img} className={getDisasterClassName} />
           </div>
         </Tooltip>
       </div>
