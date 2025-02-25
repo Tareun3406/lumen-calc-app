@@ -354,7 +354,7 @@ const characters: readonly Character[] = Object.freeze([
         type: "TOGGLE",
         toggle: false,
         description:
-          "판도라 박스의 효과로 활성화."
+          "루멘 존에 판도라 박스가 있을 때, 루멘 페이즈 시 상대 패 한장을 골라 그 카드의 종류를 선언할 수 있다. 맞힐경우 [디제스터 원] 상태 부여. 틀릴경우 패 한장을 버린다."
       }
     ]
   },
