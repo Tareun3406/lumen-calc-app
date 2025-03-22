@@ -33,8 +33,8 @@ function OneCounterToken(props: IActionProps) {
   );
 
   return (
-    <div style={{ display: "flex", justifyContent: "center" }}>
-      {player.isFirst  || !flipPanel ? "" : counterToken}
+    <div style={{ display: "flex", justifyContent: "center" }}
+         className={player.isFirst || !flipPanel ? "" : "reverseFlexRow"}>
       <Tooltip title={character.tokens[0].description} placement={"top"}>
         <div
           style={{
@@ -55,7 +55,7 @@ function OneCounterToken(props: IActionProps) {
             }}></div>
         </div>
       </Tooltip>
-      {player.isFirst ? counterToken : ""}
+      {counterToken}
     </div>
   );
 }

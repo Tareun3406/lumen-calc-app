@@ -134,7 +134,7 @@ function TaoTokens(props: IActionProps) {
           placeContent: "center"
         }}>
         <Tooltip title={character.tokens[2].description} placement={"top"}>
-          <div style={{ position: "relative" }}>
+          <div style={{ position: "relative", display: "flex" }}>
             <img src={character.tokens[2].img} style={smallTokenStyle} alt={character.tokens[2].img} />
             <div
               style={{
