@@ -359,6 +359,32 @@ const characters: readonly Character[] = Object.freeze([
     ]
   },
   {
+    name: "이제벨",
+    portrait: "/portrait/jezebel.png",
+    hp: {
+      maxHp: 5000,
+      hpHand: [
+        [2000, 9],
+        [3000, 8],
+        [4000, 7],
+        [5000, 6]
+      ]
+    },
+    tokens: [
+      {
+        name: "거미",
+        img: "/token/spider.png",
+        type: "COUNTER",
+        toggle: false,
+        count: 0,
+        maxCount: 1000,
+        toggleCount: 1,
+        description:
+          "자신의 효과로 체력을 지불할 때 거미 토큰 +1. 기술당 한번 [잔향] 판정의 기술로 데미지를 주었을 때 [거미] 토큰을 1장 제거하고 200 데미지"
+      }
+    ]
+  },
+  {
     name: "선택없음",
     portrait: "",
     hp: {
@@ -387,7 +413,7 @@ export interface Token {
 }
 
 export interface Character {
-  name: "세츠메이" | "루트" | "울프" | "비올라" | "델피" | "키스" | "니아" | "레브" | "타오" | "리타" | "린" | "요한" | "선택없음";
+  name: "세츠메이" | "루트" | "울프" | "비올라" | "델피" | "키스" | "니아" | "레브" | "타오" | "리타" | "린" | "요한" | "이제벨" | "선택없음";
   portrait: string;
   hp: {
     maxHp: number;

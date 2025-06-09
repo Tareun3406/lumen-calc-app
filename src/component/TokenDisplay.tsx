@@ -9,6 +9,7 @@ import OneCounterToken from "./tokens/OneCounterToken";
 import SetzTokens from "./tokens/SetzTokens";
 import JoanTokens from "./tokens/JoanTokens";
 import LinTokens from "./tokens/LinTokens";
+import JezebelToken from "./tokens/JezebelToken";
 
 interface TokenDisplayProps {
   player: PlayerState;
@@ -47,6 +48,8 @@ function TokenDisplay(props: TokenDisplayProps) {
         return <TaoTokens player={player} />;
       case "레브":
         return <LevTokens player={player} otherPlayer={otherPlayer} />;
+      case "이제벨":
+        return <JezebelToken player={player}/>
       default:
         return <div></div>;
     }

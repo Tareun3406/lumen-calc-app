@@ -107,7 +107,7 @@ function CharacterSelect() {
         <img src={secondPlayer.character.portrait} height={80} alt={secondPlayer.character.portrait} style={secondPlayerSelectImgStyle}/>
       </Grid2>
       <Grid2 size={12}>
-        <ImageList cols={6} gap={5} sx={{ maxWidth: 660, margin: "auto" }}>
+        <ImageList cols={7} gap={5} sx={{ maxWidth: 660, margin: "auto"}}>
           {characters.filter(character => character.name !== "선택없음").map(character => characterButton(character))}
         </ImageList>
       </Grid2>
